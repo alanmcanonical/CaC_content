@@ -35,13 +35,13 @@ selections:
     - partition_for_tmp
 
     ### 1.1.3 Ensure nodev option set on /tmp partition (Automated)
-    # Needs rule
+    - mount_option_tmp_nodev_optional
 
     ### 1.1.4 Ensure nosuid option set on /tmp partition (Automated)
-    # Needs rule
+    - mount_option_tmp_nosuid_optional
 
     ### 1.1.5 Ensure noexec option set on /tmp partition (Automated)
-    # Needs rule
+    - mount_option_tmp_noexec_optional
 
     ### 1.1.6 Ensure /dev/shm is configured (Automated)
     # Skip due to being handled by systemd and ensured by follow-on tests
@@ -63,13 +63,13 @@ selections:
     # partition_for_var_tmp
 
     ### 1.1.12 Ensure nodev option set on /var/tmp partition (Automated)
-    # Needs rule
+    - mount_option_var_tmp_nodev_optional
 
     ### 1.1.13 Ensure nosuid option set on /var/tmp partition (Automated)
-    # Needs rule
+    - mount_option_var_tmp_nosuid_optional
 
     ### 1.1.14 Ensure noexec option set on /var/tmp partition (Automated)
-    # Needs rule
+    - mount_option_var_tmp_noexec_optional
 
     ### 1.1.15 Ensure separate partition exists for /var/log (Automated)
     # Skip due to being Level 2
@@ -82,7 +82,7 @@ selections:
     # partition_for_home
 
     ### 1.1.18 Ensure nodev option set on /home partition (Automated)
-    # Needs rule
+    - mount_option_home_nodev_optional
 
     ### 1.1.19 Ensure nodev option set on removable media partitions (Manual)
     # Skip due to being a manual test
@@ -137,11 +137,11 @@ selections:
 
     ### 1.5.3 Ensure authentication required for single user mode (Automated)
     # Needs variable
-    # Needs rule
+    - single_user_authentication
 
     ## 1.6 Additional Process Hardening ##
     ### 1.6.1 Ensure XD/NX support is enabled (Automated)
-    # Needs rule
+    - ensure_xd_nx_support_enabled
 
     ### 1.6.2 Ensure address space layout randomization (ASLR) is enabled (Automated)
     - sysctl_kernel_randomize_va_space
@@ -156,14 +156,14 @@ selections:
     ## 1.7 Mandatory Access Control ##
     ### 1.7.1 Configure AppArmor ###
     #### 1.7.1.1 Ensure AppArmor is installed (Automated)
-    # Needs rule
+    - package_apparmor_installed
 
     #### 1.7.1.2 Ensure AppArmor is enabled in the bootloader configuration (Automated)
-    # Needs rule
+    - grub2_enable_apparmor
 
     #### 1.7.1.3 Ensure all AppArmor Profiles are in enforce or complain mode (Automated)
     # Needs variable
-    # Needs rule
+    - ensure_apparmor_enforce_or_complain
 
     #### 1.7.1.4 Ensure all AppArmor Profiles are enforcing (Automated)
     # Skip due to being Level 2
@@ -171,13 +171,14 @@ selections:
     ## 1.8 Warning Banners ##
     ### 1.8.1 Command Line Warning Banners ###
     #### 1.8.1.1 Ensure message of the day is configured properly (Automated)
-    # Needs rule
+    - no_etc_motd_leak
 
     #### 1.8.1.2 Ensure local login warning banner is configured properly (Automated)
-    # Needs rule
+    - login_banner_text=cis_default
+    - no_etc_issue_leak
 
     #### 1.8.1.3 Ensure remote login warning banner is configured properly (Automated)
-    # Needs rule
+    - no_etc_issue_net_leak
 
     #### 1.8.1.4 Ensure permissions on /etc/motd are configured (Automated)
     - file_permissions_etc_motd
@@ -190,7 +191,9 @@ selections:
     - file_groupowner_etc_issue
 
     #### 1.8.1.6 Ensure permissions on /etc/issue.net are configured (Automated)
-    # Needs rules
+    - file_permissions_etc_issue_net
+    - file_owner_etc_issue_net
+    - file_groupowner_etc_issue_net
 
     ## 1.9 Ensure updates, patches, and additional security software are installed (Manual)
     # Manual rule; security_patches_up_to_date
@@ -208,14 +211,14 @@ selections:
     - package_xinetd_removed
 
     ### 2.1.2 Ensure openbsd-inetd is not installed (Automated)
-    # Needs rule
+    - package_openbsd-inetd_removed
 
     ## 2.2 Special Purpose Services ##
     ### 2.2.1 Time Synchronization ###
     #### 2.2.1.1 Ensure time synchronization is in use (Automated)
-    # Needs variable: var_time_synchronization_daemon=chrony
+    - var_time_synchronization_daemon=chrony
     - package_chrony_installed
-    # Needs rule: package_ntp_removed
+    - package_ntp_removed
     - service_chronyd_or_ntpd_enabled
 
     #### 2.2.1.2 Ensure systemd-timesyncd is configured (Manual)
@@ -230,7 +233,7 @@ selections:
 
     #### 2.2.1.4 Ensure ntp is configured (Automated)
     - package_ntp_installed
-    # Needs rule: package_chrony_removed
+    - package_chrony_removed
     - service_ntp_enabled
 
     ### 2.2.2 Ensure X Window System is not installed (Automated)
@@ -238,11 +241,11 @@ selections:
 
     ### 2.2.3 Ensure Avahi Server is not installed (Automated)
     - service_avahi-daemon_disabled
-    # Needs rule: package_avahi-daemon_removed
+    - package_avahi-daemon_removed
 
     ### 2.2.4 Ensure CUPS is not installed (Automated)
     - service_cups_disabled
-    # Needs rule: package_cups_removed
+    - package_cups_removed
 
     ### 2.2.5 Ensure DHCP Server is not installed (Automated)
     - package_dhcp_removed
@@ -251,7 +254,7 @@ selections:
     - package_openldap-servers_removed
 
     ### 2.2.7 Ensure NFS is not installed (Automated)
-    # Needs rule: package_nfs-kernel-server_removed
+    - package_nfs-kernel-server_removed
 
     ### 2.2.8 Ensure DNS Server is not installed (Automated)
     - package_bind_removed
@@ -275,10 +278,21 @@ selections:
     - package_net-snmp_removed
 
     ### 2.2.15 Ensure mail transfer agent is configured for local-only mode (Automated)
-    # Needs rule
+    - has_nonlocal_mta
+    - exim4_configtype_local
+    - exim4_local_interfaces
+    - exim4_readhost
+    - exim4_relay_domains
+    - exim4_minimaldns
+    - exim4_relay_nets
+    - exim4_smarthosts
+    - exim4_use_split_config
+    - exim4_hide_mailname
+    - exim4_mailname_in_oh
+    - exim4_localdelivery
 
     ### 2.2.16 Ensure rsync service is not installed (Automated)
-    # Needs rule: package_rsync_removed
+    - package_rsync_removed
 
     ### 2.2.17 Ensure NIS Server is not installed (Automated)
     - package_nis_removed
@@ -300,7 +314,7 @@ selections:
     - package_openldap-clients_removed
 
     ### 2.3.6 Ensure RPC is not installed (Automated)
-    # Needs rule: package_rpcbind_removed
+    - package_rpcbind_removed
 
     ## 2.4 Ensure nonessential services are removed or masked (Manual)
     # Skip due to being a manual test
@@ -374,18 +388,23 @@ selections:
     # Skip due to being Level 2
 
     ## 3.5 Firewall Configuration
+    - var_firewall_package=iptables
+
     ### 3.5.1 Configure Uncomplicated Firewall
     #### 3.5.1.1 Ensure Uncomplicated Firewall is installed (Automated)
-    # Needs rule
+    - package_ufw_installed
 
     #### 3.5.1.2 Ensure iptables-persistent is not installed (Automated)
-    # Needs rule
+    - package_iptables-persistent_removed
 
     #### 3.5.1.3 Ensure ufw service is enabled (Automated)
-    # Needs rule
+    - service_ufw_enabled
 
     #### 3.5.1.4 Ensure loopback traffic is configured (Automated)
-    # Needs rule
+    - ufw_allow_in_lo
+    - ufw_allow_out_lo
+    - ufw_deny_in_other_for_localhost
+    - ufw_deny_in_other_for_localhost6
 
     #### 3.5.1.5 Ensure outbound connections are configured (Manual)
     # Skip due to being a manual test
@@ -394,57 +413,61 @@ selections:
     # Skip due to being a manual test
 
     #### 3.5.1.7 Ensure default deny firewall policy (Automated)
-    # Needs rule
+    - ufw_default_deny
 
     ### 3.5.2 Configure nftables
     #### 3.5.2.1 Ensure nftables is installed (Automated)
-    # Needs rule
+    - package_nftables_installed
 
     #### 3.5.2.2 Ensure Uncomplicated Firewall is not installed or disabled (Automated)
-    # Needs rule
+    - package_ufw_removed
 
     #### 3.5.2.3 Ensure iptables are flushed (Manual)
     # Skip due to being a manual test
 
     #### 3.5.2.4 Ensure a table exists (Automated)
-    # Needs rule
+    - nftables_ensure_table_exists
 
     #### 3.5.2.5 Ensure base chains exist (Automated)
-    # Needs rule
+    - nftables_ensure_base_chain_exist
 
     #### 3.5.2.6 Ensure loopback traffic is configured (Automated)
-    # Needs rule
+    - nftables_allow_in_lo
+    - nftables_deny_in_other_for_localhost
+    - nftables_deny_in_other_for_localhost6
 
     #### 3.5.2.7 Ensure outbound and established connections are configured (Manual)
     # Skip due to being a manual test
 
     #### 3.5.2.8 Ensure default deny firewall policy (Automated)
-    # Needs rule
+    - nftables_default_deny
 
     #### 3.5.2.9 Ensure nftables service is enabled (Automated)
-    # Needs rule
+    - service_nftables_enabled
 
     #### 3.5.2.10 Ensure nftables rules are permanent (Automated)
-    # Needs rule
+    - nftables_permanent_rules
 
     ### 3.5.3 Configure iptables ###
     #### 3.5.3.1 Configure software ####
     ##### 3.5.3.1.1 Ensure iptables packages are installed (Automated)
     - package_iptables_installed
-    - service_iptables_enabled
+    - package_iptables-persistent_installed
 
     ###### 3.5.3.1.2 Ensure nftables is not installed (Automated)
-    # Needs rule: package_nftables_removed
+    - package_nftables_removed
 
     ###### 3.5.3.1.3 Ensure Uncomplicated Firewall is not installed or disabled (Automated)
     # - package_ufw_removed # (Duplicate of above)
 
     #### 3.5.3.2 Configure IPv4 iptables ####
     ###### 3.5.3.2.1 Ensure default deny firewall policy (Automated)
-    - set_iptables_default_rule
+    - iptables_default_deny
 
     ###### 3.5.3.2.2 Ensure loopback traffic is configured (Automated)
-    # Needs rules
+    - iptables_allow_in_lo
+    - iptables_allow_out_lo
+    - iptables_deny_in_other_for_localhost
 
     ##### 3.5.3.2.3 Ensure outbound and established connections are configured (Manual)
     # Skip due to being a manual test
@@ -454,10 +477,12 @@ selections:
 
     #### 3.5.3.3 Configure IPv6 ip6tables ####
     # 3.5.3.3.1 Ensure IPv6 default deny firewall policy (Automated)
-    - set_ip6tables_default_rule
+    - ip6tables_default_deny
 
     # 3.5.3.3.2 Ensure IPv6 loopback traffic is configured (Automated)
-    # Needs rules
+    - ip6tables_allow_in_lo
+    - ip6tables_allow_out_lo
+    - ip6tables_deny_in_other_for_localhost6
 
     # 3.5.3.3.3 Ensure IPv6 outbound and established connections are configured (Manual)
     # Skip due to being a manual test
@@ -547,7 +572,7 @@ selections:
     # Skip due to being a manual test
 
     #### 4.2.1.4 Ensure rsyslog default file permissions configured (Automated)
-    # Needs rules: rsyslog_filecreatemode
+    - rsyslog_filecreatemode
 
     #### 4.2.1.5 Ensure rsyslog is configured to send logs to a remote log host (Automated)
     - rsyslog_remote_loghost
@@ -557,23 +582,23 @@ selections:
 
     ## 4.2.2 Configure journald ##
     #### 4.2.2.1 Ensure journald is configured to send logs to rsyslog (Automated)
-    # Needs rule: forward_to_syslog
+    - forward_to_syslog
 
     #### 4.2.2.2 Ensure journald is configured to compress large log files (Automated)
-    # Needs rule: compress_large_logs
+    - compress_large_logs
 
     #### 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk (Automated)
-    # Needs rule: persistent_storage
+    - persistent_storage
 
     ### 4.2.3 Ensure permissions on all logfiles are configured (Automated)
-    # Needs rule: all_logfile_permissions
+    - all_logfile_permissions
 
     ## 4.3 Ensure logrotate is configured (Manual)
     # Skip due to being a manual test
 
     ## 4.4 Ensure logrotate assigns appropriate permissions (Automated)
     # Needs variable? Leave manual?
-    # Needs rule: ensure_logrotate_permissions
+    - ensure_logrotate_permissions
 
     # 5 Access, Authentication and Authorization #
     ## 5.1 Configure time-based job schedulers ##
@@ -611,11 +636,13 @@ selections:
     - file_groupowner_cron_d
 
     ### 5.1.8 Ensure cron is restricted to authorized users (Automated)
+    - restrict_cron_users
     - file_permissions_cron_allow
     - file_owner_cron_allow
     - file_groupowner_cron_allow
 
     ### 5.1.9 Ensure at is restricted to authorized users (Automated)
+    - restrict_at_users
     - file_permissions_at_allow
     - file_owner_at_allow
     - file_groupowner_at_allow
@@ -658,16 +685,16 @@ selections:
     - sshd_do_not_permit_user_env
 
     ### 5.2.12 Ensure only strong Ciphers are used (Automated)
-    # Needs variable value: sshd_approved_ciphers=ubuntu_fips
+    - sshd_approved_ciphers=ubuntu_fips
     - sshd_use_approved_ciphers
 
     ### 5.2.13 Ensure only strong MAC algorithms are used (Automated)
-    # Needs variable value: sshd_approved_macs=ubuntu_fips
+    - sshd_approved_macs=ubuntu_fips
     - sshd_use_approved_macs
 
     ### 5.2.14 Ensure only strong Key Exchange algorithms are used (Automated)
-    # Needs variable
-    # Needs rule
+    - sshd_approved_kexs=ubuntu_fips
+    - sshd_use_approved_kexs
 
     ### 5.2.15 Ensure SSH Idle Timeout Interval is configured (Automated)
     - sshd_idle_timeout_value=5_minutes
@@ -676,23 +703,26 @@ selections:
     - sshd_set_keepalive
 
     ### 5.2.16 Ensure SSH LoginGraceTime is set to one minute or less (Automated)
-    # Needs variable
-    # Needs rule
+    - var_sshd_login_grace_time=60
+    - sshd_set_login_grace_time
 
     ### 5.2.17 Ensure SSH access is limited (Automated)
-    # Needs rules
+    - sshd_configure_allow_users
+    - sshd_configure_deny_users
+    - sshd_configure_allow_groups
+    - sshd_configure_deny_groups
 
     ### 5.2.18 Ensure SSH warning banner is configured (Automated)
-    # Needs rule
+    - sshd_enable_warning_banner_net
 
     ### 5.2.19 Ensure SSH PAM is enabled (Automated)
-    # Needs rule
+    - sshd_enable_pam
 
     ### 5.2.20 Ensure SSH AllowTcpForwarding is disabled (Automated)
     # Skip due to being Level 2
 
     ### 5.2.21 Ensure SSH MaxStartups is configured (Automated)
-    # Needs rule
+    - sshd_set_maxstartups
 
     ### 5.2.22 Ensure SSH MaxSessions is limited (Automated)
     - var_sshd_max_sessions=10
@@ -716,7 +746,7 @@ selections:
     - accounts_password_pam_retry
 
     ### 5.3.2 Ensure lockout for failed password attempts is configured (Automated)
-    # Needs variable: var_accounts_passwords_pam_tally2_deny=5
+    - var_accounts_passwords_pam_tally2_deny=5
     - accounts_passwords_pam_tally2
 
     ### 5.3.3 Ensure password reuse is limited (Automated)
@@ -730,13 +760,13 @@ selections:
     ### 5.4.1 Set Shadow Password Suite Parameters ###
     #### 5.4.1.1 Ensure password expiration is 365 days or less (Automated)
     - var_accounts_maximum_age_login_defs=365
-    # Needs variable: var_accounts_password_set_max_life_existing=365
+    - var_accounts_password_set_max_life_existing=365
     - accounts_maximum_age_login_defs
     - accounts_password_set_max_life_existing
 
     #### 5.4.1.2 Ensure minimum days between password changes is configured (Automated)
     - var_accounts_minimum_age_login_defs=1
-    # Needs variable: var_accounts_password_set_min_life_existing=1
+    - var_accounts_password_set_min_life_existing=1
     - accounts_minimum_age_login_defs
     - accounts_password_set_min_life_existing
 
@@ -749,13 +779,13 @@ selections:
     - account_disable_post_pw_expiration
 
     #### 5.4.1.5 Ensure all users last password change date is in the past (Automated)
-    # Needs rule: last_change_date_in_past
+    - last_change_date_in_past
 
     ### 5.4.2 Ensure system accounts are secured (Automated)
     - no_shelllogin_for_systemaccounts
 
     ### 5.4.3 Ensure default group for the root account is GID 0 (Automated)
-    # Needs rule: accounts_no_gid_except_zero
+    - accounts_no_gid_except_zero
 
     ### 5.4.4 Ensure default user umask is 027 or more restrictive (Automated)
     - accounts_umask_etc_csh_cshrc
@@ -827,7 +857,7 @@ selections:
 
     ### 6.1.12 Ensure no ungrouped files or directories exist (Automated)
     # Needs variable
-    # Needs rule: no_ungrouped_files_or_dirs
+    - no_ungrouped_files_or_dirs
 
     ### 6.1.13 Audit SUID executables (Manual)
     # Skip due to being a manual test
@@ -851,45 +881,45 @@ selections:
     ### 6.2.5 Ensure users' home directories permissions are 750 or more restrictive (Automated)
     - file_permissions_home_directories
     # Needs variable
-    # Needs rule: adduser_home_directories_umask
-    # Needs rule: useradd_home_directories_umask
+    - adduser_home_directories_umask
+    - useradd_home_directories_umask
 
     ### 6.2.6 Ensure users own their home directories (Automated)
-    # Needs rule: accounts_users_own_home_directories
+    - accounts_users_own_home_directories
 
     ### 6.2.7 Ensure users' dot files are not group or world writable (Automated)
     - accounts_user_dot_user_ownership
     - accounts_user_dot_group_ownership
-    # Needs rule: no_group_world_readable_dot_files
+    - no_group_world_readable_dot_files
 
     ### 6.2.8 Ensure no users have .forward files (Automated)
     # Needs variable
-    # Needs rule: no_forward_files
+    - no_forward_files
 
     ### 6.2.9 Ensure no users have .netrc files (Automated)
     # Needs variable
     - no_netrc_files
 
     ### 6.2.10 Ensure users' .netrc Files are not group or world accessible (Automated)
-    # Needs rule: no_group_world_readable_netrc_files
+    - no_group_world_readable_netrc_files
 
     ### 6.2.11 Ensure no users have .rhosts files (Automated)
     - no_rsh_trust_files
 
     ### 6.2.12 Ensure all groups in /etc/passwd exist in /etc/group (Automated)
-    # Needs rule: all_etc_passwd_groups_exist_in_etc_group
+    - all_etc_passwd_groups_exist_in_etc_group
 
     ### 6.2.13 Ensure no duplicate UIDs exist (Automated)
-    # Needs rule: no_duplicate_uids
+    - no_duplicate_uids
 
     ### 6.2.14 Ensure no duplicate GIDs exist (Automated)
-    # Needs rule: no_duplicate_gids
+    - no_duplicate_gids
 
     ### 6.2.15 Ensure no duplicate user names exist (Automated)
-    # Needs rule: no_duplicate_user_names
+    - no_duplicate_user_names
 
     ### 6.2.16 Ensure no duplicate group names exist (Automated)
-    # Needs rule: no_duplicate_group_names
+    - no_duplicate_group_names
 
     ### 6.2.17 Ensure shadow group is empty (Automated)
-    # Needs rule: ensure_shadow_group_empty
+    - ensure_shadow_group_empty
