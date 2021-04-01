@@ -1,49 +1,100 @@
 <def-group>
-  <definition class="compliance" id="accounts_root_path_dirs_no_write" version="2">
+  <definition class="compliance" id="accounts_root_path_dirs_no_write" version="3">
     {{{ oval_metadata("Check each directory in root's path and make use it does
       not grant write permission to group and other") }}}
     <criteria comment="Check that write permission to group and other in root's path is denied">
-      <criterion comment="Check for write permission to group and other in root's path"
-      test_ref="test_accounts_root_path_dirs_no_group_other_write" />
+      <criterion test_ref="test_no_empty_directory_in_path" comment="no empty directory in $PATH(::)" />
+      <criterion test_ref="test_no_trailing_colon_in_path" comment="no trailing : in $PATH" />
+      <criterion test_ref="test_path_does_not_contain_curdir" comment="$PATH does not contain ." />
+      <criterion test_ref="test_directories_in_path_have_proper_permissions" comment="directories contained in $PATH have proper permissions set" />
+      <criterion test_ref="test_items_in_path_are_directories_or_links_to_dirs" comment="items contained in $PATH are directories or links pointing to directorties" />
     </criteria>
   </definition>
 
-  <ind:environmentvariable58_object id="object_accounts_root_path_dirs_no_write_pathenv" version="1">
-    <ind:pid xsi:nil="true" datatype="int" />
-    <ind:name>PATH</ind:name>
-  </ind:environmentvariable58_object>
-
-  <local_variable comment="Split the PATH on the : delimiter" datatype="string"
-  id="var_accounts_root_path_dirs_no_write" version="1">
-    <split delimiter=":">
-      <object_component item_field="value"
-      object_ref="object_accounts_root_path_dirs_no_write_pathenv" />
-    </split>
-  </local_variable>
-
-  <unix:file_test check="all" check_existence="none_exist"
-  comment="Check if there aren't directories in root's path having write permission set for group or other"
-  id="test_accounts_root_path_dirs_no_group_other_write" version="1">
-    <unix:object object_ref="object_accounts_root_path_dirs_no_group_other_write" />
+  <ind:environmentvariable58_test check="none satisfy" id="test_no_empty_directory_in_path" version="1" comment="empty directory in PATH(::)">
+    <ind:object object_ref="obj_root_pathenv" />
+    <ind:state state_ref="state_root_paths_match_empty_dir"/>
+  </ind:environmentvariable58_test>
+  <ind:environmentvariable58_test check="none satisfy" id="test_no_trailing_colon_in_path" version="1" comment="trailing : in PATH">
+    <ind:object object_ref="obj_root_pathenv" />
+    <ind:state state_ref="state_root_paths_match_trailing_colon"/>
+  </ind:environmentvariable58_test>
+  <ind:environmentvariable58_test check="none satisfy" id="test_path_does_not_contain_curdir" version="1" comment="PATH contains .">
+    <ind:object object_ref="obj_root_pathenv" />
+    <ind:state state_ref="state_root_paths_match_current_dir" />
+  </ind:environmentvariable58_test>
+  <unix:file_test check="all" id="test_directories_in_path_have_proper_permissions" version="1" comment="directories contained in PATH have proper permissions set">
+    <unix:object object_ref="obj_root_path_all_resolved_directories" />
+    <unix:state state_ref="state_root_paths_match_proper_permissions" />
+  </unix:file_test>
+  <unix:file_test check="all" check_existence="any_exist" id="test_items_in_path_are_directories_or_links_to_dirs" version="1" comment="items contained in $PATH are directories or links pointing to directories">
+    <unix:object object_ref="obj_root_path_all_entries_union_resolved_symlinks_dirs" /> <!-- filter out all file_object of the type directory, so we only need to check for symbolic links -->
+    <unix:state state_ref="state_root_paths_match_sym_link" />
   </unix:file_test>
 
-  <unix:file_object comment="root's path directories with wrong group / other write permissions"
-  id="object_accounts_root_path_dirs_no_group_other_write" version="1">
-    <unix:path var_ref="var_accounts_root_path_dirs_no_write" var_check="at least one" />
-    <unix:filename xsi:nil="true" />
-    <filter action="include">state_accounts_root_path_dirs_wrong_perms</filter>
-    <filter action="exclude">state_accounts_root_path_dirs_symlink</filter>
+  <ind:environmentvariable58_object id="obj_root_pathenv" version="1">
+    <ind:pid xsi:nil="true" datatype="int"/>
+    <ind:name>PATH</ind:name>
+  </ind:environmentvariable58_object>
+  <unix:symlink_object id="obj_root_path_all_symlinks" version="1"> <!-- all symlink objects contained in PATH -->
+    <unix:filepath operation="equals" var_ref="var_root_path_directories_in_pathenv" var_check="at least one" />
+  </unix:symlink_object>
+  <unix:file_object id="obj_root_path_resolved_dirs_from_symlinks" version="1"> <!-- directories resolved from symlinks which were included in PATH -->
+    <unix:path operation="equals" var_ref="var_root_path_canonical_directories_in_pathenv" var_check="at least one" />
+    <unix:filename xsi:nil="true"/>
+  </unix:file_object>
+  <unix:file_object id="obj_root_path_all_directories" version="1"> <!-- directories included in PATH -->
+    <unix:path operation="equals" var_ref="var_root_path_directories_in_pathenv" var_check="at least one" />
+    <unix:filename xsi:nil="true"/>
+    <filter action="include">state_root_paths_match_directory</filter>
+  </unix:file_object>
+  <unix:file_object id="obj_root_path_all_resolved_directories" version="1"> <!-- UNION of directories from PATH, after resolving symlinks -->
+    <set set_operator="UNION">
+     <object_reference>obj_root_path_resolved_dirs_from_symlinks</object_reference>
+     <object_reference>obj_root_path_all_directories</object_reference>
+    </set>
+  </unix:file_object>
+  <unix:file_object id="obj_root_path_only_dirs" version="1">
+    <unix:filepath operation="equals" var_ref="var_root_path_directories_in_pathenv" var_check="at least one" />
+  </unix:file_object>
+  <unix:file_object id="obj_root_path_resolved_directories_from_symlinks" version="1"> <!-- files resolved from symlinks which were included in PATH -->
+    <unix:filepath operation="equals" var_ref="var_root_path_canonical_directories_in_pathenv" var_check="at least one" />
+  </unix:file_object>
+  <unix:file_object id="obj_root_path_all_entries_union_resolved_symlinks_dirs" version="1"> <!-- UNION of files from PATH, after resolving symlinks -->
+    <set set_operator="UNION">
+     <object_reference>obj_root_path_only_dirs</object_reference>
+     <object_reference>obj_root_path_resolved_directories_from_symlinks</object_reference>
+    </set>
   </unix:file_object>
 
-  <unix:file_state comment="group or other has write privilege"
-  id="state_accounts_root_path_dirs_wrong_perms" version="1" operator="OR">
-    <unix:gwrite datatype="boolean">true</unix:gwrite>
-    <unix:owrite datatype="boolean">true</unix:owrite>
-  </unix:file_state>
+  <local_variable datatype="string" id="var_root_path_directories_in_pathenv" version="1" comment="directories contained in PATH" >
+    <split delimiter=":">
+      <object_component item_field="value" object_ref="obj_root_pathenv" />
+    </split>
+  </local_variable>
+  <local_variable datatype="string" id="var_root_path_canonical_directories_in_pathenv" version="1" comment="canonical paths from symlinks contained in PATH" >
+    <object_component item_field="canonical_path" object_ref="obj_root_path_all_symlinks" />
+  </local_variable>
 
-  <unix:file_state comment="symbolic link"
-  id="state_accounts_root_path_dirs_symlink" version="1">
-    <unix:type operation="equals">symbolic link</unix:type>
+  <ind:environmentvariable58_state id="state_root_paths_match_empty_dir" version="1">
+    <ind:value operation="pattern match">^.*::.*$</ind:value>
+  </ind:environmentvariable58_state>
+  <ind:environmentvariable58_state id="state_root_paths_match_trailing_colon" version="1">
+    <ind:value operation="pattern match">^.*:$</ind:value>
+  </ind:environmentvariable58_state>
+  <ind:environmentvariable58_state id="state_root_paths_match_current_dir" version="1">
+    <ind:value operation="pattern match">^.*:(\.|\.\/):.*$|^(\.|\.\/):.*$|^.*:(\.|\.\/)$</ind:value>
+  </ind:environmentvariable58_state>
+  <unix:file_state id="state_root_paths_match_proper_permissions" version="1">
+    <unix:user_id datatype="int" operation="equals">0</unix:user_id>
+    <unix:gwrite datatype="boolean">false</unix:gwrite>
+    <unix:owrite datatype="boolean">false</unix:owrite>
+  </unix:file_state>
+  <unix:file_state id="state_root_paths_match_sym_link" version="1">
+    <unix:type datatype="string">symbolic link</unix:type>
+  </unix:file_state>
+  <unix:file_state id="state_root_paths_match_directory" version="1">
+    <unix:type datatype="string">directory</unix:type>
   </unix:file_state>
 
 </def-group>
