@@ -6,6 +6,11 @@
   xmlns:date="http://exslt.org/dates-and-times" extension-element-prefixes="date"
   exclude-result-prefixes="xccdf xhtml dc">
 
+  <!-- XSLT version one doesn't have upper-case(...). We need to use
+       translate instead. Save us from having to use the alphabet again. -->
+  <xsl:variable name="lowercase" select="'abcdefghijklmnopqrstuvwxyz'" />
+  <xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
+
   <!-- This transform takes a "shorthand" variant of XCCDF
        and expands its elements into proper XCCDF elements.
        It also assigns all elements into the proper namespace,
@@ -348,10 +353,10 @@
         </xsl:attribute>
         <xsl:choose>
           <xsl:when test="name() = 'disa'">
-            <xsl:value-of select='$refitem' />
+            <xsl:value-of select='concat("DISA§", $refitem)' />
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="normalize-space($refitem)" />
+            <xsl:value-of select="concat(translate($refsource, $lowercase, $uppercase), '§', normalize-space($refitem))" />
           </xsl:otherwise>
         </xsl:choose>
       </reference>
