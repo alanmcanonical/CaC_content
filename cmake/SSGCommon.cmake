@@ -458,13 +458,38 @@ macro(ssg_build_sce PRODUCT)
     )
 endmacro()
 
-# The CPE dictionary is a list of platform-like constructs that get built
-# per-product and allow detection of specific features (like OS version or
-# package installation state). This is a "dictionary" file and then OVAL
-# checks to actually audit the state of each dictionary item. Note that
-# these get evaluated separately from the XCCDF and have no knowledge of
-# e.g. the state of XCCDF variables in a profile. Most of these are located
-# under shared/applicability and shared/checks.
+macro(ssg_build_hardening PRODUCT)
+    # Building hardening scripts is a high-level goal. We depend on other
+    # lower-level goals but otherwise don't have any dependencies on our
+    # output. We are thus safe to exec the helper macro and not put a
+    # dependency on the results.
+    set(LANGUAGE "bash")
+    add_custom_target(generate-ssg-${PRODUCT}-hardening)
+    _ssg_build_hardening_for_langauge("${PRODUCT}" "${LANGUAGE}")
+endmacro()
+
+macro(_ssg_build_hardening_for_langauge PRODUCT LANGUAGE)
+    set(BUILD_HARDENING_DIR "${CMAKE_CURRENT_BINARY_DIR}/hardening/${LANGUAGE}")
+    set(BUILD_REMEDIATIONS_DIR "${CMAKE_CURRENT_BINARY_DIR}/fixes_from_templates/${LANGUAGE}")
+    set(ALL_FIXES_DIR "${CMAKE_CURRENT_BINARY_DIR}/fixes/${LANGUAGE}")
+
+    # We need to wait until all remediations for this product have been built
+    # and then we can build our hardening scripts.
+    add_custom_command(
+        OUTPUT "${BUILD_HARDENING_DIR}/.done"
+        COMMAND env "PYTHONPATH=$ENV{PYTHONPATH}" "${PYTHON_EXECUTABLE}" "${SSG_BUILD_SCRIPTS}/build_hardening.py" --build-config-yaml "${CMAKE_BINARY_DIR}/build_config.yml" --product-yaml "${CMAKE_CURRENT_SOURCE_DIR}/product.yml" --check-files "${ALL_FIXES_DIR}" --output "${BUILD_HARDENING_DIR}/${LANGAUGE}"
+        COMMAND ${CMAKE_COMMAND} -E touch "${BUILD_HARDENING_DIR}/.done"
+        DEPENDS "${SSG_BUILD_SCRIPTS}/build_hardening.py"
+        DEPENDS "generate-internal-${PRODUCT}-${LANGUAGE}-all-fixes"
+        COMMENT "[${PRODUCT}-content] generating hardening/${LANGUAGE}"
+    )
+    add_custom_target(
+        generate-internal-${PRODUCT}-${LANGUAGE}-hardening
+        DEPENDS "${BUILD_HARDENING_DIR}/.done"
+    )
+    add_dependencies(generate-ssg-${PRODUCT}-hardening generate-internal-${PRODUCT}-${LANGUAGE}-hardening)
+endmacro()
+
 macro(ssg_build_cpe_dictionary PRODUCT)
 
     add_custom_command(
@@ -902,6 +927,7 @@ macro(ssg_build_product PRODUCT)
     ssg_build_xccdf_unlinked(${PRODUCT})
     ssg_build_ocil_unlinked(${PRODUCT})
     ssg_build_remediations(${PRODUCT})
+    ssg_build_hardening(${PRODUCT})
 
     if ("${PRODUCT_ANSIBLE_REMEDIATION_ENABLED}" AND SSG_ANSIBLE_PLAYBOOKS_PER_RULE_ENABLED)
         ssg_build_ansible_playbooks(${PRODUCT})
@@ -933,6 +959,7 @@ macro(ssg_build_product PRODUCT)
         generate-ssg-${PRODUCT}-ocil.xml
         generate-ssg-${PRODUCT}-cpe-dictionary.xml
         generate-ssg-${PRODUCT}-ds.xml
+        generate-ssg-${PRODUCT}-hardening
         generate-ssg-tables-${PRODUCT}-all
     )
 
