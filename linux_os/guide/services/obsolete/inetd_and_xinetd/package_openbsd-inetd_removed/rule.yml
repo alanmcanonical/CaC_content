@@ -1,0 +1,28 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Uninstall openbsd-inetd Package'
+
+description: |-
+    {{{ describe_package_remove(package="openbsd-inetd") }}}
+
+rationale: |-
+    If there are no inetd services required, it is recommended that the daemon
+    be removed.
+
+severity: low
+
+references:
+    cis@ubuntu2004: 2.1.2
+
+ocil: |-
+    If network services are using the openbsd-inetd service, this is not
+    applicable.
+    <br /><br />
+    {{{ complete_ocil_entry_package(package="openbsd-inetd") }}}
+
+template:
+    name: package_removed
+    vars:
+        pkgname: openbsd-inetd
