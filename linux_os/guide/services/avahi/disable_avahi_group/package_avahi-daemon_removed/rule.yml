@@ -1,0 +1,29 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Uninstall avahi-daemon Package'
+
+description: |-
+    {{{ describe_package_remove(package="avahi-daemon") }}}
+
+rationale: |-
+    Automatic discovery of network services is not normally required for
+    system functionality. It is recommended to remove this package to reduce
+    the potential attack surface.
+
+severity: low
+
+references:
+    cis@ubuntu2004: 2.2.3
+
+ocil: |-
+    If network services are using the avahi-daemon service, this is not
+    applicable.
+    <br /><br />
+    {{{ complete_ocil_entry_package(package="avahi-daemon") }}}
+
+template:
+    name: package_removed
+    vars:
+        pkgname: avahi-daemon
