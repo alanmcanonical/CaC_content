@@ -1,0 +1,8 @@
+documentation_complete: true
+
+title: 'Harden Local EXIM4 MTA Configuration'
+
+description: |-
+    The guidance in this section is appropriate for any host which is not
+    operating as a site MTA but still needs a local MTA, such as for notifying
+    local administrators of failing jobs.
