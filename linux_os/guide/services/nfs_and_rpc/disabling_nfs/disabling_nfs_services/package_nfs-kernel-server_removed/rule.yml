@@ -1,0 +1,29 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Uninstall nfs-kernel-server Package'
+
+description: |-
+    {{{ describe_package_remove(package="nfs-kernel-server") }}}
+
+rationale: |-
+    If the system does not export NFS shares or act as an NFS client, it is
+    recommended that these services be removed to reduce the remote attack
+    surface.
+
+severity: low
+
+references:
+    cis@ubuntu2004: 2.2.7
+
+ocil: |-
+    If network services are using the nfs-kernel-server service, this is not
+    applicable.
+    <br /><br />
+    {{{ complete_ocil_entry_package(package="nfs-kernel-server") }}}
+
+template:
+    name: package_removed
+    vars:
+        pkgname: nfs-kernel-server
