@@ -238,6 +238,17 @@ value: "Setting={{ varname1 }}"
 {{%- endmacro %}}
 
 {{#
+  High level macro to set a parameter in /etc/exim4/update-exim4.conf.conf
+  Parameters:
+  - msg: the name for the ansible task
+  - parameter: the parameter to be set in the configuration file
+  - value: value of the parameter
+#}}
+{{%- macro ansible_exim4_config_set(msg='', parameter='', value='') %}}
+{{{ ansible_set_config_file_dir(msg, "/etc/exim4/update-exim4.conf.conf", "/etc/exim4/conf.d", "/etc/exim4/update-exim4.conf.conf", parameter=parameter, separator="=", separator_regex="=", prefix_regex="^", value=value, validate="bash -n %s") }}}
+{{%- endmacro %}}
+
+{{#
   Generates an Ansible task that puts 'contents' into a file at 'filepath'
   Parameters:
     - filepath - filepath of the file to check

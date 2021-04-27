@@ -99,6 +99,21 @@ populate {{{ name }}}
     }}}
 {{%- endmacro -%}}
 
+{{%- macro bash_exim4_config_set(parameter, value) -%}}
+{{{ set_config_file(
+        path="/etc/exim4/update-exim4.conf.conf",
+        parameter=parameter,
+        value=value,
+        create=true,
+        insert_after="",
+        insert_before="",
+        insensitive=false,
+        separator="=",
+        separator_regex="=",
+        prefix_regex="^")
+    }}}
+{{%- endmacro -%}}
+
 {{#
     Install a package
 
