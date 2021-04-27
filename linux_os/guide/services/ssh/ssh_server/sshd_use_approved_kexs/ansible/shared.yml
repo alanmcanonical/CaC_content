@@ -1,0 +1,8 @@
+# platform = multi_platform_ubuntu
+# reboot = false
+# strategy = restrict
+# complexity = low
+# disruption = low
+{{{ ansible_instantiate_variables("sshd_approved_kexs") }}}
+
+{{{ ansible_sshd_set(parameter="KexAlgorithms", value="{{ sshd_approved_kexs }}") }}}
