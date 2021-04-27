@@ -1,0 +1,16 @@
+documentation_complete: true
+
+title: 'SSH LoginGraceTime duration in seconds'
+
+description: 'Specify the maximum time to allow for successful authentication.'
+
+type: number
+
+operator: equals
+
+interactive: false
+
+options:
+    minimum: '1'
+    '60': '60'
+    default: '120'
