@@ -1,0 +1,28 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Uninstall rpcbind Package'
+
+description: |-
+    {{{ describe_package_remove(package="rpcbind") }}}
+
+rationale: |-
+    If RPC is not required, it is recommended that this services be removed
+    to reduce the remote attack surface.
+
+severity: low
+
+references:
+    cis@ubuntu2004: 2.3.6
+
+ocil: |-
+    If network services are using the rpcbind service, this is not
+    applicable.
+    <br /><br />
+    {{{ complete_ocil_entry_package(package="rpcbind") }}}
+
+template:
+    name: package_removed
+    vars:
+        pkgname: rpcbind
