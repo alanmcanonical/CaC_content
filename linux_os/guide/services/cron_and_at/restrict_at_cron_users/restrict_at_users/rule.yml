@@ -1,0 +1,26 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Ensure at is restricted to authorized users'
+
+description: |-
+    Configure /etc/at.allow to allow specific users to use these services. If
+    /etc/at.allow do not exist, then /etc/at.deny is checked. Any user not
+    specifically defined in these file is allowed to use at. By removing the
+    file, only users in /etc/at.allow is allowed to use at.
+
+    Note: Other methods, such as systemd timers , exist for scheduling jobs. If another method is
+    used, at should be removed, and the alternate method should be secured in accordance with
+    local site policy.
+
+rationale: |-
+    On many systems, only the system administrator is authorized to schedule at jobs. Using
+    the at.allow file to control who can run at jobs enforces this policy. It is easier to manage
+    an allow list than a deny list. In a deny list, you could potentially add a user ID to the system
+    and forget to add it to the deny files.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 5.1.9
