@@ -1,0 +1,27 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Remove iptables-persistent Package'
+
+description: |-
+    The iptables-persistent is a boot-time loader for netfilter rules, iptables plugin.
+    {{{ describe_package_remove(package="iptables-persistent") }}}
+
+rationale: |-
+    Running both iptables-persistent and another iptables-based firewall (such as UFW
+    or firewalld) may lead to conflicts.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 3.5.1.2
+
+ocil_clause: 'the package is installed'
+
+ocil: '{{{ ocil_package(package="iptables-persistent") }}}'
+
+template:
+    name: package_removed
+    vars:
+        pkgname: iptables-persistent
