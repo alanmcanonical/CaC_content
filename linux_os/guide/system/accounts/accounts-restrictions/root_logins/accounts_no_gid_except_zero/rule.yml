@@ -1,0 +1,20 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Ensure default group for the root account is GID 0'
+
+description: |-
+    The usermod command can be used to specify which group the root user belongs
+    to. This affects permissions of files that are created by the root user.
+    Using GID 0 for the root account helps prevent root-owned files from
+    accidentally becoming accessible to non-privileged users.
+
+rationale: |-
+    Using GID 0 for the root account helps prevent root -owned files from accidentally
+    becoming accessible to non-privileged users.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 5.4.3
