@@ -1,0 +1,26 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Uninstall rsync Package'
+
+description: |-
+    {{{ describe_package_remove(package="rsync") }}}
+
+rationale: |-
+    The rsync service presents a security risk as it uses unencrypted
+    protocols for communication. The rsync package should be removed to
+    reduce the attack area of the system.
+
+severity: low
+
+references:
+    cis@ubuntu2004: 2.2.16
+
+ocil: |-
+    {{{ complete_ocil_entry_package(package="rsync") }}}
+
+template:
+    name: package_removed
+    vars:
+        pkgname: rsync
