@@ -1,0 +1,57 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Use Only Approved KEXs'
+
+description: |-
+    Limit the KEXs to those key exchange algorithms which are approved.
+    The following line in <tt>/etc/ssh/sshd_config</tt>
+    demonstrates use of approved KEXs:
+    <pre>KexAlgorithms {{{ xccdf_value("sshd_approved_kexs") }}}</pre>
+
+    The man page <tt>sshd_config(5)</tt> contains a list of supported MACs.
+    The rule is parametrized to use the following KEXs: <code>{{{ xccdf_value("sshd_approved_kexs") }}}</code>.
+
+rationale: |-
+    DoD Information Systems are required to use approved cryptographic key
+    exchange algorithms. Key exchange methods that are considered weak should be
+    removed. A key exchange method may be weak because too few bits are used, or
+    the hashing algorithm is considered too weak. Using weak algorithms could
+    expose connections to man-in-the-middle attacks.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 5.2.14
+
+ocil_clause: 'KEXs option is commented out or not using approved key exchange algorithms'
+
+ocil: |-
+    Only approved KEXs should be used. To verify that only approved
+    KEXs are in use, run the following command:
+    <pre>$ sudo grep -i kexalgorithms /etc/ssh/sshd_config</pre>
+    The output should contain only those KEXs which are approved. Any use of other
+    ciphers or algorithms will result in the module entering the a non-compliant
+    mode of operation.
+
+warnings:
+    - general: |-
+        The system needs to be rebooted for these changes to take effect.
+    - regulatory: |-
+        To achieve FIPS compliance, System Crypto Modules must be provided by
+        a vendor that undergoes FIPS-140 certifications.
+        FIPS-140 is applicable to all Federal agencies that use
+        cryptographic-based security systems to protect sensitive information
+        in computer and telecommunication systems (including voice systems) as
+        defined in Section 5131 of the Information Technology Management Reform
+        Act of 1996, Public Law 104-106. This standard shall be used in
+        designing and implementing cryptographic modules that Federal
+        departments and agencies operate or are operated for them under
+        contract. See <b>{{{ weblink(link="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.140-2.pdf") }}}</b>
+        To meet this, the system has to have cryptographic software provided by
+        a vendor that has undergone this certification. This means providing
+        documentation, test results, design information, and independent third
+        party review by an accredited lab. While open source software is
+        capable of meeting this, it does not meet FIPS-140 unless the vendor
+        submits to this process.
