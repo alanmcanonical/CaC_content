@@ -1,0 +1,58 @@
+<def-group>
+  <definition class="compliance" id="sshd_use_approved_kexs" version="1">
+    {{{ oval_metadata("Limit the Key Exchange Algorithms (KEXs) to those which are approved.") }}}
+    <criteria operator="AND">
+      <criteria comment="SSH is configured correctly or is not installed"
+      operator="OR">
+        <criteria comment="sshd is not installed" operator="AND">
+          <extend_definition comment="sshd is not required or requirement is unset"
+          definition_ref="sshd_not_required_or_unset" />
+          <extend_definition comment="deb package openssh removed"
+          definition_ref="package_openssh-server_removed" />
+        </criteria>
+        <criteria comment="sshd is installed and configured" operator="AND">
+          <extend_definition comment="sshd is required or requirement is unset"
+          definition_ref="sshd_required_or_unset" />
+          <extend_definition comment="deb package openssh-server installed"
+          definition_ref="package_openssh-server_installed" />
+        </criteria>
+      </criteria>
+    </criteria>
+  </definition>
+
+  <ind:variable_test check="at least one"
+  comment="tests the value of KEXs setting in the /etc/ssh/sshd_config file"
+  id="test_sshd_use_approved_kexs" version="1">
+    <ind:object object_ref="obj_sshd_use_approved_kexs" />
+    <ind:state state_ref="ste_sshd_use_approved_kexs" />
+  </ind:variable_test>
+
+  <ind:variable_object id="obj_sshd_use_approved_kexs" version="1">
+    <ind:var_ref>var_sshd_config_kexs</ind:var_ref>
+  </ind:variable_object>
+
+  <ind:variable_state comment="approved kexs" id="ste_sshd_use_approved_kexs" version="1">
+    <ind:value operation="equals" datatype="string" var_ref="var_sshd_approved_kexs" var_check="at least one" />
+  </ind:variable_state>
+
+  <ind:textfilecontent54_object id="obj_sshd_config_kexs" version="1">
+    <ind:filepath>/etc/ssh/sshd_config</ind:filepath>
+    <ind:pattern operation="pattern match">^[\s]*(?i)KexAlgorithms(?-i)[\s]+([\w,-@]+)+[\s]*(?:#.*)?$</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <local_variable id="var_sshd_config_kexs" datatype="string" version="1" comment="KexAlgorithms values splitted on comma">
+    <split delimiter=",">
+      <object_component item_field="subexpression" object_ref="obj_sshd_config_kexs" />
+    </split>
+  </local_variable>
+
+  <local_variable id="var_sshd_approved_kexs" datatype="string" version="1" comment="approved KexAlgorithms values splitted on comma">
+    <split delimiter=",">
+      <variable_component var_ref="sshd_approved_kexs" />
+    </split>
+  </local_variable>
+
+  <external_variable comment="SSH Approved KexAlgorithms" datatype="string" id="sshd_approved_kexs" version="1" />
+
+</def-group>
