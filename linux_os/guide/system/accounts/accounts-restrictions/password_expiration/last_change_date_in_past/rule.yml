@@ -1,0 +1,17 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Ensure all users last password change date is in the past'
+
+description: |-
+    All users should have a password change date in the past.
+
+rationale: |-
+    If a users recorded password change date is in the future then they could bypass any set
+    password expiration.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 5.4.1.5
