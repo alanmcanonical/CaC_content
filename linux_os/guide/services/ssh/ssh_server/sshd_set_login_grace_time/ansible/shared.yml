@@ -1,0 +1,8 @@
+# platform = multi_platform_all
+# reboot = false
+# strategy = configure
+# complexity = low
+# disruption = low
+{{{ ansible_instantiate_variables("var_sshd_login_grace_time") }}}
+
+{{{ ansible_sshd_set(parameter="LoginGraceTime", value="{{ var_sshd_login_grace_time }}") }}}
