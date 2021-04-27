@@ -1,0 +1,22 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Ensure no users have .forward files'
+
+description: |-
+    The .forward file specifies an email address to forward the user's mail to. Use
+    of the .forward file poses a security risk in that sensitive data may be
+    inadvertently transferred outside the organization. The .forward file also
+    poses a risk as it can be used to execute commands that may perform
+    unintended actions.
+
+rationale: |-
+    Use of the .forward file poses a security risk in that sensitive data may be inadvertently
+    transferred outside the organization. The .forward file also poses a risk as it can be used to
+    execute commands that may perform unintended actions.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 6.2.8
