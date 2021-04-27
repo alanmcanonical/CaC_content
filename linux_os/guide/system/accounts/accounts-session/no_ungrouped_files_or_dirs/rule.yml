@@ -1,0 +1,20 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Ensure no ungrouped files or directories exist'
+
+description: |-
+    Sometimes when administrators delete users or groups from the system they
+    neglect to remove all files owned by those users or groups. A new user who
+    is assigned the deleted user's user ID or group ID may then end up "owning"
+    these files, and thus have more access on the system than was intended.
+
+rationale: |-
+    A new user who is assigned the deleted user's user ID or group ID may then end up
+    "owning" these files, and thus have more access on the system than was intended.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 6.1.12
