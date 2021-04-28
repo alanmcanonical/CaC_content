@@ -1,0 +1,15 @@
+documentation_complete: true
+
+title: nftables
+
+description: |-
+    nftables replaces the popular {ip,ip6,arp,eb}tables. This software provides a
+    new in-kernel packet classification framework that is based on a network-specific
+    Virtual Machine (VM) and a new nft userspace command line tool. nftables reuses
+    the existing Netfilter subsystems such as the existing hook infrastructure, the
+    connection tracking system, NAT, userspace queueing and logging subsystem.
+
+    This software also provides libnftables, the high-level userspace library that
+    includes support for JSON, see man (3) libnftables for more information.
+
+platform: machine
