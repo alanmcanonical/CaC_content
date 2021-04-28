@@ -1,0 +1,18 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Trafic in on lo is allowed'
+
+description: |-
+    iptables should be configured to allow all inbound traffic on the loopback
+    interface.
+
+rationale: |-
+    A properly configured system expects communication on the loopback
+    interface to be possible.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 3.5.3.2.2
