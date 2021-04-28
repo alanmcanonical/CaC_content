@@ -1,0 +1,24 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Restrict sshd user access via AllowUsers'
+
+description: |-
+    AllowUsers gives the system administrator the option of allowing specific users to
+    ssh into the system.
+
+    - The list consists of space separated user names
+    - Numeric user IDs are not recognized with this variable
+    - A system administrator may restrict user access further by only allowing the
+      allowed users to log in from a particular host by specifying the entry as
+      user@host.
+
+rationale: |-
+    Restricting which users can remotely access the system via SSH will help ensure that only
+    authorized users access the system.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 5.2.17
