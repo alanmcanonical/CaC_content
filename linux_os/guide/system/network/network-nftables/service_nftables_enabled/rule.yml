@@ -1,0 +1,24 @@
+documentation_complete: true
+
+title: 'Verify nftables Enabled'
+
+description: |-
+    {{{ describe_service_enable(service="nftables") }}}
+
+rationale: |-
+    The nftables service must be enabled and running in order for nftables to protect the system.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 3.5.2.9
+
+ocil: |-
+    {{{ ocil_service_enabled(service="nftables") }}}
+
+template:
+    name: service_enabled
+    vars:
+        servicename: nftables
+
+platform: machine
