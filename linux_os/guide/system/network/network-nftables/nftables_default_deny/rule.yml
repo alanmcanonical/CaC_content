@@ -1,0 +1,21 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Ensure default deny firewall policy'
+
+description: |-
+    Base chain policy is the default verdict that will be applied to packets reaching the end of
+    the chain.
+
+rationale: |-
+    There are two policies: accept (Default) and drop. If the policy is set to
+    accept, the firewall will accept any packet that is not configured to be
+    denied and the packet will continue transversing the network stack. It is
+    easier to white list acceptable usage than to black list unacceptable
+    usage.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 3.5.2.8
