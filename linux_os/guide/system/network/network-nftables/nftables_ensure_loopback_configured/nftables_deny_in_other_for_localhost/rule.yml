@@ -1,0 +1,18 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Inbound traffic for 127.0.0.0/8 on any other interface is denied.'
+
+description: |-
+    nftables should be configured to forbid all traffic for the localhost addresses
+    (127.0.0.0/8) on interfaces other than the designated lo interface.
+
+rationale: |-
+    A properly configured system expects communication on the loopback
+    interface to be secure and only accessible to the local system.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 3.5.2.6
