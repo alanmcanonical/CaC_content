@@ -1,0 +1,24 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Ensure nftables rules are permanent'
+
+description: |-
+    nftables is a subsystem of the Linux kernel providing filtering and classification of network
+    packets/datagrams/frames.
+
+    The nftables service reads the /etc/nftables.conf file for a nftables file or files to include
+    in the nftables ruleset.
+
+    A nftables ruleset containing the input, forward, and output base chains allow network
+    traffic to be filtered.
+
+rationale: |-
+    Changes made to nftables ruleset only affect the live system, you will also
+    need to configure the nftables ruleset to apply on boot.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 3.5.2.10
