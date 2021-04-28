@@ -1,0 +1,27 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Remove nftables Package'
+
+description: |-
+    {{{ describe_package_remove(package="nftables") }}}
+
+rationale: |-
+    nftables is a subsystem of the Linux kernel that can protect against threats originating from
+    within a corporate network to include malicious mobile code and poorly configured
+    software on a host.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 3.5.3.1.2
+
+ocil_clause: 'the package is installed'
+
+ocil: '{{{ ocil_package(package="nftables") }}}'
+
+template:
+    name: package_removed
+    vars:
+        pkgname: nftables
