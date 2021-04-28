@@ -1,0 +1,21 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Ensure default deny firewall policy'
+
+description: |-
+    A default deny policy on connections ensures that any unconfigured network usage will be
+    rejected.
+
+    Note: Any port or protocol without a explicit allow before the default deny will be blocked.
+
+rationale: |-
+    With a default accept policy the firewall will accept any packet that is not
+    configured to be denied. It is easier to allow acceptable usage than to block
+    unacceptable usage.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 3.5.1.7
