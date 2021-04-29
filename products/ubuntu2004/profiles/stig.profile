@@ -41,8 +41,10 @@ selections:
     - '!grub2_password'
 
     # UBTU-20-010010 The Ubuntu operating system must uniquely identify interactive users.
+    - no_duplicate_uids
 
     # UBTU-20-010012 The Ubuntu operating system must ensure only users who need access to security functions are part of sudo group.
+    - ensure_sudo_group_restricted
 
     # UBTU-20-010013 The Ubuntu operating system must automatically terminate a user session after inactivity timeouts have expired.
     - var_accounts_tmout=10_min
@@ -56,9 +58,11 @@ selections:
     - accounts_umask_etc_login_defs
 
     # UBTU-20-010033 The Ubuntu operating system must implement smart card logins for multifactor authentication for local and network access to privileged and non-privileged accounts.
+    - sshd_enable_pubkey_auth
     - smartcard_pam_enabled
 
     # UBTU-20-010035 The Ubuntu operating system must use strong authenticators in establishing nonlocal maintenance and diagnostic sessions.
+    - sshd_enable_pam
 
     # UBTU-20-010036 The Ubuntu operating system must immediately terminate all network connections associated with SSH traffic after a period of inactivity.
     - sshd_set_keepalive
@@ -274,21 +278,26 @@ selections:
     - audit_rules_unsuccessful_file_modification_open_by_handle_at
 
     # UBTU-20-010161 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the sudo command.
+    # missing -F perm=x
     - audit_rules_privileged_commands_sudo
 
     # UBTU-20-010162 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the sudoedit command.
+    # missing -F perm=x
     - audit_rules_privileged_commands_sudoedit
 
     # UBTU-20-010163 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chsh command.
+    # missing -F perm=x
     - audit_rules_privileged_commands_chsh
 
     # UBTU-20-010164 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the newgrp command.
+    # missing -F perm=x
     - audit_rules_privileged_commands_newgrp
 
     # UBTU-20-010165 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chcon command.
     - audit_rules_execution_chcon
 
     # UBTU-20-010166 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the apparmor_parser command.
+    - audit_rules_privileged_commands_apparmor_parser
 
     # UBTU-20-010167 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the setfacl command.
     - audit_rules_execution_setfacl
@@ -306,23 +315,29 @@ selections:
     - audit_rules_login_events_lastlog
 
     # UBTU-20-010172 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the passwd command.
+    # missing -F perm=x
     - audit_rules_privileged_commands_passwd
 
     # UBTU-20-010173 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the unix_update command.
+    - audit_rules_privileged_commands_unix_update
 
     # UBTU-20-010174 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the gpasswd command.
+    # missing -F perm=x
     - audit_rules_privileged_commands_gpasswd
 
     # UBTU-20-010175 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chage command.
+    # missing -F perm=x
     - audit_rules_privileged_commands_chage
 
     # UBTU-20-010176 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the usermod command.
     - audit_rules_privileged_commands_usermod
 
     # UBTU-20-010177 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the crontab command.
+    # missing -F perm=x
     - audit_rules_privileged_commands_crontab
 
     # UBTU-20-010178 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the pam_timestamp_check command.
+    # missing -F perm=x
     - audit_rules_privileged_commands_pam_timestamp_check
 
     # UBTU-20-010179 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the init_module syscall.
@@ -332,6 +347,7 @@ selections:
     - audit_rules_kernel_module_loading_finit
 
     # UBTU-20-010181 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the delete_module syscall
+    # Needs rule, a little different from audit_rules_kernel_module_loading_delete
 
     # UBTU-20-010182 The Ubuntu operating system must produce audit records and reports containing information to establish when, where, what type, the source, and the outcome for all DoD-defined auditable events and actions in near real time.
     - package_audit_installed
@@ -359,6 +375,7 @@ selections:
     - auditd_audispd_configure_sufficiently_large_partition
 
     # UBTU-20-010216 The Ubuntu operating system audit event multiplexor must be configured to off-load audit logs onto a different system or storage media from the system being audited.
+    #- var_audispd_remote_server=192.168.122.126
     - package_audit-audispd-plugins_installed
     - auditd_audispd_configure_remote_server
 
@@ -372,6 +389,7 @@ selections:
     - ensure_rtc_utc_configuration
 
     # UBTU-20-010244 The Ubuntu operating system must generate audit records for privileged activities, nonlocal maintenance, diagnostic sessions and other system-level access.
+    - audit_sudo_log_events
 
     # UBTU-20-010267 The Ubuntu operating system must generate audit records for any successful/unsuccessful use of unlink system call.
     - audit_rules_file_deletion_events_unlink
@@ -386,6 +404,7 @@ selections:
     - audit_rules_file_deletion_events_renameat
 
     # UBTU-20-010276 The Ubuntu operating system must generate audit records when loading dynamic kernel modules.
+    # same as UBTU-20-010302? audit_rules_kernel_module_loading_delete
 
     # UBTU-20-010277 The Ubuntu operating system must generate audit records for the /var/log/wtmp file.
     - audit_rules_session_events_wtmp
@@ -403,10 +422,13 @@ selections:
     - audit_rules_privileged_commands_kmod
 
     # UBTU-20-010298 The Ubuntu operating system must generate audit records when successful/unsuccessful attempts to use the fdisk command.
+    - audit_rules_privileged_commands_fdisk
 
     # UBTU-20-010300 The Ubuntu operating system must have a crontab script running weekly to offload audit events of standalone systems.
+    - auditd_offload_logs
 
     # UBTU-20-010302 The Ubuntu operating system must generate records for successful/unsuccessful uses of delete_module syscall.
+    # Confused if same as UBTU-20-010276
     - audit_rules_kernel_module_loading_delete
 
     # UBTU-20-010400 The Ubuntu operating system must limit the number of concurrent sessions to ten for all accounts and/or account types.
@@ -426,13 +448,17 @@ selections:
     - package_rsh-server_removed
 
     # UBTU-20-010407 The Ubuntu operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the PPSM CAL and vulnerability assessments.
+    - ufw_only_required_services
 
     # UBTU-20-010408 The Ubuntu operating system must prevent direct login into the root account.
+    - prevent_direct_root_logins
 
     # UBTU-20-010409 The Ubuntu operating system must disable account identifiers (individuals, groups, roles, and devices) after 35 days of inactivity.
     - account_disable_post_pw_expiration
 
     # UBTU-20-010410 The Ubuntu operating system must automatically remove or disable emergency accounts after 72 hours.
+    # same as UBTU-20-010000
+    # - account_temp_expire_date
 
     # UBTU-20-010411 The Ubuntu operating system must set a sticky bit  on all public directories to prevent unauthorized and unintended information transferred via shared system resources.
     - dir_perms_world_writable_sticky_bits
@@ -447,6 +473,7 @@ selections:
     - encrypt_partitions
 
     # UBTU-20-010415 The Ubuntu operating system must deploy Endpoint Security for Linux Threat Prevention (ENSLTP).
+    - package_mfetp_installed
 
     # UBTU-20-010416 The Ubuntu operating system must generate error messages that provide information necessary for corrective actions without revealing information that could be exploited by adversaries.
     - permissions_local_var_log
@@ -461,10 +488,13 @@ selections:
     - file_permissions_var_log
 
     # UBTU-20-010420 The Ubuntu operating system must configure the /var/log/syslog file to be group-owned by adm.
+    - file_groupowner_var_log_syslog
 
     # UBTU-20-010421 The Ubuntu operating system must configure /var/log/syslog file to be owned by syslog.
+    - file_owner_var_log_syslog
 
     # UBTU-20-010422 The Ubuntu operating system must configure /var/log/syslog file with mode 0640 or less permissive.
+    - file_permissions_var_log_syslog
 
     # UBTU-20-010423 The Ubuntu operating system must have directories that contain system commands set to a mode of 0755 or less permissive.
     - dir_permissions_binary_dirs
@@ -497,8 +527,11 @@ selections:
     - service_rsyslog_enabled
 
     # UBTU-20-010433 The Ubuntu operating system must have an application firewall installed in order to control remote access methods.
+    - package_ufw_installed
 
     # UBTU-20-010434 The Ubuntu operating system must enable and run the uncomplicated firewall(ufw).
+    - service_ufw_enabled
+    # same as UBTU-20-010454
 
     # UBTU-20-010435 The Ubuntu operating system must, for networked systems, compare internal information system clocks at least every 24 hours with a server which is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, or a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS).
     - var_time_service_set_maxpoll=36_hours
@@ -506,13 +539,17 @@ selections:
     - chronyd_or_ntpd_set_maxpoll
 
     # UBTU-20-010436 The Ubuntu operating system must synchronize internal information system clocks to the authoritative time source when the time difference is greater than one second.
+    - chronyd_sync_clock
 
     # UBTU-20-010437 The Ubuntu operating system must notify designated personnel if baseline configurations are changed in an unauthorized manner. The file integrity tool must notify the System Administrator when changes to the baseline configuration or anomalies in the oper
+    # Needs rule
+    # same as UBTU-20-010451
 
     # UBTU-20-010438 The Ubuntu operating system's Advance Package Tool (APT) must be configured to prevent the installation of patches, service packs, device drivers, or Ubuntu operating system components without verification they have been digitally signed using a certificate that is recognized and approved by the organization.
     - apt_conf_disallow_unauthenticated
 
     # UBTU-20-010439 The Ubuntu operating system must be configured to use AppArmor.
+    - package_apparmor_installed
     - apparmor_configured
 
     # UBTU-20-010440 The Ubuntu operating system must allow the use of a temporary password for system logons with an immediate change to a permanent password.
@@ -525,14 +562,21 @@ selections:
     - is_fips_mode_enabled
 
     # UBTU-20-010443 The Ubuntu operating system must only allow the use of DoD PKI-established certificate authorities for verification of the establishment of protected sessions.
+    - only_allow_dod_certs
 
     # UBTU-20-010444 Ubuntu operating system must implement cryptographic mechanisms to prevent unauthorized modification of all information at rest.
+    # Needs rule
+    # same as UBTU-20-010414
 
     # UBTU-20-010445 Ubuntu operating system must implement cryptographic mechanisms to prevent unauthorized disclosure of all information at rest.
+    # Needs rule
+    # same as UBTU-20-010414 and UBTU-20-010444
 
     # UBTU-20-010446 The Ubuntu operating system must configure the uncomplicated firewall to rate-limit impacted network interfaces.
+    - ufw_rate_limit
 
     # UBTU-20-010447 The Ubuntu operating system must implement non-executable data to protect its memory from unauthorized code execution.
+    - ensure_xd_nx_support_enabled
 
     # UBTU-20-010448 The Ubuntu operating system must implement address space layout randomization to protect its memory from unauthorized code execution.
     - sysctl_kernel_randomize_va_space
@@ -544,16 +588,20 @@ selections:
     - package_aide_installed
 
     # UBTU-20-010451 The Ubuntu operating system must notify designated personnel if baseline configurations are changed in an unauthorized manner. The file integrity tool must notify the System Administrator when changes to the baseline configuration or anomalies in the operation of any security functions are discovered.
+    # Needs rule
+    # same as UBTU-20-010437
 
     # UBTU-20-010453 The Ubuntu operating system must display the date and time of the last successful account logon upon logon.
     - display_login_attempts
 
     # UBTU-20-010454 The Ubuntu operating system must have an application firewall enabled.
+    # same as UBTU-20-010434
 
     # UBTU-20-010455 The Ubuntu operating system must disable all wireless network adapters.
     - wireless_disable_interfaces
 
     # UBTU-20-010456 The Ubuntu operating system must have system commands set to a mode of 0755 or less permissive.
+    # rule has a few extra directories
     - file_permissions_binary_dirs
 
     # UBTU-20-010457 The Ubuntu operating system must have system commands owned by root.
