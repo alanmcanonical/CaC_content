@@ -22,3 +22,9 @@ severity: medium
 
 references:
     cis@ubuntu2004: 4.2.2.3
+
+template:
+  name: lineinfile
+  vars:
+    path: /etc/systemd/journald.conf
+    text: Storage=persistent
