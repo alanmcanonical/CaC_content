@@ -114,6 +114,9 @@ def bash_for_reference(env_yaml, yaml_path, remediation_dir, output, reference, 
         if os.path.exists(rule_remediation):
             rules_to_fix[rule_id] = rule_remediation
 
+    if not rules_by_reference or not rules_to_fix:
+        return
+
     # If the current reference identifier can't easily be ordered by sections,
     # don't attempt to group it by section.
     if not isinstance(ref_to_int(list(rules_by_reference.keys())[0]), int):
