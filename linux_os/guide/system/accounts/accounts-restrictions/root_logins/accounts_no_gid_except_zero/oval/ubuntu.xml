@@ -1,0 +1,20 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("Using GID 0 for the root account helps prevent root-owned files from accidentally becoming accessible to non-privileged users.") }}}
+    <criteria>
+      <criterion test_ref="test_default_group_root_is_zero" comment="default group for the root account is GID 0" />
+    </criteria>
+  </definition>
+  <ind:textfilecontent54_object id="obj_etc_passwd_root_id" version="1">
+    <ind:filepath datatype="string">/etc/passwd</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^root:.*:.*:(.*):.*:.*:.*$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_state id="ste_root_id_equals_zero" version="1">
+    <ind:subexpression operation="equals" datatype="int">0</ind:subexpression>
+  </ind:textfilecontent54_state>
+  <ind:textfilecontent54_test check="all" id="test_default_group_root_is_zero" version="1" comment="default group for the root account is GID 0">
+    <ind:object object_ref="obj_etc_passwd_root_id" />
+    <ind:state state_ref="ste_root_id_equals_zero" />
+  </ind:textfilecontent54_test>
+</def-group>
