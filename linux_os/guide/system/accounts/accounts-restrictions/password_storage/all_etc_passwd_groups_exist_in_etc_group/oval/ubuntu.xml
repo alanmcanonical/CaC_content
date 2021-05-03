@@ -1,0 +1,28 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("Over time, system administration errors and changes can lead to groups being defined in /etc/passwd but not in /etc/group.") }}}
+    <criteria>
+      <criterion test_ref="tst_all_groups_in_etc_passwd_exist_in_etc_group" comment="all groups in /etc/passwd exist in /etc/group" />
+    </criteria>
+  </definition>
+  <ind:textfilecontent54_object id="obj_gids_from_etc_group" version="1">
+    <ind:filepath datatype="string">/etc/group</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^.+?:[^:]*:([^:]+):.*$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_object id="obj_all_gids_from_etc_passwd" version="1">
+    <ind:filepath datatype="string">/etc/passwd</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^.*:.*:.*:(.+):.*:.*:.*$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_state id="ste_gids_exist_in_etc_group" version="1">
+    <ind:subexpression datatype="int" var_ref="var_all_gids_in_etc_group" var_check="at least one" />
+  </ind:textfilecontent54_state>
+  <ind:textfilecontent54_test check="all" id="tst_all_groups_in_etc_passwd_exist_in_etc_group" version="1" comment="all groups in /etc/passwd exist in /etc/group">
+    <ind:object object_ref="obj_all_gids_from_etc_passwd" />
+    <ind:state state_ref="ste_gids_exist_in_etc_group" />
+  </ind:textfilecontent54_test>
+  <local_variable datatype="int" id="var_all_gids_in_etc_group" version="1" comment="all GIDs in the /etc/group">
+    <object_component item_field="subexpression" object_ref="obj_gids_from_etc_group" />
+  </local_variable>
+</def-group>
