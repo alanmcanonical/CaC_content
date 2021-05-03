@@ -1,0 +1,28 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("Log files stored in /var/log/ contain logged information from many services on the system and potentially from other logged hosts as well.") }}}
+    <criteria>
+      <criterion test_ref="tst_permissions_on_all_logfiles_configured" comment="permissions on all logfiles are configured" />
+    </criteria>
+  </definition>
+  <unix:file_object id="obj_all_log_files_in_var_log" version="1">
+    <unix:behaviors recurse="directories" recurse_direction="down" recurse_file_system="local" />
+    <unix:path operation="equals">/var/log/</unix:path>
+    <unix:filename operation="pattern match">.*</unix:filename>
+    <filter action="include">ste_all_regular_files</filter>
+  </unix:file_object>
+  <unix:file_state id="ste_files_with_group_write_exec_and_other_read_write_exec" version="1">
+    <unix:gwrite datatype="boolean">false</unix:gwrite>
+    <unix:gexec datatype="boolean">false</unix:gexec>
+    <unix:oread datatype="boolean">false</unix:oread>
+    <unix:owrite datatype="boolean">false</unix:owrite>
+    <unix:oexec datatype="boolean">false</unix:oexec>
+  </unix:file_state>
+  <unix:file_state id="ste_all_regular_files" version="1">
+    <unix:type datatype="string">regular</unix:type>
+  </unix:file_state>
+  <unix:file_test check="all" id="tst_permissions_on_all_logfiles_configured" version="1" comment="permissions on all logfiles are configured">
+    <unix:object object_ref="obj_all_log_files_in_var_log" />
+    <unix:state state_ref="ste_files_with_group_write_exec_and_other_read_write_exec" />
+  </unix:file_test>
+</def-group>
