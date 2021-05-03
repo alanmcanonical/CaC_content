@@ -1,0 +1,47 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("Although the groupadd program will not let you create a duplicate group name, it is possible for an administrator to manually edit the /etc/group file and change the group name.") }}}
+    <criteria>
+      <criterion test_ref="tst_no_duplicate_group_names_exist" comment="no duplicate group names exist" />
+    </criteria>
+  </definition>
+  <ind:variable_object id="obj_num_duplicate_group_names" version="1">
+    <ind:var_ref>var_number_duplicate_group_names_in_etc_group</ind:var_ref>
+  </ind:variable_object>
+  <ind:textfilecontent54_object id="obj_group_names_in_etc_group" version="1">
+    <ind:filepath datatype="string">/etc/group</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^(.+):.+:.+:.*$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:variable_state id="ste_no_duplicate_group_names" version="1">
+    <ind:value datatype="int" operation="equals">0</ind:value>
+  </ind:variable_state>
+  <ind:variable_test check="all" id="tst_no_duplicate_group_names_exist" version="1" comment="no duplicate group names exist">
+    <ind:object object_ref="obj_num_duplicate_group_names" />
+    <ind:state state_ref="ste_no_duplicate_group_names" />
+  </ind:variable_test>
+  <local_variable datatype="int" id="var_group_names_in_etc_group" version="1" comment="all group names in /etc/group">
+    <object_component item_field="subexpression" object_ref="obj_group_names_in_etc_group" />
+  </local_variable>
+  <local_variable datatype="int" id="var_number_unique_names_in_etc_group" version="1" comment="number of unique group names in /etc/group">
+    <count>
+      <unique>
+        <variable_component var_ref="var_group_names_in_etc_group" />
+      </unique>
+    </count>
+  </local_variable>
+  <local_variable datatype="int" id="var_total_number_names_in_etc_group" version="1" comment="total number of group names in /etc/group">
+    <count>
+        <variable_component var_ref="var_group_names_in_etc_group" />
+    </count>
+  </local_variable>
+  <local_variable datatype="int" id="var_number_duplicate_group_names_in_etc_group" version="1" comment="number of duplicate group names">
+    <arithmetic arithmetic_operation="add">
+      <arithmetic arithmetic_operation="multiply">
+        <literal_component datatype="int">-1</literal_component>
+        <variable_component var_ref="var_number_unique_names_in_etc_group" />
+      </arithmetic>
+      <variable_component var_ref="var_total_number_names_in_etc_group" />
+    </arithmetic>
+  </local_variable>
+</def-group>
