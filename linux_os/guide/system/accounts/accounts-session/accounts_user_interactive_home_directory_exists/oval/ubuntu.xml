@@ -1,0 +1,49 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("Users can be defined in /etc/passwd without a home directory or with a home directory that does not actually exist.") }}}
+    <criteria>
+      <criterion test_ref="tst_all_home_dirs_exist" comment="all users' home directories exist" />
+    </criteria>
+  </definition>
+  <local_variable datatype="string" id="var_all_home_dirs_interactive_users" version="1" comment="home directories for interacive users" >
+    <object_component item_field="subexpression" object_ref="obj_etc_passwd_regular_user_accounts" />
+  </local_variable>
+  <local_variable datatype="int" id="var_total_home_dirs_in_etc_passwd" version="1" comment="total number of home directories in /etc/passwd" >
+    <count>
+      <object_component item_field="subexpression" object_ref="obj_etc_passwd_regular_user_accounts" />
+    </count>
+  </local_variable>
+  <local_variable datatype="int" id="var_number_of_real_dirs" version="1" comment="number of directories that are real" >
+    <count>
+      <object_component item_field="path" object_ref="obj_presently_exist_home_dirs" />
+    </count>
+  </local_variable>
+  <ind:textfilecontent54_object id="obj_etc_passwd_regular_user_accounts" version="1">
+    <ind:filepath datatype="string">/etc/passwd</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^(?!\bhalt\b|\bsync\b|\bshutdown\b).*:.*:.*:.*:.*:(.*):(?!\/usr\/sbin\/nologin\b|\/bin\/false\b).*$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <unix:file_object id="obj_presently_exist_home_dirs" version="1">
+    <unix:path datatype="string" var_ref="var_all_home_dirs_interactive_users" var_check="at least one"/>
+    <unix:filename xsi:nil="true"/>
+  </unix:file_object>
+  <local_variable datatype="int" id="var_delta_total_real_home_dirs" version="1" comment="difference between the number of total and the number of real directories" >
+    <arithmetic arithmetic_operation="add">
+      <arithmetic arithmetic_operation="multiply">
+        <literal_component datatype="int">-1</literal_component>
+        <variable_component var_ref="var_number_of_real_dirs" />
+      </arithmetic>
+      <variable_component var_ref="var_total_home_dirs_in_etc_passwd" />
+    </arithmetic>
+  </local_variable>
+  <ind:variable_object id="obj_var_delta_total_real_dirs" version="1">
+    <ind:var_ref>var_delta_total_real_home_dirs</ind:var_ref>
+  </ind:variable_object>
+  <ind:variable_state id="ste_delta_total_real_dirs_is_zero" version="1">
+    <ind:value datatype="int" operation="equals">0</ind:value>
+  </ind:variable_state>
+  <ind:variable_test check="all" id="tst_all_home_dirs_exist" version="1" comment="all users' home directories exist">
+    <ind:object object_ref="obj_var_delta_total_real_dirs" />
+    <ind:state state_ref="ste_delta_total_real_dirs_is_zero" />
+  </ind:variable_test>
+</def-group>
