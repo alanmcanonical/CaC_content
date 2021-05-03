@@ -1,0 +1,26 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("Log files stored in /var/log/ contain logged information from many services on the system and potentially from other logged hosts as well.") }}}
+    <criteria>
+      <criterion test_ref="tst_logrotate_conf_permissions" comment="logrotate.conf is configured to assign appropriate permissions" />
+      <criterion test_ref="tst_log_rotatate_d_permissions" comment="logrotate.d is configured to assign appropriate permissions" />
+    </criteria>
+  </definition>
+  <ind:textfilecontent54_object id="obj_logrotate_conf_create_permissions" version="1">
+    <ind:filepath datatype="string">/etc/logrotate.conf</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^\s*create\s+([1-7]\d\d\d|\d?(7\d\d|\d[[1-35-7]\d|\d\d[1-7]))\b</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_object id="obj_logrotate_d_create_permissions" version="1">
+    <ind:path datatype="string">/etc/logrotate.d</ind:path>
+    <ind:filename operation="pattern match">^.*$</ind:filename>
+    <ind:pattern operation="pattern match" datatype="string">^\s*create\s+([1-7]\d\d\d|\d?(7\d\d|\d[[1-35-7]\d|\d\d[1-7]))\b</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_test check="all" check_existence="none_exist" id="tst_logrotate_conf_permissions" version="1" comment="logrotate.conf permissions for created files are appropriate">
+    <ind:object object_ref="obj_logrotate_conf_create_permissions" />
+  </ind:textfilecontent54_test>
+  <ind:textfilecontent54_test check="all" check_existence="none_exist" id="tst_log_rotatate_d_permissions" version="1" comment="logrotate.d permissions for created files are appropriate">
+    <ind:object object_ref="obj_logrotate_d_create_permissions" />
+  </ind:textfilecontent54_test>
+</def-group>
