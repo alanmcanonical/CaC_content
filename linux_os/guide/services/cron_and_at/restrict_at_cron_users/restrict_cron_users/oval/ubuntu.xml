@@ -1,0 +1,21 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("On many systems, only the system administrator is authorized to schedule cron jobs. Using the cron.allow file to control who can run cron jobs enforces this policy. It is easier to manage an allow list than a deny list. In a deny list, you could potentially add a user ID to the system and forget to add it to the deny files.") }}}
+    <criteria>
+      <criterion test_ref="tst_cron_deny_does_not_exist" comment="/etc/cron.deny does not exist" />
+      <criterion test_ref="tst_cron_allow_exists" comment="/etc/cron.allow exists" />
+    </criteria>
+  </definition>
+  <unix:file_object id="obj_etc_cron_deny" version="1">
+    <unix:filepath operation="equals">/etc/cron.deny</unix:filepath>
+  </unix:file_object>
+  <unix:file_object id="obj_etc_cron_allow" version="1">
+    <unix:filepath operation="equals">/etc/cron.allow</unix:filepath>
+  </unix:file_object>
+  <unix:file_test check="all" check_existence="none_exist" id="tst_cron_deny_does_not_exist" version="1" comment="/etc/cron.deny does not exist">
+    <unix:object object_ref="obj_etc_cron_deny" />
+  </unix:file_test>
+  <unix:file_test check="all" check_existence="all_exist" id="tst_cron_allow_exists" version="1" comment="/etc/cron.allow exists">
+    <unix:object object_ref="obj_etc_cron_allow" />
+  </unix:file_test>
+</def-group>
