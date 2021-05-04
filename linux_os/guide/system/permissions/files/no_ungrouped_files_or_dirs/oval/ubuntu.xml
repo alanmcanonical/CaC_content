@@ -1,0 +1,32 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("Sometimes when administrators delete users or groups from the system they neglect to remove all files owned by those users or groups.") }}}
+    <criteria>
+      <criterion test_ref="tst_no_ungrouped_files_or_dirs_exist" comment="no ungrouped files or directories exist" />
+    </criteria>
+  </definition>
+  <unix:file_object id="obj_ungrouped_files_or_dirs" version="1">
+    <unix:behaviors recurse="directories" recurse_direction="down" recurse_file_system="defined" />
+    <unix:path operation="equals">/</unix:path>
+    <unix:filename operation="pattern match">^.*$</unix:filename>
+    <filter action="include">ste_include_all_ungrouped_files</filter>
+    <filter action="exclude">ste_exclude_var_lib_private_systemd_timesync_clock</filter>
+  </unix:file_object>
+  <ind:textfilecontent54_object id="obj_all_gids_in_etc_group_for_ungrouped_files_dirs" version="1">
+    <ind:filepath datatype="string">/etc/group</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^.+?:[^:]*:([^:]+):.*$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <unix:file_state id="ste_exclude_var_lib_private_systemd_timesync_clock" version="1">
+    <unix:filepath operation="equals">/var/lib/private/systemd/timesync/clock</unix:filepath>
+  </unix:file_state>
+  <unix:file_state id="ste_include_all_ungrouped_files" version="1">
+    <unix:group_id datatype="int" var_check="none satisfy" var_ref="var_all_known_gids_in_etc_group_for_ungrouped_files_dirs" />
+  </unix:file_state>
+  <unix:file_test check="all" check_existence="none_exist" id="tst_no_ungrouped_files_or_dirs_exist" version="1" comment="no ungrouped files or directories exist">
+    <unix:object object_ref="obj_ungrouped_files_or_dirs" />
+  </unix:file_test>
+  <local_variable datatype="int" id="var_all_known_gids_in_etc_group_for_ungrouped_files_dirs" version="1" comment="all GIDs in the /etc/group">
+    <object_component item_field="subexpression" object_ref="obj_all_gids_in_etc_group_for_ungrouped_files_dirs" />
+  </local_variable>
+</def-group>
