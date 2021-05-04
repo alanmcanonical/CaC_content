@@ -1,0 +1,50 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("The contents of the /etc/issue.net file are displayed to users prior to login for remote terminals.") }}}
+    <criteria>
+      <criterion test_ref="tst_etc_issue_net_no_forbidden_escapes" negate="true" comment="/etc/issue.net does not contain \v \r \m \s" />
+      <criterion test_ref="tst_etc_issue_net_contains_banner" comment="/etc/issue.net contains banner text" />
+      <criterion test_ref="tst_etc_issue_net_no_etc_os_release_ids" negate="true" comment="/etc/issue.net does not contain the ID value from /etc/os-release" />
+    </criteria>
+ </definition>
+ <ind:textfilecontent54_object id="obj_etc_os_release_id_for_etc_login_net" version="1">
+    <ind:filepath datatype="string">/etc/os-release</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^ID=["]?([\w-_.]+)["]?\s*$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_object id="obj_etc_issue_net_escape_sequences" version="1">
+    <ind:filepath datatype="string">/etc/issue.net</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">((\\v)|(\\r)|(\\m)|(\\s))</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_object id="etc_issue_net_banner_text" version="1">
+    <ind:filepath datatype="string">/etc/issue.net</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string" var_ref="login_banner_text" />
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_object id="obj_etc_issue_net_all_banner_text" version="1">
+    <ind:filepath datatype="string">/etc/issue.net</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">.*</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_state id="ste_etc_issue_net_no_matching_ids" version="1">
+    <ind:text operation="pattern match" datatype="string" var_ref="var_etc_os_release_id_for_etc_login_net" var_check="at least one" />
+  </ind:textfilecontent54_state>
+  <ind:textfilecontent54_test check="at least one" id="tst_etc_issue_net_no_forbidden_escapes" version="1" comment="/etc/issue.net exists and has \v, \r, \m, or \s options specified">
+    <ind:object object_ref="obj_etc_issue_net_escape_sequences" />
+  </ind:textfilecontent54_test>
+  <ind:textfilecontent54_test check="all" id="tst_etc_issue_net_contains_banner" version="1" comment="/etc/issue.net contains remote banner">
+    <ind:object object_ref="etc_issue_net_banner_text" />
+  </ind:textfilecontent54_test>
+  <ind:textfilecontent54_test check="at least one" id="tst_etc_issue_net_no_etc_os_release_ids" version="1" comment="/etc/issue.net exists and contains the ID value from /etc/os-release">
+    <ind:object object_ref="obj_etc_issue_net_all_banner_text" />
+    <ind:state state_ref="ste_etc_issue_net_no_matching_ids" />
+  </ind:textfilecontent54_test>
+  <local_variable datatype="string" id="var_etc_os_release_id_for_etc_login_net" version="1" comment="ID value from /etc/os-release">
+    <concat>
+      <literal_component datatype="string">(?i)</literal_component>
+      <object_component item_field="subexpression" object_ref="obj_etc_os_release_id_for_etc_login_net" />
+    </concat>
+  </local_variable>
+  <external_variable datatype="string" id="login_banner_text" version="1" comment="required login banner text" />
+</def-group>
