@@ -1,0 +1,21 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("On many systems, only the system administrator is authorized to schedule at jobs. Using the at.allow file to control who can run at jobs enforces this policy. It is easier to manage an allow list than a deny list. In a deny list, you could potentially add a user ID to the system and forget to add it to the deny files.") }}}
+    <criteria>
+      <criterion test_ref="tst_at_deny_does_not_exist" comment="/etc/at.deny does not exist" />
+      <criterion test_ref="tst_at_allow_exists" comment="/etc/at.allow exists" />
+    </criteria>
+  </definition>
+  <unix:file_object id="obj_etc_at_deny" version="1">
+    <unix:filepath operation="equals">/etc/at.deny</unix:filepath>
+  </unix:file_object>
+  <unix:file_object id="obj_etc_at_allow" version="1">
+    <unix:filepath operation="equals">/etc/at.allow</unix:filepath>
+  </unix:file_object>
+  <unix:file_test check="all" check_existence="none_exist" id="tst_at_deny_does_not_exist" version="1" comment="/etc/at.deny does not exist">
+    <unix:object object_ref="obj_etc_at_deny" />
+  </unix:file_test>
+  <unix:file_test check="all" check_existence="all_exist" id="tst_at_allow_exists" version="1" comment="/etc/at.allow exists">
+    <unix:object object_ref="obj_etc_at_allow" />
+  </unix:file_test>
+</def-group>
