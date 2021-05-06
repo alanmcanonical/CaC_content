@@ -35,7 +35,7 @@ selections:
 
     ### 2.2.4 Ensure CUPS is not installed (Automated)
     - 'service_cups_disabled'
-    # Needs rule: 'package_cups_removed'
+    - 'package_cups_removed'
 
     ### 3.1.2 Ensure wireless interfaces are disabled (Automated)
     - 'wireless_disable_interfaces'
