@@ -58,7 +58,7 @@ references:
 template:
     name: sshd_lineinfile
     vars:
-        missing_parameter_pass: 'true'
+        missing_parameter_pass: 'false'
         parameter: PermitEmptyPasswords
         rule_id: sshd_disable_empty_passwords
         value: 'no'

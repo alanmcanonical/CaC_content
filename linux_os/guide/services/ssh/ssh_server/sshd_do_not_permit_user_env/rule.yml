@@ -58,7 +58,7 @@ ocil: |-
 template:
     name: sshd_lineinfile
     vars:
-        missing_parameter_pass: 'true'
+        missing_parameter_pass: 'false'
         parameter: PermitUserEnvironment
         rule_id: sshd_do_not_permit_user_env
         value: 'no'

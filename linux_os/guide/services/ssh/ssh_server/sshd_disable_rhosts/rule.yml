@@ -49,7 +49,7 @@ references:
 template:
     name: sshd_lineinfile
     vars:
-        missing_parameter_pass: 'true'
+        missing_parameter_pass: 'false'
         parameter: IgnoreRhosts
         rule_id: sshd_disable_rhosts
         value: 'yes'
