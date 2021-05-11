@@ -1,0 +1,1 @@
+{{{ oval_check_var_is_value("var_time_synchronization_daemon", "chrony") }}}
