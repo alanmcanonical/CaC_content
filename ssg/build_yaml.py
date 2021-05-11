@@ -151,12 +151,19 @@ class Profile(object):
         # ensure that content of profile.platform is in profile.platforms as
         # well
         if profile.platform is not None:
+            if not isinstance(profile.platform, str):
+                msg = "Unknown platform content; did you mean platforms for "
+                msg += "list content on profile {0}, value: {1}"
+                msg.format(profile.id_, profile.platform)
+                raise ValueError(msg)
+
             profile.platforms.add(profile.platform)
 
         if env_yaml:
             for platform in profile.platforms:
                 try:
-                    profile.cpe_names.add(env_yaml["product_cpes"].get_cpe_name(platform))
+                    if not platform.startswith("var_") and not platform.startswith("not_var_"):
+                        profile.cpe_names.add(env_yaml["product_cpes"].get_cpe_name(platform))
                 except CPEDoesNotExist:
                     print("Unsupported platform '%s' in profile '%s'." % (platform, profile.id_))
                     raise
@@ -872,12 +879,19 @@ class Group(object):
         # ensure that content of group.platform is in group.platforms as
         # well
         if group.platform is not None:
+            if not isinstance(group.platform, str):
+                msg = "Unknown platform content; did you mean platforms for "
+                msg += "list content on group {0}, value: {1}"
+                msg.format(group.id_, group.platform)
+                raise ValueError(msg)
+
             group.platforms.add(group.platform)
 
         if env_yaml:
             for platform in group.platforms:
                 try:
-                    group.cpe_names.add(env_yaml["product_cpes"].get_cpe_name(platform))
+                    if not platform.startswith("var_") and not platform.startswith("not_var_"):
+                        group.cpe_names.add(env_yaml["product_cpes"].get_cpe_name(platform))
                 except CPEDoesNotExist:
                     print("Unsupported platform '%s' in group '%s'." % (platform, group.id_))
                     raise
@@ -1001,7 +1015,8 @@ class Group(object):
         if env_yaml:
             for platform in group.platforms:
                 try:
-                    group.cpe_names.add(env_yaml["product_cpes"].get_cpe_name(platform))
+                    if not platform.startswith("var_") and not platform.startswith("not_var_"):
+                        group.cpe_names.add(env_yaml["product_cpes"].get_cpe_name(platform))
                 except CPEDoesNotExist:
                     print("Unsupported platform '%s' in group '%s'." % (platform, group.id_))
                     raise
@@ -1024,7 +1039,8 @@ class Group(object):
         if env_yaml:
             for platform in rule.platforms:
                 try:
-                    rule.cpe_names.add(env_yaml["product_cpes"].get_cpe_name(platform))
+                    if not platform.startswith("var_") and not platform.startswith("not_var_"):
+                        rule.cpe_names.add(env_yaml["product_cpes"].get_cpe_name(platform))
                 except CPEDoesNotExist:
                     print("Unsupported platform '%s' in rule '%s'." % (platform, rule.id_))
                     raise
@@ -1129,6 +1145,12 @@ class Rule(object):
         # ensure that content of rule.platform is in rule.platforms as
         # well
         if rule.platform is not None:
+            if not isinstance(rule.platform, str):
+                msg = "Unknown platform content; did you mean platforms for "
+                msg += "list content on rule {0}, value: {1}"
+                msg.format(rule.id_, rule.platform)
+                raise ValueError(msg)
+
             rule.platforms.add(rule.platform)
 
         # Convert the platform names to CPE names
@@ -1137,7 +1159,8 @@ class Rule(object):
         if env_yaml and env_yaml["product"] in parse_prodtype(rule.prodtype):
             for platform in rule.platforms:
                 try:
-                    rule.cpe_names.add(env_yaml["product_cpes"].get_cpe_name(platform))
+                    if not platform.startswith("var_") and not platform.startswith("not_var_"):
+                        rule.cpe_names.add(env_yaml["product_cpes"].get_cpe_name(platform))
                 except CPEDoesNotExist:
                     print("Unsupported platform '%s' in rule '%s'." % (platform, rule.id_))
                     raise
