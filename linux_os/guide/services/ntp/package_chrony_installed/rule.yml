@@ -15,7 +15,9 @@ rationale: |-
 
 severity: medium
 
-platform: machine
+platforms:
+  - var_chrony
+  - machine
 
 identifiers:
     cce@rhel7: CCE-83419-2
