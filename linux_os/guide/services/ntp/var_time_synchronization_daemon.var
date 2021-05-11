@@ -1,0 +1,15 @@
+documentation_complete: true
+
+title: 'Selected time synchronization daemon'
+
+description: 'Which time synchronization daemon (chrony, ntp, or timesyncd) should be used.'
+
+type: string
+
+interactive: true
+
+options:
+    default: chrony
+    chrony: chrony
+    ntp: ntp
+    timesyncd: timesyncd
