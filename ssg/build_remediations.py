@@ -301,14 +301,27 @@ class BashRemediation(Remediation):
             self.generate_platform_conditional(p) for p in inherited_platforms]
         rule_specific_conditionals = [
             self.generate_platform_conditional(p) for p in rule_specific_platforms]
+        inherited_variables = [
+            self.generate_platform_variables(p) for p in inherited_platforms]
+        rule_specific_variables = [
+            self.generate_platform_variables(p) for p in rule_specific_platforms]
         # remove potential "None" from lists
         inherited_conditionals = sorted([
             p for p in inherited_conditionals if p is not None])
         rule_specific_conditionals = sorted([
             p for p in rule_specific_conditionals if p is not None])
+        inherited_variables = sorted([p for p in inherited_variables if p is not None])
+        rule_specific_variables = sorted([p for p in rule_specific_variables if p is not None])
 
         if inherited_conditionals or rule_specific_conditionals:
             wrapped_fix_text = ["# Remediation is applicable only in certain platforms"]
+            # By definition, we can only have variables if we have conditionals;
+            # thus we only need to consider this inside the above if.
+            variables = set(inherited_variables + rule_specific_variables)
+            if variables:
+                # Unlike the ansible remediation below, we always load these
+                # variables as they might not be populated in time otherwise.
+                wrapped_fix_text.extend(sorted(variables))
 
             all_conditions = ""
             if inherited_conditionals:
@@ -338,6 +351,17 @@ class BashRemediation(Remediation):
         if platform == "machine":
             # Based on check installed_env_is_a_container
             return '[ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]'
+        elif platform.startswith("var_") or platform.startswith("not_var_"):
+            if not self.local_env_yaml:
+                return None
+
+            cpe = self.local_env_yaml["product_cpes"].get_cpe(platform)
+            assert cpe.variable
+            assert cpe.value
+
+            if cpe.negated:
+                return '[ "${0}" != "{1}" ]'.format(cpe.variable, cpe.value)
+            return '[ "${0}" == "{1}" ]'.format(cpe.variable, cpe.value)
         elif platform is not None:
             # Assume any other platform is a Package CPE
 
@@ -355,6 +379,16 @@ class BashRemediation(Remediation):
             pkg_manager = self.local_env_yaml["pkg_manager"]
             pkg_check_command = PKG_MANAGER_TO_PACKAGE_CHECK_COMMAND[pkg_manager]
             return pkg_check_command.format(platform)
+
+    def generate_platform_variables(self, platform):
+        if platform.startswith("var_") or platform.startswith("not_var_"):
+            if not self.local_env_yaml:
+                return None
+
+            cpe = self.local_env_yaml["product_cpes"].get_cpe(platform)
+            assert cpe.variable
+            return "populate {0}".format(cpe.variable)
+
 
 class AnsibleRemediation(Remediation):
     def __init__(self, file_path):
@@ -479,11 +513,17 @@ class AnsibleRemediation(Remediation):
             self.generate_platform_conditional(p) for p in inherited_platforms]
         rule_specific_conditionals = [
             self.generate_platform_conditional(p) for p in rule_specific_platforms]
+        inherited_variables = [
+            self.generate_platform_variables(p) for p in inherited_platforms]
+        rule_specific_variables = [
+            self.generate_platform_variables(p) for p in rule_specific_platforms]
         # remove potential "None" from lists
         inherited_conditionals = sorted([
             p for p in inherited_conditionals if p is not None])
         rule_specific_conditionals = sorted([
             p for p in rule_specific_conditionals if p is not None])
+        inherited_variables = sorted([p for p in inherited_variables if p is not None])
+        rule_specific_variables = sorted([p for p in rule_specific_variables if p is not None])
 
         # remove conditionals related to package CPEs if the updated task
         # collects package facts
@@ -507,19 +547,49 @@ class AnsibleRemediation(Remediation):
         else:
             to_update["when"] = new_when
 
+        # If there's any new variables we need to add, go ahead and return them.
+        return inherited_variables + rule_specific_variables
+
     def update(self, parsed, config):
         # We split the remediation update in three steps
+
+        # 0. Grab any variables we'll need to add later. We build this list
+        #    when we iterate through each section looking to update `when`
+        #    clauses. This is easiest as we calcualte the inherited/specific
+        #    platforms there. Worst case, we remove some extras.
+        variables = set()
 
         # 1. Update the when clause
         for p in parsed:
             if not isinstance(p, dict):
                 continue
-            self.update_when_from_rule(p)
+            variables.update(self.update_when_from_rule(p))
 
-        # 2. Inject any extra task necessary
+        # 2. Inject any missing variable clauses.
+        if variables:
+            insert_offset = 0
+            for index, p in enumerate(parsed):
+                if not p:
+                    continue
+
+                if not isinstance(p, str):
+                    insert_index = index
+                    break
+
+            for variable in sorted(variables):
+                skip = False
+                for p in parsed:
+                    if not isinstance(p, str):
+                        continue
+                    if p.strip() == variable.strip():
+                        skip = True
+                if not skip:
+                    parsed.insert(insert_offset, variable)
+
+        # 3. Inject any extra task necessary
         self.inject_package_facts_task(parsed)
 
-        # 3. Add tags to all tasks, including the ones we have injected
+        # 4. Add tags to all tasks, including the ones we have injected
         for p in parsed:
             if not isinstance(p, dict):
                 continue
@@ -541,6 +611,17 @@ class AnsibleRemediation(Remediation):
         if platform == "machine":
             return 'ansible_virtualization_type not in '\
                 '["docker", "lxc", "openvz", "podman", "container"]'
+        elif platform.startswith("var_") or platform.startswith("not_var_"):
+            if not self.local_env_yaml:
+                return None
+
+            cpe = self.local_env_yaml["product_cpes"].get_cpe(platform)
+            assert cpe.variable
+            assert cpe.value
+
+            if cpe.negated:
+                return '{0} != "{1}"'.format(cpe.variable, cpe.value)
+            return '{0} == {1}'.format(cpe.variable, cpe.value)
         elif platform is not None:
             # Assume any other platform is a Package CPE
 
@@ -555,6 +636,14 @@ class AnsibleRemediation(Remediation):
 
             return '"' + platform + '" in ansible_facts.packages'
 
+    def generate_platform_variables(self, platform):
+        if platform.startswith("var_") or platform.startswith("not_var_"):
+            if not self.local_env_yaml:
+                return None
+
+            cpe = self.local_env_yaml["product_cpes"].get_cpe(platform)
+            assert cpe.variable
+            return "(xccdf-var {0})".format(cpe.variable)
 
 
 class AnacondaRemediation(Remediation):
