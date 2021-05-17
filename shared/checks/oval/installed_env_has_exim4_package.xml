@@ -1,0 +1,20 @@
+<def-group>
+
+  <definition class="inventory"
+  id="installed_env_has_exim4_package" version="1">
+    <metadata>
+      <title>Package exim4 is installed</title>
+      <affected family="unix">
+        <platform>multi_platform_all</platform>
+      </affected>
+      <description>Checks if package exim4 is installed.</description>
+      <reference ref_id="cpe:/a:exim4" source="CPE" />
+    </metadata>
+    <criteria>
+      <criterion comment="Package exim4 is installed" test_ref="test_env_has_exim4_installed" />
+    </criteria>
+  </definition>
+
+  {{{ oval_test_package_installed(package='exim4', test_id='test_env_has_exim4_installed') }}}
+
+</def-group>

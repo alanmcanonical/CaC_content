@@ -4,6 +4,11 @@ cpes:
       title: "Package chrony is installed"
       check_id: installed_env_has_chrony_package
 
+  - exim4:
+      name: "cpe:/a:exim4"
+      title: "Package exim4 is installed"
+      check_id: installed_env_has_exim4_package
+
   - gdm:
       name: "cpe:/a:gdm"
       title: "Package gdm is installed"
