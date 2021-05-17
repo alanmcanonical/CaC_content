@@ -22,6 +22,9 @@ rationale: |-
     such as sendmail. If this is the case consult the documentation for your
     installed MTA to configure the recommended state.
 
+platforms:
+  - exim4
+
 severity: medium
 
 references:
