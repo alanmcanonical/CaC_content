@@ -1,0 +1,32 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="1">
+    {{{ oval_metadata("rsyslog will create logfiles that do not already exist on the system. This setting controls what permissions will be applied to these newly created files.") }}}
+    <criteria>
+      <criterion test_ref="tst_default_file_permissions_for_rsyslog" comment="rsyslog default file permissions configured in /etc/rsyslog.conf and|or /etc/rsyslog.d/*" />
+    </criteria>
+  </definition>
+  <ind:textfilecontent54_object id="obj_combined_rsyslog_conf_rsyslog_d_permissions" version="1">
+   <set set_operator="UNION">
+     <object_reference>obj_etc_rsyslog_conf_filecreatemode</object_reference>
+     <object_reference>obj_etc_rsyslog_d_filecreatemode</object_reference>
+   </set>
+ </ind:textfilecontent54_object>
+ <ind:textfilecontent54_object id="obj_etc_rsyslog_conf_filecreatemode" version="1">
+    <ind:filepath datatype="string">/etc/rsyslog.conf</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^\$FileCreateMode\s+(\d+)</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_object id="obj_etc_rsyslog_d_filecreatemode" version="1">
+    <ind:path datatype="string">/etc/rsyslog.d</ind:path>
+    <ind:filename operation="pattern match">^.*\.conf$</ind:filename>
+    <ind:pattern operation="pattern match" datatype="string">^\$FileCreateMode\s+(\d+)</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_state id="ste_correct_permissions" version="1">
+    <ind:subexpression operation="pattern match" datatype="string">0640|0600</ind:subexpression>
+  </ind:textfilecontent54_state>
+  <ind:textfilecontent54_test check="all" id="tst_default_file_permissions_for_rsyslog" version="1" comment="rsyslog default file permissions configured in /etc/rsyslog.conf and|or /etc/rsyslog.d/*">
+    <ind:object object_ref="obj_combined_rsyslog_conf_rsyslog_d_permissions" />
+    <ind:state state_ref="ste_correct_permissions" />
+  </ind:textfilecontent54_test>
+</def-group>
