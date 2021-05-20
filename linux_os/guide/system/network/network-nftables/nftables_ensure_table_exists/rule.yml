@@ -12,6 +12,10 @@ rationale: |-
     nftables doesn't have any default tables. Without a table being build, nftables
     will not filter network traffic.
 
+platforms:
+  - var_nftables
+  - machine
+
 severity: medium
 
 references:
