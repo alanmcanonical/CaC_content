@@ -15,6 +15,10 @@ rationale: |-
     easier to white list acceptable usage than to black list unacceptable
     usage.
 
+platforms:
+  - var_nftables
+  - machine
+
 severity: medium
 
 references:
