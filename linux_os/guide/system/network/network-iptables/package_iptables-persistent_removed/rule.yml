@@ -12,6 +12,10 @@ rationale: |-
     Running both iptables-persistent and another iptables-based firewall (such as UFW
     or firewalld) may lead to conflicts.
 
+platforms:
+  - not_var_iptables
+  - machine
+
 severity: medium
 
 references:
