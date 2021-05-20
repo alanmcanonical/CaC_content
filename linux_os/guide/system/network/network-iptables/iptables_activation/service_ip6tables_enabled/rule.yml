@@ -9,6 +9,10 @@ rationale: |-
     The <tt>ip6tables</tt> service provides the system's host-based firewalling
     capability for IPv6 and ICMPv6.
 
+platforms:
+  - var_iptables
+  - machine
+
 severity: medium
 
 references:
