@@ -17,6 +17,10 @@ rationale: |-
     any packets which are not explicitly permitted should not be
     accepted.
 
+platforms:
+  - var_iptables
+  - machine
+
 severity: medium
 
 references:
