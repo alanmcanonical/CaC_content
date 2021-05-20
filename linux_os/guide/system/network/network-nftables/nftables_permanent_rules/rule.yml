@@ -18,6 +18,10 @@ rationale: |-
     Changes made to nftables ruleset only affect the live system, you will also
     need to configure the nftables ruleset to apply on boot.
 
+platforms:
+  - var_nftables
+  - machine
+
 severity: medium
 
 references:
