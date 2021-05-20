@@ -8,6 +8,10 @@ description: |-
 rationale: |-
     The nftables service must be enabled and running in order for nftables to protect the system.
 
+platforms:
+  - var_nftables
+  - machine
+
 severity: medium
 
 references:
