@@ -12,6 +12,10 @@ rationale: |-
     within a corporate network to include malicious mobile code and poorly configured
     software on a host.
 
+platforms:
+  - var_nftables
+  - machine
+
 severity: medium
 
 references:
