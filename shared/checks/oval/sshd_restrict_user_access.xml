@@ -1,0 +1,52 @@
+<def-group>
+  <definition class="compliance" id="sshd_restrict_user_access" version="1">
+    <metadata>
+      <title>One of the access control parameters of sshd is set</title>
+      <affected family="unix">
+        <platform>multi_platform_all</platform>
+      </affected>
+      <description>One of the following parameters of the sshd configuration file is set:
+        AllowUsers, DenyUsers, AllowGroups, DenyGroups.</description>
+    </metadata>
+    <criteria operator="OR">
+      <criterion test_ref="test_allow_user_is_configured" />
+      <criterion test_ref="test_allow_group_is_configured" />
+      <criterion test_ref="test_deny_user_is_configured" />
+      <criterion test_ref="test_deny_group_is_configured" />
+    </criteria>
+  </definition>
+
+  <ind:textfilecontent54_test check="all" id="test_allow_user_is_configured" version="1" comment="Check if there is an AllowUsers entry">
+    <ind:object object_ref="obj_allow_user" />
+  </ind:textfilecontent54_test>
+  <ind:textfilecontent54_test check="all" id="test_allow_group_is_configured" version="1" comment="Check if there is an AllowGroups entry">
+    <ind:object object_ref="obj_allow_group" />
+  </ind:textfilecontent54_test>
+  <ind:textfilecontent54_test check="all" id="test_deny_user_is_configured" version="1" comment="Check if there is an DenyUsers entry">
+    <ind:object object_ref="obj_deny_user" />
+  </ind:textfilecontent54_test>
+  <ind:textfilecontent54_test check="all" id="test_deny_group_is_configured" version="1" comment="Check if there is an DenyGroups entry">
+    <ind:object object_ref="obj_deny_group" />
+  </ind:textfilecontent54_test>
+
+  <ind:textfilecontent54_object id="obj_allow_user" version="1">
+    <ind:filepath operation="equals">/etc/ssh/sshd_config</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">(?i)^[ ]*AllowUsers[ ]+((?:[^ \n]+[ ]*)+)$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_object id="obj_allow_group" version="1">
+    <ind:filepath operation="equals">/etc/ssh/sshd_config</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">(?i)^[ ]*AllowGroups[ ]+((?:[^ \n]+[ ]*)+)$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_object id="obj_deny_user" version="1">
+    <ind:filepath operation="equals">/etc/ssh/sshd_config</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">(?i)^[ ]*DenyUsers[ ]+((?:[^ \n]+[ ]*)+)$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:textfilecontent54_object id="obj_deny_group" version="1">
+    <ind:filepath operation="equals">/etc/ssh/sshd_config</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">(?i)^[ ]*DenyGroups[ ]+((?:[^ \n]+[ ]*)+)$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+</def-group>
