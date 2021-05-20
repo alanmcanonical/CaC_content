@@ -12,6 +12,10 @@ rationale: |-
     A properly configured system expects communication on the loopback
     interface to be possible.
 
+platforms:
+  - var_ufw
+  - machine
+
 severity: medium
 
 references:
