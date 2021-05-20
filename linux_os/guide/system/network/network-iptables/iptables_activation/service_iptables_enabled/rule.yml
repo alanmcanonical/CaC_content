@@ -9,6 +9,10 @@ rationale: |-
     The <tt>iptables</tt> service provides the system's host-based firewalling
     capability for IPv4 and ICMP.
 
+platforms:
+  - var_iptables
+  - machine
+
 severity: medium
 
 references:
