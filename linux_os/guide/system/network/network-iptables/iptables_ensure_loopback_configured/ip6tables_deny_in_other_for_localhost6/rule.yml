@@ -12,6 +12,10 @@ rationale: |-
     A properly configured system expects communication on the loopback
     interface to be secure and only accessible to the local system.
 
+platforms:
+  - var_iptables
+  - machine
+
 severity: medium
 
 references:
