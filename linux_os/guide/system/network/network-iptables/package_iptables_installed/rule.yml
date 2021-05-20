@@ -12,6 +12,10 @@ rationale: |-
     code. <tt>iptables</tt> allows system operators to set up firewalls and IP
     masquerading, etc.
 
+platforms:
+  - var_iptables
+  - machine
+
 severity: medium
 
 identifiers:
