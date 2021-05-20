@@ -15,6 +15,10 @@ rationale: |-
     configured to be denied. It is easier to allow acceptable usage than to block
     unacceptable usage.
 
+platforms:
+  - var_ufw
+  - machine
+
 severity: medium
 
 references:
