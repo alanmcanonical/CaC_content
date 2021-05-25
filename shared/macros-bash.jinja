@@ -767,3 +767,20 @@ else
     printf '%s\n' "$formatted_output" >> "{{{ config_file }}}"
 fi
 {{%- endmacro -%}}
+
+{{#
+  # Ensure that iptables packages are installed
+  #}}
+{{% macro bash_iptables_installed() %}}
+if ! {{{ bash_package_installed("iptables") }}}; then
+    {{{ bash_package_install("iptables") }}}
+fi
+
+if ! {{{ bash_package_installed("iptables-persistent") }}}; then
+    {{% if pkg_manager == "apt_get" %}}
+    debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true"
+    debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true"
+    {{% endif %}}
+    {{{ bash_package_install("iptables-persistent") }}}
+fi
+{{% endmacro %}}
