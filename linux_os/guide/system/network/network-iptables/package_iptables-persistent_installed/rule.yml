@@ -1,0 +1,36 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Install iptables-persistent Package'
+
+description: |-
+    {{{ describe_package_install(package="iptables-persistent") }}}
+
+rationale: |-
+    <tt>iptables</tt> controls the Linux kernel network packet filtering
+    code. <tt>iptables</tt> allows system operators to set up firewalls and IP
+    masquerading, etc.
+
+    <tt>iptables-persistent</tt> is a package that enables saving and restoring
+    of firewall rules on startup.
+
+platforms:
+  - var_iptables
+  - machine
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 3.5.3.1.1
+    nist: CM-6(a)
+    srg: SRG-OS-000480-GPOS-00227
+
+ocil_clause: 'the package is not installed'
+
+ocil: '{{{ ocil_package(package="iptables-persistent") }}}'
+
+template:
+    name: package_installed
+    vars:
+        pkgname: iptables-persistent
