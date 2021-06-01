@@ -1,0 +1,25 @@
+documentation_complete: true
+
+title: 'System Audit Logs Must Be Owned By Root'
+
+description: |-
+    All audit logs must be owned by user root.
+    <pre>$ sudo chown root <i>audit_file</i></pre>
+
+rationale: |-
+    Unauthorized disclosure of audit records can reveal system and configuration data to
+    attackers, thus compromising its confidentiality.
+
+severity: medium
+
+references:
+    disa: CCI-000162
+    srg: SRG-OS-000057-GPOS-00027,SRG-OS-000058-GPOS-00028,SRG-OS-000059-GPOS-00029
+    stigid@ubuntu2004: UBTU-20-010123
+
+ocil: |-
+    Run the following commands to check who owns the system audit logs:
+    <pre>$ sudo grep -iw log_file /etc/audit/auditd.conf</pre>
+    <pre>log_file = /var/log/audit/audit.log</pre>
+    <pre>sudo stat -c "%n %U" /var/log/audit/*</pre>
+    Audit logs must be owned by user root.
