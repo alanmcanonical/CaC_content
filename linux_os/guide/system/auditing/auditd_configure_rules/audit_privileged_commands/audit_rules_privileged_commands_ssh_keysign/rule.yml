@@ -4,6 +4,8 @@
 
 {{%- if product in ["sle12", "sle15"] %}}
   {{%- set ssh_keysign_path="/usr/lib/ssh/ssh-keysign" %}}
+{{%- elif "ubuntu" in product %}}
+  {{%- set ssh_keysign_path="/usr/lib/openssh/ssh-keysign" %}}
 {{%- else %}}
   {{%- set ssh_keysign_path="/usr/libexec/openssh/ssh-keysign" %}}
 {{%- endif %}}
@@ -81,6 +83,4 @@ ocil: |-
 template:
     name: audit_rules_privileged_commands
     vars:
-        path: /usr/libexec/openssh/ssh-keysign
-        path@sle12: /usr/lib/ssh/ssh-keysign
-        path@sle15: /usr/lib/ssh/ssh-keysign
+        path: {{{ ssh_keysign_path }}}
