@@ -4,6 +4,8 @@ import sys
 import os
 import argparse
 import json
+import re
+import string
 
 import ssg.build_yaml
 import ssg.environment
@@ -17,6 +19,7 @@ from refchecker import load_for_product
 
 SSG_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SECTION_KEY_FUNC = ssg.rule_yaml.add_or_modify_nested_section_key
+STIG_ID_REGEX = re.compile(r'^[A-Z]{4}-[0-9]{2}-[0-9]{6}$')
 
 
 """
@@ -87,6 +90,14 @@ def parse_args():
     return parser.parse_args()
 
 
+def ends_with_no_prefix(line, value):
+    if line.endswith(value):
+        disallowed = string.ascii_letters + string.digits + '_-.'
+        index = line.index(value)
+        return line[index-1] not in disallowed
+    return False
+
+
 def find_value_line(lines, value):
     # Hack: within the lines in a file, return the line number matching
     # the given value. We assume a "nice" file.
@@ -94,11 +105,11 @@ def find_value_line(lines, value):
     matches = []
     for index, line in enumerate(lines):
         no_trailing_comment = line.split('#', 1)[0].strip()
-        if no_trailing_comment.endswith(value):
+        if ends_with_no_prefix(no_trailing_comment, value):
             matches.append(index)
-        if no_trailing_comment.endswith(value + '"'):
+        if ends_with_no_prefix(no_trailing_comment, value + '"'):
             matches.append(index)
-        if no_trailing_comment.endswith(value + "'"):
+        if ends_with_no_prefix(no_trailing_comment, value + "'"):
             matches.append(index)
 
     if len(matches) > 1 or not matches:
@@ -132,6 +143,11 @@ def is_reference_identifier_comment(line, reference):
             # We might've copied an extra period after our reference identifier;
             # handle trimming it nicely.
             ref_identifier = ref_identifier[:-1]
+        if valid_id:
+            return True, ref_identifier
+        return False, None
+    elif reference == 'stigid':
+        valid_id = STIG_ID_REGEX.match(ref_identifier)
         if valid_id:
             return True, ref_identifier
         return False, None
