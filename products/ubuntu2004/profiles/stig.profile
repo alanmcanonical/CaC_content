@@ -305,6 +305,7 @@ selections:
     - audit_rules_privileged_commands_chage
 
     # UBTU-20-010176 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the usermod command.
+    # different path in ubuntu for usermod
     - audit_rules_privileged_commands_usermod
 
     # UBTU-20-010177 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the crontab command.
