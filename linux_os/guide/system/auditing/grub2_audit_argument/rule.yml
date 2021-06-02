@@ -54,7 +54,7 @@ references:
 ocil_clause: 'auditing is not enabled at boot time'
 
 ocil: |-
-{{% if product in ["rhel7", "ol7"] %}}
+{{% if product in ["rhel7", "ol7", "ubuntu2004"] %}}
     Inspect the form of default GRUB 2 command line for the Linux operating system
     in <tt>/etc/default/grub</tt>. If it includes <tt>audit=1</tt>, then auditing
     is enabled at boot time.
