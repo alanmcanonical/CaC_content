@@ -1,0 +1,57 @@
+<def-group>
+  <definition class="compliance" id="auditd_data_retention_space_left" version="2">
+    {{{ oval_metadata("space_left setting in /etc/audit/auditd.conf is set to at least a certain value") }}}
+    <criteria operator="AND">
+        <criterion comment="space_left numerical component in auditd.conf" test_ref="test_auditd_data_retention_space_left_numerical" />
+        <criterion comment="space_left percent component in auditd.conf" test_ref="test_auditd_data_retention_space_left_percent" />
+    </criteria>
+  </definition>
+
+  <external_variable comment="audit space_left setting" datatype="string" id="var_auditd_space_left" version="1" />
+
+  <local_variable id="var_auditd_space_left_numerical" datatype="int" version="1" comment="numerical portion of var_auditd_space_left">
+    <regex_capture pattern="^(\d+)">
+      <variable_component var_ref="var_auditd_space_left" />
+    </regex_capture>
+  </local_variable>
+
+  <local_variable id="var_auditd_space_left_percent" datatype="string" version="1" comment="optional percent sign in var_auditd_space_left">
+    <regex_capture pattern="^\d+(.*)$">
+      <variable_component var_ref="var_auditd_space_left" />
+    </regex_capture>
+  </local_variable>
+
+  <ind:textfilecontent54_test check="all" comment="admin space left numerical value" id="test_auditd_data_retention_space_left_numerical" version="1">
+    <ind:object object_ref="object_auditd_data_retention_space_left_numerical" />
+    <ind:state state_ref="state_auditd_data_retention_space_left_numerical" />
+  </ind:textfilecontent54_test>
+
+  <ind:textfilecontent54_object id="object_auditd_data_retention_space_left_numerical" version="3">
+    <ind:filepath>/etc/audit/auditd.conf</ind:filepath>
+    <!-- Allow only space (exactly) as delimiter: https://fedorahosted.org/audit/browser/trunk/src/auditd-config.c#L426 -->
+    <!-- Require at least one space before and after the equal sign -->
+    <ind:pattern operation="pattern match">^[\s]*space_left[\s]+=[\s]+(\d+)[%]?[\s]*$</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <ind:textfilecontent54_state id="state_auditd_data_retention_space_left_numerical" version="1">
+    <ind:subexpression operation="greater than or equal" var_ref="var_auditd_space_left_numerical" datatype="int" />
+  </ind:textfilecontent54_state>
+
+  <ind:textfilecontent54_test check="all" comment="admin space left percent sign" id="test_auditd_data_retention_space_left_percent" version="1">
+    <ind:object object_ref="object_auditd_data_retention_space_left_percent" />
+    <ind:state state_ref="state_auditd_data_retention_space_left_percent" />
+  </ind:textfilecontent54_test>
+
+  <ind:textfilecontent54_object id="object_auditd_data_retention_space_left_percent" version="1">
+    <ind:filepath>/etc/audit/auditd.conf</ind:filepath>
+    <!-- Allow only space (exactly) as delimiter: https://fedorahosted.org/audit/browser/trunk/src/auditd-config.c#L426 -->
+    <!-- Require at least one space before and after the equal sign -->
+    <ind:pattern operation="pattern match">^[\s]*space_left[\s]+=[\s]+\d+([%]?)[\s]*$</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <ind:textfilecontent54_state id="state_auditd_data_retention_space_left_percent" version="1">
+    <ind:subexpression operation="equals" var_ref="var_auditd_space_left_percent" datatype="string" />
+  </ind:textfilecontent54_state>
+</def-group>

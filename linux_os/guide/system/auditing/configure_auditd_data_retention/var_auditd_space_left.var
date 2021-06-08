@@ -4,14 +4,15 @@ title: 'Size remaining in disk space before prompting space_left_action'
 
 description: 'The setting for space_left (MB) in /etc/audit/auditd.conf'
 
-type: number
+type: string
 
 interactive: false
 
 options:
-    1000MB: 1000
-    100MB: 100
-    250MB: 250
-    500MB: 500
-    750MB: 750
-    default: 100
+    1000MB: '1000'
+    100MB: '100'
+    250MB: '250'
+    500MB: '500'
+    750MB: '750'
+    25%: '25%'
+    default: '100'
