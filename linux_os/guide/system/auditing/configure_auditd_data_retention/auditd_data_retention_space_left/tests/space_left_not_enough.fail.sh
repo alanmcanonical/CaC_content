@@ -1,5 +1,5 @@
 #!/bin/bash
-# profiles = xccdf_org.ssgproject.content_profile_stig
+# variables var_auditd_space_left=100
 # remediation = bash
 
 . $SHARED/auditd_utils.sh

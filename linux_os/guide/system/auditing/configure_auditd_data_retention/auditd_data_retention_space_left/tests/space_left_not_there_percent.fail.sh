@@ -1,5 +1,5 @@
 #!/bin/bash
-# variables var_auditd_space_left=100
+# variables var_auditd_space_left=25%
 # remediation = bash
 
 . $SHARED/auditd_utils.sh
