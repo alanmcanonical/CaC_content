@@ -1,0 +1,17 @@
+##ssg## platform = multi_platform_ubuntu
+##ssg## check-import = stdout
+#!/bin/bash
+#
+# "Copyright 2021 Canonical Limited. All rights reserved."
+#
+#--------------------------------------------------------
+
+set -u
+
+GROUP="privileged"
+
+auditctl -l -k "$GROUP" |\
+    grep -q '^-a always,exit.*-F path={{{ PATH }}}.*-F auid>={{{ auid }}}.*-F auid!=unset'
+    || exit ${XCCDF_RESULT_FAIL}
+
+exit ${XCCDF_RESULT_PASS}

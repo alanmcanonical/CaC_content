@@ -3,3 +3,4 @@ supported_languages:
   - bash
   - kubernetes
   - oval
+  - sce-bash
