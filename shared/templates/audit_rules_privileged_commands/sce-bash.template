@@ -1,5 +1,6 @@
 ##ssg## platform = multi_platform_ubuntu
 ##ssg## check-import = stdout
+##ssg## complex-check = AND
 #!/bin/bash
 #
 # "Copyright 2021 Canonical Limited. All rights reserved."
