@@ -5,10 +5,7 @@ prodtype: sle12,sle15,ubuntu2004
 title: 'Set Deny For Failed Password Attempts'
 
 description: |-
-    The 
-    {{% if product in ['sle12','sle15'] %}}SUSE{{% endif %}}
-    {{% if product in ['ubuntu2004'] %}}Ubuntu{{% endif %}}
-    operating system must lock an account after - at most - {{{ xccdf_value("var_accounts_passwords_pam_tally2_deny") }}}
+    The {{{ full_name }}} operating system must lock an account after - at most - {{{ xccdf_value("var_accounts_passwords_pam_tally2_deny") }}}
     consecutive invalid access attempts.
 
 rationale: |-
