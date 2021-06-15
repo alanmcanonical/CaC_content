@@ -40,6 +40,7 @@ def main():
         args.build_config_yaml, args.product_yaml)
 
     ssg.build_hardening.cis(env_yaml, args.product_yaml, args.check_files, args.output)
+    ssg.build_hardening.stig(env_yaml, args.product_yaml, args.check_files, args.output)
 
 if __name__ == "__main__":
     main()

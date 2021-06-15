@@ -9,7 +9,6 @@ import textwrap
 from .build_yaml import Rule, DocumentationNotComplete
 from .constants import MULTI_PLATFORM_LIST
 from .jinja import process_file_with_macros
-from .rule_yaml import parse_prodtype
 from .rules import get_rule_dir_id, get_rule_dir_sces, find_rule_dirs_in_paths
 from . import utils
 
@@ -96,6 +95,9 @@ def bash_for_reference(env_yaml, yaml_path, remediation_dir, output, reference, 
             continue
 
         rule.normalize(product)
+
+        if 'all' not in rule.prodtype and product not in rule.prodtype:
+            continue
 
         assert rule_id not in rule_id_to_parsed
         rule_id_to_parsed[rule_id] = rule
@@ -195,3 +197,6 @@ def bash_for_reference(env_yaml, yaml_path, remediation_dir, output, reference, 
 
 def cis(env_yaml, yaml_path, remediation_dir, output):
     return bash_for_reference(env_yaml, yaml_path, remediation_dir, output, 'cis')
+
+def stig(env_yaml, yaml_path, remediation_dir, output):
+    return bash_for_reference(env_yaml, yaml_path, remediation_dir, output, 'stigid', group_by_major_section=False)
