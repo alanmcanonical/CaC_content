@@ -1,0 +1,27 @@
+documentation_complete: true
+
+title: 'System Audit Logs Directory Must Have mode 0750 or Less Permissive'
+
+description: |-
+    The audit logs directory is set to a mode other than 0750, change the
+    mode of the audit directory with the following command:
+    <pre>$ sudo chmod -R g-w,o-rwx <i>audit_directory</i></pre>
+
+rationale: |-
+    Unauthorized disclosure of audit records can reveal system and
+    configuration data to attackers, thus compromising its confidentiality.
+
+severity: medium
+
+references:
+    disa: CCI-000164
+    srg: SRG-OS-000059-GPOS-00029
+    stigid@ubuntu2004: UBTU-20-010128
+
+ocil: |-
+    Run the following commands to check the mode of the system audit directory:
+    <pre>$ sudo grep -iw ^log_file /etc/audit/auditd.conf</pre>
+    <pre>log_file = /var/log/audit/audit.log</pre>
+    <pre>$ sudo stat -c "%n %a" /var/log/audit /var/log/audit/*</pre>
+    <pre>/var/log/audit 750</pre>
+    <pre>/var/log/audit/audit.log 600</pre>
