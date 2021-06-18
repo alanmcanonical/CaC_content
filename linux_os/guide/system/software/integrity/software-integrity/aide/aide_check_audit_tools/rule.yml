@@ -5,7 +5,8 @@ prodtype: sle12,sle15,ubuntu2004,rhel8,fedora
 title: 'Configure AIDE to Verify the Audit Tools'
 
 description: |-
-    The operating system file integrity tool must be configured to protect the integrity of the audit tools.
+    The {{{ full_name }}} operating system file integrity tool must be
+    configured to protect the integrity of the audit tools.
 
 rationale: |-
     Protecting the integrity of the tools used for auditing purposes is a
@@ -46,26 +47,37 @@ references:
 
 ocil_clause: 'integrity checks of the audit tools are missing or incomplete'
 
-{{% if 'rhel' not in product %}}
+{{% if 'rhel' not in product and 'ubuntu' not in product %}}
 {{% set aide_string = 'p+i+n+u+g+s+b+acl+selinux+xattrs+sha512' %}}
 {{% else %}}
 {{% set aide_string = 'p+i+n+u+g+s+b+acl+xattrs+sha512' %}}
 {{% endif %}}
 
+{{% set aide_dir = '/sbin' %}}
+{{% if 'ubuntu' not in product %}}
+  {{% set aide_dir = '/usr/sbin' %}}
+{{% endif %}}
+
+
 ocil: |-
     Check that AIDE is properly configured to protect the integrity of the
     audit tools by running the following command:
 
+    {{% if 'ubuntu' in product %}}
+    <pre>egrep '(\/sbin\/(audit|au))' /etc/aide/aide.conf</pre>
+    {{% else %}}
     <pre># sudo cat /etc/aide.conf | grep /usr/sbin/au
+    {{% endif %}}
 
-    /usr/sbin/auditctl {{{ aide_string }}}
-    /usr/sbin/auditd {{{ aide_string }}}
-    /usr/sbin/ausearch {{{ aide_string }}}
-    /usr/sbin/aureport {{{ aide_string }}}
-    /usr/sbin/autrace {{{ aide_string }}}
-    {{% if 'rhel' not in product %}}/usr/sbin/audispd {{{ aide_string }}}{{% endif %}}
-    /usr/sbin/augenrules {{{ aide_string }}}</pre>
-
+    {{{ aide_dir }}}/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512
+    {{{ aide_dir }}}/auditd p+i+n+u+g+s+b+acl+xattrs+sha512
+    {{{ aide_dir }}}/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512
+    {{{ aide_dir }}}/aureport p+i+n+u+g+s+b+acl+xattrs+sha512
+    {{{ aide_dir }}}/autrace p+i+n+u+g+s+b+acl+xattrs+sha512
+    {{% if 'rhel' not in product %}}{{{ aide_string }}}/audispd {{{ aide_string }}}{{% endif %}}
+    {{{ aide_dir }}}/audispd p+i+n+u+g+s+b+acl+xattrs+sha512
+    {{{ aide_dir }}}/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512
+    
     If AIDE is configured properly to protect the integrity of the audit tools,
     all lines listed above will be returned from the command.
 
