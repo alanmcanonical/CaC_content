@@ -340,6 +340,7 @@ selections:
     - file_ownership_audit_binaries
 
     # UBTU-20-010201 The Ubuntu operating system must configure the audit tools to be group-owned by root.
+    - file_group_ownership_audit_binaries
 
     # UBTU-20-010205 The Ubuntu operating system must use cryptographic mechanisms to protect the integrity of audit tools.
     - aide_check_audit_tools
