@@ -1,6 +1,12 @@
+{{%- if 'ubuntu' in product -%}}
+  {{%- set unix_update_path="/sbin/unix_update" %}}
+{{%- else %}}
+  {{%- set unix_update_path="/usr/sbin/unix_update" %}}
+{{%- endif %}}
+
 documentation_complete: true
 
-prodtype: rhel8,rhel9
+prodtype: rhel8,rhel9,ubuntu2004
 
 title: 'Ensure auditd Collects Information on the Use of Privileged Commands - unix_update'
 
@@ -10,11 +16,11 @@ description: |-
     configured to use the <tt>augenrules</tt> program to read audit rules during
     daemon startup (the default), add a line of the following form to a file with
     suffix <tt>.rules</tt> in the directory <tt>/etc/audit/rules.d</tt>:
-    <pre>-a always,exit -F path=/usr/sbin/unix_update -F perm=x -F auid&gt;={{{ auid }}} -F auid!=unset -F key=privileged</pre>
+    <pre>-a always,exit -F path={{{ unix_update_path }}} -F perm=x -F auid&gt;={{{ auid }}} -F auid!=unset -F key=privileged</pre>
     If the <tt>auditd</tt> daemon is configured to use the <tt>auditctl</tt>
     utility to read audit rules during daemon startup, add a line of the following
     form to <tt>/etc/audit/audit.rules</tt>:
-    <pre>-a always,exit -F path=/usr/sbin/unix_update -F perm=x -F auid&gt;={{{ auid }}} -F auid!=unset -F key=privileged</pre>
+    <pre>-a always,exit -F path={{{ unix_update_path }}} -F perm=x -F auid&gt;={{{ auid }}} -F auid!=unset -F key=privileged</pre>
 
 rationale: |-
     Misuse of privileged functions, either intentionally or unintentionally by
@@ -35,9 +41,10 @@ identifiers:
     cce@rhel9: CCE-89481-6
 
 references:
-    disa: CCI-000169
-    srg: SRG-OS-000037-GPOS-00015,SRG-OS-000042-GPOS-00020,SRG-OS-000062-GPOS-00031,SRG-OS-000392-GPOS-00172,SRG-OS-000462-GPOS-00206,SRG-OS-000471-GPOS-00215
+    disa: CCI-000169,CCI-000172
+    srg: SRG-OS-000037-GPOS-00015,SRG-OS-000042-GPOS-00020,SRG-OS-000062-GPOS-00031,SRG-OS-000064-GPOS-00033,SRG-OS-000392-GPOS-00172,SRG-OS-000462-GPOS-00206,SRG-OS-000471-GPOS-00215
     stigid@rhel8: RHEL-08-030310
+    stigid@ubuntu2004: UBTU-20-010173
 
 ocil_clause: 'it is not the case'
 
@@ -50,4 +57,4 @@ ocil: |-
 template:
     name: audit_rules_privileged_commands
     vars:
-        path: /usr/sbin/unix_update
+        path: {{{ unix_update_path }}}
