@@ -44,6 +44,7 @@ template:
     name: audit_rules_login_events
     vars:
         path: /run/utmp
+        path@ubuntu2004: /var/run/utmp
     backends:
         ansible: "off"
         bash: "off"
