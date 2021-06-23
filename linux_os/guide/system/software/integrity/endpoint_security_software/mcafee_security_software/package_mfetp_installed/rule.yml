@@ -1,0 +1,35 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Install Endpoint Security for Linux Threat Prevention'
+
+description: |-
+    The operating system must deploy Endpoint Security for Linux Threat
+    Prevention (ENSLTP).
+
+rationale: |-
+    Without the use of automated mechanisms to scan for security flaws on a
+    continuous and/or periodic basis, the operating system or other system
+    components may remain vulnerable to the exploits presented by
+    undetected software flaws.
+    To support this requirement, the operating system may have an integrated
+    solution incorporating continuous scanning using HBSS and periodic
+    scanning using other tools, as specified in the requirement.
+
+severity: medium
+
+references:
+    disa: CCI-001233
+    srg: SRG-OS-000191-GPOS-00080
+    stigid@ubuntu2004: UBTU-20-010415
+
+ocil_clause: 'mfetp is not installed'
+
+ocil: |-
+    ocil_package(package='mfetp')
+
+template:
+    name: package_installed
+    vars:
+        pkgname: mfetp
