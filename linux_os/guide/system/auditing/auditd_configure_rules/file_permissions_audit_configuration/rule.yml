@@ -6,6 +6,8 @@ title: 'Audit Configuration Files Must Have Mode 0640 or Less Permissive'
 
 description: |-
     All audit configuration files must have mode 0640 or less permissive.
+    {{{ describe_file_permissions(file="/etc/audit/audit*.{rules,conf}", perms="0640") }}}
+    {{{ describe_file_permissions(file="/etc/audit/rules.d/*", perms="0640") }}}
 
 rationale: |-
     Without the capability to restrict which roles and individuals can
@@ -23,12 +25,21 @@ references:
     srg: SRG-OS-000063-GPOS-00032
     stigid@ubuntu2004: UBTU-20-010133
 
-ocil_clause: 'any are more permissive'
+ocil_clause: |-
+    {{{ ocil_clause_file_permissions(file="/etc/audit/audit*.{rules,conf}", perms="-rw-r-----") }}}
+    {{{ ocil_clause_file_permissions(file="/etc/audit/rules.d/*", perms="-rw-r-----") }}}
 
 ocil: |-
-    {{{ describe_file_permissions(file="/etc/audit/", perms="0640") }}}
-    {{{ describe_file_permissions(file="/etc/audit/rules.d/", perms="0640") }}}
+    {{{ ocil_file_permissions(file="/etc/audit/audit*.{rules,conf}", perms="-rw-r-----") }}}
+    {{{ ocil_file_permissions(file="/etc/audit/rules.d/*", perms="-rw-r-----") }}}
 
-    Run the following command to check the mode of the system audit logs:
-    <pre>sudo ls -al /etc/audit/ /etc/audit/rules.d/</pre>
-    Configuration files must be mode 0640 or less permissive.
+template:
+    name: file_permissions
+    vars:
+        filepath:
+            - /etc/audit/
+            - /etc/audit/rules.d/
+        file_regex:
+            - ^.*audit.*\.(rules|conf)$
+            - ^.*\.rules$
+        filemode: '0640'
