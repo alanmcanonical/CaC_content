@@ -61,4 +61,5 @@ template:
             - /usr/sbin/
             - /usr/local/bin/
             - /usr/local/sbin/
+        recursive: 'true'
         filegid: '0'
