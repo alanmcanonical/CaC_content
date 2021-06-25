@@ -27,4 +27,6 @@ severity: medium
 
 references:
     cis@ubuntu2004: 1.6.1
-
+    disa: CCI-002824
+    srg: SRG-OS-000433-GPOS-00192
+    stigid@ubuntu2004: UBTU-20-010447
