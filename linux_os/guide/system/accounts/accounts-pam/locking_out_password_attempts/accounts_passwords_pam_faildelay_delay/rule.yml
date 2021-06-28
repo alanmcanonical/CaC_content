@@ -32,7 +32,7 @@ references:
 ocil_clause: 'that is not the case'
 
 ocil: |-
-    Verify that the {{ full_name }} operating system enforces a minimum delay betweeen
+    Verify that the {{{ full_name }}} operating system enforces a minimum delay betweeen
     logon prompts following a failed logon attempt.
 
     <pre># grep pam_faildelay /etc/pam.d/common-auth
