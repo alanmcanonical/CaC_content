@@ -16,6 +16,23 @@ description: |-
     Also remove the configuration files for every wifi adapter from
     <tt>/etc/wicked/ifconfig/&lt;WIFI-INTERFACE&gt;.xml</tt> to prevent future
     connections.
+    {{% elif 'ubuntu' in product %}}
+    Verify that there are no wireless interfaces configured on the system
+    with the following command:
+    <pre>$ ls -L -d /sys/class/net/*/wireless | xargs dirname | xargs basename</pre>
+    For each interface, configure the system to disable wireless network
+    interfaces with the following command:
+    <pre>$ sudo ifdown <tt>interface name</tt></pre>
+    For each interface listed, find their respective module with the
+    following command:
+    <pre>$ basename $(readlink -f /sys/class/net/<tt>interface name</tt>/device/driver)</pre>
+    where <tt>interface name</tt> must be substituted by the actual interface name.
+    Create a file in the <tt>/etc/modprobe.d</tt> directory and for each module,
+    add the following line:
+    <pre>install <tt>module name</tt> /bin/true</pre>
+    For each module from the system, execute the following command to
+    remove it:
+    <pre>$ sudo modprobe -r <tt>module name</tt></pre>
     {{% else %}}
     Configure the system to disable all wireless network interfaces with the
     following command:
@@ -93,6 +110,21 @@ ocil: |-
 
     If a wireless interface is configured it must be documented and approved by
     the local Authorizing Official.
+    {{% elif 'ubuntu' in product %}}
+    <pre>$ ls -L -d /sys/class/net/*/wireless | xargs dirname | xargs basename</pre>
+    For each interface, configure the system to disable wireless network
+    interfaces with the following command:
+    <pre>$ sudo ifdown <tt>interface name</tt></pre>
+    For each interface listed, find their respective module with the
+    following command:
+    <pre>$ basename $(readlink -f /sys/class/net/<tt>interface name</tt>/device/driver)</pre>
+    where <tt>interface name</tt> must be substituted by the actual interface name.
+    Create a file in the <tt>/etc/modprobe.d</tt> directory and for each module,
+    add the following line:
+    <pre>install <tt>module name</tt> /bin/true</pre>
+    For each module from the system, execute the following command to
+    remove it:
+    <pre>$ sudo modprobe -r <tt>module name</tt></pre>
     {{% else %}}
     <pre>$ sudo nmcli device</pre>
     The output should contain the following:
