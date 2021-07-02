@@ -9,4 +9,7 @@ if [ -n "$(find /sys/class/net/*/ -type d -name wireless)" ]; then
         echo "install $drivers /bin/true" >> /etc/modprobe.d/disable_wireless.conf
         modprobe -r $drivers
     done
+    if command -v nmcli >/dev/null 2>&1 ; then
+        nmcli radio all off
+    fi
 fi
