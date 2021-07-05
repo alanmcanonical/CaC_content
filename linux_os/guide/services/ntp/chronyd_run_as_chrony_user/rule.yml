@@ -11,8 +11,14 @@ description: |-
     {{{ weblink(link="http://chrony.tuxfamily.org/") }}}.
     Chrony can be configured to be a client and/or a server.
     To ensure that chronyd is running under chrony user account, Add or edit the
+    {{% if 'ubuntu' not in product %}}
     <tt>OPTIONS</tt> variable in <tt>/etc/sysconfig/chronyd</tt> to include <tt>-u chrony</tt>:
     <pre>OPTIONS="-u chrony"</pre>
+    {{% else %}}
+    <tt>user</tt> variable in <tt>{{{ chrony_conf_path }}}</tt> is set to <tt>_chrony</tt> or is
+    absent:
+    <pre>user _chrony</pre>
+    {{% endif %}}
     This recommendation only applies if chrony is in use on the system.
 
 rationale: |-
@@ -36,6 +42,13 @@ identifiers:
 ocil_clause: 'chronyd is not running under chrony user account'
 
 ocil: |-
+    {{% if 'ubuntu' not in product %}}
     Run the following command and verify that <tt>-u chrony</tt> is included in <tt>OPTIONS</tt>:
     <pre># grep "^OPTIONS" /etc/sysconfig/chronyd
     OPTIONS="-u chrony"</pre>
+    {{% else %}}
+    Run the following command and verify that <tt>user</tt> is set to <tt>_chrony</tt> in <tt>{{{ chrony_conf_path }}}</tt>
+    or the <tt>user</tt> parameter is absent:
+    <pre># grep "^user" {{{ chrony_conf_path }}}
+    user _chrony</pre>
+    {{% endif %}}
