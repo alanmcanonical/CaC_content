@@ -1,0 +1,1 @@
+{{{ oval_check_config_file(path='/etc/chrony/chrony.conf', prefix_regex='^[ \\t]*', parameter='user', separator_regex='[[:space:]]', value='_chrony', missing_parameter_pass=true, missing_config_file_fail=false) }}}
