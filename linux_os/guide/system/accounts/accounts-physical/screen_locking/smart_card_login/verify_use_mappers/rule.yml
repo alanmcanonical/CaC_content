@@ -26,3 +26,21 @@ references:
     disa: CCI-000187
     srg: SRG-OS-000068-GPOS-00036
     stigid@ubuntu2004: UBTU-20-010006
+
+ocil_clause: 'use_mappers is not uncommented or configured correctly'
+
+ocil: |-
+    Verify that <tt>use_mappers</tt> is set to <tt>pwent</tt> in
+    <tt>/etc/pam_pkcs11/pam_pkcs11.conf</tt> file with the following command:
+
+    <pre>$ grep ^use_mappers /etc/pam_pkcs11/pam_pkcs11.conf
+
+    use_mappers = pwent</pre>
+
+template:
+    name: lineinfile
+    vars:
+        text: "use_mappers = pwent"
+        path: /etc/pam_pkcs11/pam_pkcs11.conf
+        oval_extended_definitions:
+            smartcard_configure_cert_checking
