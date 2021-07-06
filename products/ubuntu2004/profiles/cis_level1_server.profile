@@ -229,6 +229,7 @@ selections:
 
     #### 2.2.1.3 Ensure chrony is configured (Automated)
     - chronyd_run_as_chrony_user
+    - var_multiple_time_servers=ubuntu
     - chronyd_specify_remote_server
 
     #### 2.2.1.4 Ensure ntp is configured (Automated)
