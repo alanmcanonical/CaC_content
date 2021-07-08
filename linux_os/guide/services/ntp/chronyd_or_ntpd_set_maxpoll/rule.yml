@@ -7,8 +7,8 @@ title: 'Configure Time Service Maxpoll Interval'
 description: |-
     The <tt>maxpoll</tt> should be configured to
     {{{ xccdf_value("var_time_service_set_maxpoll") }}} in <tt>/etc/ntp.conf</tt> or
-    <tt>/etc/chrony.conf</tt> to continuously poll time servers. To configure
-    <tt>maxpoll</tt> in <tt>/etc/ntp.conf</tt> or <tt>/etc/chrony.conf</tt>
+    <tt>{{{ chrony_conf_path }}}</tt> to continuously poll time servers. To configure
+    <tt>maxpoll</tt> in <tt>/etc/ntp.conf</tt> or <tt>{{{ chrony_conf_path }}}</tt>
     add the following after each `server` entry:
     <pre>maxpoll {{{ xccdf_value("var_time_service_set_maxpoll") }}}</pre>
     {{% if product == "rhcos4" %}}
@@ -102,6 +102,6 @@ ocil_clause: 'it does not exist or maxpoll has not been set to the expected valu
 
 ocil: |-
     To verify that <tt>maxpoll</tt> has been set properly, perform the following:
-    <pre>$ sudo grep maxpoll /etc/ntp.conf /etc/chrony.conf</pre>
+    <pre>$ sudo grep maxpoll /etc/ntp.conf {{{ chrony_conf_path }}}</pre>
     The output should return:
     <pre>maxpoll {{{ xccdf_value("var_time_service_set_maxpoll") }}}</pre>.
