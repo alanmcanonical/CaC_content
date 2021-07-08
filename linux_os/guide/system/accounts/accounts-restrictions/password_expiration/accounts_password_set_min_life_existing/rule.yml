@@ -25,8 +25,8 @@ identifiers:
     cce@sle15: CCE-85710-2
 
 references:
-    disa: CCI-000198
     cis@ubuntu2004: 5.4.1.2
+    disa: CCI-000198
     nist: IA-5(f),IA-5(1)(d),CM-6(a)
     nist@sle15: IA-5(1).1(v)
     srg: SRG-OS-000075-GPOS-00043

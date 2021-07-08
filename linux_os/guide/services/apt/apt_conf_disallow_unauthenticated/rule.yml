@@ -15,4 +15,6 @@ severity: unknown
 
 references:
     anssi: BP28(R15)
+    disa: CCI-001749
+    srg: SRG-OS-000366-GPOS-00153
     stigid@ubuntu2004: UBTU-20-010438
