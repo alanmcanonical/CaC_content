@@ -1,8 +1,8 @@
 # platform = multi_platform_ubuntu
 
 if LC_ALL=C grep -iw log_file /etc/audit/auditd.conf; then
-    FILE=$(awk -F "=" '/log_file/ {print $2}' /etc/audit/auditd.conf | tr -d ' ')
-    GROUP=$(awk -F "=" '/log_group/ {print $2}' /etc/audit/auditd.conf | tr -d ' ')
+    FILE=$(awk -F "=" '/^log_file/ {print $2}' /etc/audit/auditd.conf | tr -d ' ')
+    GROUP=$(awk -F "=" '/^log_group/ {print $2}' /etc/audit/auditd.conf | tr -d ' ')
     if [ "$GROUP" != 'root' ] | [ "$GROUP" != 'adm' ] ; then
         chown :adm "$FILE"
         sed -i '/^log_group/D' /etc/audit/auditd.conf
