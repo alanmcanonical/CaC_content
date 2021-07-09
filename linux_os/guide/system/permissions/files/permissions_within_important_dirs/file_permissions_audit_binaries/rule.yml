@@ -63,3 +63,16 @@ ocil: |-
 
     Replace "[audit_tool]" with the audit tool that does not have the
     correct permissions.
+
+template:
+    name: file_permissions
+    vars:
+        filepath:
+            - /sbin/auditctl
+            - /sbin/aureport
+            - /sbin/ausearch
+            - /sbin/autrace
+            - /sbin/auditd
+            - /sbin/audispd
+            - /sbin/augenrules
+        filemode: '0755'
