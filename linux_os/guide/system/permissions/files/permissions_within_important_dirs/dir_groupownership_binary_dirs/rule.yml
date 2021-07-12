@@ -50,3 +50,15 @@ ocil: |-
     For each of these directories, run the following command to find files not
     owned by root group:
     <pre>$ sudo find -L <i>$DIR</i> ! -group root -type d \;</pre>
+
+template:
+    name: file_groupowner
+    vars:
+        filepath:
+            - /bin/
+            - /sbin/
+            - /usr/bin/
+            - /usr/sbin/
+            - /usr/local/bin/
+            - /usr/local/sbin/
+        filegid: '0'
