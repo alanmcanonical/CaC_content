@@ -62,3 +62,16 @@ ocil: |-
     <pre>$ sudo chown :root [audit_tool] </pre>
 
     Replace "[audit_tool]" with each audit tool not group-owned by root.
+
+template:
+    name: file_groupowner
+    vars:
+        filepath:
+            - /sbin/auditctl
+            - /sbin/aureport
+            - /sbin/ausearch
+            - /sbin/autrace
+            - /sbin/auditd
+            - /sbin/audispd
+            - /sbin/augenrules
+        filegid: '0'
