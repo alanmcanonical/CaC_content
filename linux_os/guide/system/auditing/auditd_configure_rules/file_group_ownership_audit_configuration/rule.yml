@@ -25,3 +25,14 @@ references:
 ocil: |-
     {{{ describe_file_group_owner(file="/etc/audit/", group="root") }}}
     {{{ describe_file_group_owner(file="/etc/audit/rules.d/", group="root") }}}
+
+template:
+    name: file_groupowner
+    vars:
+        filepath:
+            - /etc/audit/
+            - /etc/audit/rules.d/
+        file_regex:
+            - ^.*audit.*\.(rules|conf)$
+            - ^.*\.rules$
+        filegid: '0'
