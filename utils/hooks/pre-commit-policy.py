@@ -82,7 +82,7 @@ CatchAllPolicies = [
     CatchAllPolicy('M', 'linux_os', None, 'ansible', "Any modifications to Ansible hardening should be committed together"),
     CatchAllPolicy('M', 'linux_os', None, 'oval', "Any modifications to OVAL checks should be committed together"),
     CatchAllPolicy('M', 'linux_os', None, 'sce', "Any modifications to SCE checks should be committed together"),
-    CatchAllPolicy('M', 'shared', None, None, "Any modifications to shared content should be committed together"),
+    CatchAllPolicy(['A', 'M', 'R', 'D'], 'shared', None, None, "Any modifications to shared content should be committed together"),
     CatchAllPolicy(['A', 'M', 'R', 'D'], ['build-scripts', 'cmake', 'ssg', 'utils', 'tests'], None, None, "Any modifications to infrastructure should be committed together"),
     CatchAllPolicy(None, None, None, None, "Any other modifications")
 ]
@@ -202,7 +202,7 @@ def validate_only_one_policy(context, path, entry, top_dir, basename, parent_dir
         if skip_policy(policy, entry, top_dir, basename, parent_dir):
             continue
 
-        validate_policy_context(context, OnlyOnePolicy, index, path, exclusive=True)
+        validate_policy_context(context, OnlyOnePolicies, index, path, exclusive=True)
 
         context[-1] = index
         context[index] = path
@@ -245,7 +245,7 @@ def validate_catch_policy(context, path, entry, top_dir, basename, parent_dir):
             context[index] = set()
         context[index].add(path)
 
-        validate_policy_context(context, CatchAllPolicy, index, path)
+        validate_policy_context(context, CatchAllPolicies, index, path)
         context[-1] = index
 
         return True
