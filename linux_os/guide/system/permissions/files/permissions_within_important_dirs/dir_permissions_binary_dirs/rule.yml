@@ -42,3 +42,15 @@ ocil: |-
     world-writable, run the following command for each directory <i>DIR</i>
     which contains system executables:
     <pre>$ sudo find -L <i>DIR</i> -perm /022 -type d</pre>
+
+template:
+    name: file_permissions
+    vars:
+        filepath:
+            - /bin/
+            - /sbin/
+            - /usr/bin/
+            - /usr/sbin/
+            - /usr/local/bin/
+            - /usr/local/sbin/
+        filemode: '0755'
