@@ -125,6 +125,11 @@ def parse_args():
         "otherwise, executes one test per template type"
     )
 
+    common_parser.add_argument(
+        "--no-cleanup", dest="cleanup", action="store_false",
+        help="Don't cleanup destination machine state in event of fatal error "
+        "(useful for debugging)")
+
     subparsers = parser.add_subparsers(dest="subparser_name",
                                        help="Subcommands: profile, rule, combined")
     subparsers.required = True
@@ -355,7 +360,11 @@ def normalize_passed_arguments(options):
     # Add in product to the test environment. This is independent of actual
     # test environment type so we do it after creation.
     options.test_env.product = options.product
+<<<<<<< HEAD
     options.test_env.duplicate_templates = options.duplicate_templates
+=======
+    options.test_env.cleanup = options.cleanup
+>>>>>>> 399a490b69... Add option to avoid cleanup in SSGTS
 
     try:
         benchmark_cpes = xml_operations.benchmark_get_applicable_platforms(
