@@ -474,7 +474,7 @@ selections:
     - dir_ownership_library_dirs
 
     # UBTU-20-010430 The Ubuntu operating system library files must be group-owned by root.
-    - file_groupownership_library_dirs
+    - root_permissions_syslibrary_files
 
     # UBTU-20-010431 The Ubuntu operating system library directories must be group-owned by root.
     - dir_group_ownership_library_dirs
