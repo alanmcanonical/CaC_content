@@ -360,11 +360,8 @@ def normalize_passed_arguments(options):
     # Add in product to the test environment. This is independent of actual
     # test environment type so we do it after creation.
     options.test_env.product = options.product
-<<<<<<< HEAD
     options.test_env.duplicate_templates = options.duplicate_templates
-=======
     options.test_env.cleanup = options.cleanup
->>>>>>> 399a490b69... Add option to avoid cleanup in SSGTS
 
     try:
         benchmark_cpes = xml_operations.benchmark_get_applicable_platforms(
