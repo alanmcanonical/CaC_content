@@ -1,6 +1,6 @@
 documentation_complete: true
 
-prodtype: sle12,sle15,rhel8,fedora
+prodtype: sle12,sle15,rhel8,fedora,ubuntu2004
 
 title: |-
     Verify the system-wide library files in directories
