@@ -69,14 +69,14 @@ ocil: |-
     <pre># sudo cat /etc/aide.conf | grep /usr/sbin/au
     {{% endif %}}
 
-    {{{ aide_dir }}}/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512
-    {{{ aide_dir }}}/auditd p+i+n+u+g+s+b+acl+xattrs+sha512
-    {{{ aide_dir }}}/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512
-    {{{ aide_dir }}}/aureport p+i+n+u+g+s+b+acl+xattrs+sha512
-    {{{ aide_dir }}}/autrace p+i+n+u+g+s+b+acl+xattrs+sha512
-    {{% if 'rhel' not in product %}}{{{ aide_string }}}/audispd {{{ aide_string }}}{{% endif %}}
-    {{{ aide_dir }}}/audispd p+i+n+u+g+s+b+acl+xattrs+sha512
-    {{{ aide_dir }}}/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512
+    {{{ aide_dir }}}/auditctl {{{ aide_string }}}
+    {{{ aide_dir }}}/auditd {{{ aide_string }}}
+    {{{ aide_dir }}}/ausearch {{{ aide_string }}}
+    {{{ aide_dir }}}/aureport {{{ aide_string }}}
+    {{{ aide_dir }}}/autrace {{{ aide_string }}}
+    {{% if 'rhel' not in product %}}{{{ aide_dir }}}/audispd {{{ aide_string }}}{{% endif %}}
+    {{{ aide_dir }}}/audispd {{{ aide_string }}}
+    {{{ aide_dir }}}/augenrules {{{ aide_string }}}
     
     If AIDE is configured properly to protect the integrity of the audit tools,
     all lines listed above will be returned from the command.
