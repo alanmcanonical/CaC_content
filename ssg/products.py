@@ -12,6 +12,7 @@ from .constants import (product_directories,
                         DEFAULT_GRUB2_UEFI_BOOT_PATH,
                         DEFAULT_DCONF_GDM_DIR,
                         DEFAULT_CHRONY_CONF_PATH,
+                        DEFAULT_AIDE_CONF_PATH,
                         PKG_MANAGER_TO_SYSTEM,
                         PKG_MANAGER_TO_CONFIG_FILE,
                         XCCDF_PLATFORM_TO_PACKAGE)
@@ -58,6 +59,9 @@ def _get_implied_properties(existing_properties):
 
     if "chrony_conf_path" not in existing_properties:
         result["chrony_conf_path"] = DEFAULT_CHRONY_CONF_PATH
+
+    if "aide_conf_path" not in existing_properties:
+        result["aide_conf_path"] = DEFAULT_AIDE_CONF_PATH
 
     return result
 
