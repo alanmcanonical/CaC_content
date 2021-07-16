@@ -27,7 +27,8 @@ rationale: |-
 
 severity: medium
 
-platform: chrony
+platforms:
+  - var_chrony
 
 references:
     cis@rhel7: 2.2.1.2

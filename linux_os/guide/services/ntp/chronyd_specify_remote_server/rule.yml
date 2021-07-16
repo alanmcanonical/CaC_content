@@ -19,7 +19,8 @@ rationale: |-
 
 severity: medium
 
-platform: chrony
+platforms:
+  - var_chrony
 
 identifiers:
     cce@rhel7: CCE-83418-4
