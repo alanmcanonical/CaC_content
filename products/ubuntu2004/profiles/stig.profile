@@ -179,6 +179,7 @@ selections:
     # UBTU-20-010123 The Ubuntu operating system must be configured to permit only authorized users ownership of the audit log files.
 
     # UBTU-20-010124 The Ubuntu operating system must permit only authorized groups ownership of the audit log files.
+    - logs_groupownership_var_log_audit
 
     # UBTU-20-010128 The Ubuntu operating system must be configured so that the audit log directory is not write-accessible by unauthorized users.
 
@@ -189,7 +190,7 @@ selections:
     - file_ownership_audit_configuration
 
     # UBTU-20-010135 The Ubuntu operating system must permit only authorized groups to own the audit configuration files.
-    - file_group_ownership_audit_configuration
+    - file_groupownership_audit_configuration
 
     # UBTU-20-010136 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the su command.
     - audit_rules_privileged_commands_su
@@ -341,7 +342,7 @@ selections:
     - file_ownership_audit_binaries
 
     # UBTU-20-010201 The Ubuntu operating system must configure the audit tools to be group-owned by root.
-    - file_group_ownership_audit_binaries
+    - file_groupownership_audit_binaries
 
     # UBTU-20-010205 The Ubuntu operating system must use cryptographic mechanisms to protect the integrity of audit tools.
     - aide_check_audit_tools
@@ -485,7 +486,7 @@ selections:
     - root_permissions_syslibrary_files
 
     # UBTU-20-010431 The Ubuntu operating system library directories must be group-owned by root.
-    - dir_group_ownership_library_dirs
+    - dir_groupownership_library_dirs
 
     # UBTU-20-010432 The Ubuntu operating system must be configured to preserve log records from failure events.
     - service_rsyslog_enabled
