@@ -21,6 +21,7 @@ severity: medium
 
 platforms:
   - var_chrony
+  - machine
 
 identifiers:
     cce@rhel7: CCE-83418-4
