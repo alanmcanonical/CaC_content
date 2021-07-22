@@ -37,14 +37,15 @@ def process_bash_fix(rule_id, fix):
 
     cleaned_fix = []
     for line in split_fix:
-        if not found_import and line.startswith(". /") and line.endswith("remediation_functions"):
+        if line.startswith(". /") and "remediation_functions" in line:
+            if not found_import:
+                removed_import_next_empty_blank_line = False
             found_import = True
-            removed_import_next_empty_blank_line = False
         elif line.startswith(". /") or line.startswith(". ."):
-            assert ("Unexpected second import in remediation", rule_id, fix, line) == False
+            raise RuntimeError("Unexpected second import in remediation", rule_id, fix, line)
         elif found_import and not removed_import_next_empty_blank_line:
             removed_import_next_empty_blank_line = True
-            if not line:
+            if line.strip():
                 cleaned_fix.append(line)
         else:
             cleaned_fix.append(line)

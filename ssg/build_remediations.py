@@ -951,13 +951,14 @@ def expand_xccdf_subs(fix, remediation_type, remediation_functions):
                 rfpattern = r'((?:# Include source function library\.\n)?.*remediation_functions)'
                 rfpatcomp = re.compile(rfpattern)
                 head, _, tail = re.split(rfpatcomp, fixparts[0], maxsplit=1)
-            except ValueError:
+            except ValueError as ve:
                 sys.stderr.write("Processing fix.text for: %s rule\n"
                                  % fix.get('rule'))
+                sys.stderr.write("\n\n" + fix.text + "\n\n")
                 sys.stderr.write("Unable to extract part of the fix.text "
                                  "after inclusion of remediation functions."
                                  " Aborting..\n")
-                sys.exit(1)
+                raise ve
             # If the 'head' is not empty, make it new fix.text.
             # Otherwise use ''
             fix.text = head if head is not None else ''
