@@ -757,3 +757,104 @@
   </ind:variable_test>
 </def-group>
 {{%- endmacro -%}}
+
+{{#
+  Macro which generates a check for sshd access restriction based on value coming from a variable.
+#}}
+{{%- macro oval_check_sshd_users_or_groups_access( auth, target, variable ) -%}}
+{{% if ('allow' == auth or 'deny' == auth) and ('users' == target  or 'groups' == target) %}}
+<def-group>
+  <definition class="compliance" id="sshd_configure_{{{ auth }}}_{{{ target }}}" version="1">
+    <metadata>
+      <title>sshd {{{ auth }}}{{{ target }}}</title>
+      <affected family="unix">
+        <platform>multi_platform_all</platform>
+      </affected>
+      <description>Compare whether the sshd {{{ auth }}}{{{ target }}} parameter is a subset of the value from the associated variable {{{ variable }}}</description>
+    </metadata>
+    <criteria>
+      <extend_definition definition_ref="sshd_restrict_user_access" comment="At least one of AllowUsers/AllowGroups/DenyUsers/DenyGroups is not empty"/>
+      <criteria operator="OR">
+        <criterion test_ref="test_sshd_{{{ auth }}}_{{{ target }}}_is_empty" comment="{{{ auth }}}{{{ target }}} parameter is empty" />
+        <criteria operator="AND">
+          <criterion test_ref="test_sshd_{{{ auth }}}_{{{ target }}}_matches_valid_list" comment="list of {{{ target }}} from {{{ auth }}}{{{ target }}} parameter matches the {{{ target }}} from variable"/>
+          <criterion test_ref="test_sshd_{{{ auth }}}_{{{ target }}}_count_smaller_valid_list" comment="size of list of {{{ target }}} from {{{ auth }}}{{{ target }}} param is lesser than size of list of valid values"/>
+        </criteria>
+      </criteria>
+    </criteria>
+  </definition>
+
+  <external_variable id="{{{ variable }}}" datatype="string" version="1" comment="Value of {{{ variable }}} as a string contains the space-separated list of valid {{{ target }}}" />
+
+  <ind:textfilecontent54_test check="all" check_existence="none_exist" id="test_sshd_{{{ auth }}}_{{{ target }}}_is_empty" version="1" comment="{{{ auth }}}{{{ target }}} parameter is empty">
+    <ind:object object_ref="obj_sshd_{{{ auth }}}_{{{ target }}}_value" />
+  </ind:textfilecontent54_test>
+  <ind:variable_test check="all" id="test_sshd_{{{ auth }}}_{{{ target }}}_matches_valid_list" version="1" comment="list of {{{ target }}} from {{{ auth }}}{{{ target }}} parameter matches the valid {{{ target }}} from variable">
+    <ind:object object_ref="obj_{{{ auth }}}_{{{ target }}}_valid" />
+    <ind:state state_ref="ste_split_{{{ auth }}}_{{{ target }}}_matches" />
+  </ind:variable_test>
+  <ind:variable_test check="all" id="test_sshd_{{{ auth }}}_{{{ target }}}_count_smaller_valid_list" version="1" comment="size of list of {{{ target }}} from {{{ auth }}}{{{ target }}} param is lesser or equal than size of list of valid values">
+    <ind:object object_ref="obj_var_dif_num_valid_list_and_parameter_list_{{{ auth }}}_{{{ target }}}" />
+    <ind:state state_ref="ste_var_dif_num_valid_list_and_parameter_list_{{{ auth }}}_{{{ target }}}" />
+  </ind:variable_test>
+
+  <ind:textfilecontent54_object id="obj_sshd_{{{ auth }}}_{{{ target }}}_value" version="1" comment="Value from {{{ auth }}}{{{ target }}} parameter in /etc/ssh/sshd_config">
+    <ind:filepath operation="equals">/etc/ssh/sshd_config</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">(?i)^[ ]*{{{ auth }}}{{{ target }}}[ ]+((?:[^ \n]+[ ]*)*(?:[^ \n]+))[ ]*$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  <ind:variable_object id="obj_{{{ auth }}}_{{{ target }}}_valid" version="1" comment="Object containing list of valid {{{ target }}} from external variable">
+    <ind:var_ref>{{{ variable }}}</ind:var_ref>
+    <!--<ind:var_ref>sshd_{{{ auth }}}_{{{ target }}}_valid</ind:var_ref>-->
+  </ind:variable_object>
+  <ind:variable_object id="obj_var_dif_num_valid_list_and_parameter_list_{{{ auth }}}_{{{ target }}}" version="1" comment="Count difference between list of valid {{{ target }}} and entries in {{{ auth }}}{{{ target }}}">
+    <ind:var_ref>var_dif_num_valid_list_and_parameter_list_{{{ auth }}}_{{{ target }}}</ind:var_ref>
+  </ind:variable_object>
+
+  <ind:variable_state id="ste_split_{{{ auth }}}_{{{ target }}}_matches" comment="State matches each {{{ target }}} against the allowed values from the external variable" version="1">
+    <ind:value var_ref="var_split_{{{ auth }}}_{{{ target }}}_value" datatype="string" operation="pattern match" var_check="all"/>
+  </ind:variable_state>
+  <ind:variable_state id="ste_var_dif_num_valid_list_and_parameter_list_{{{ auth }}}_{{{ target }}}" comment="List of {{{ target }}} params from {{{ auth }}}{{{ target }}} must fit the list of allowed {{{ target }}}" version="1">
+    <ind:value datatype="int" operation="greater than or equal">0</ind:value>
+  </ind:variable_state>
+
+  <local_variable datatype="string" id="var_split_{{{ auth }}}_{{{ target }}}_valid" version="1" comment="valid values for {{{ auth }}}{{{ target }}} parameter - split on space" >
+    <split delimiter=" ">
+      <!--<variable_component var_ref="sshd_{{{ auth }}}_{{{ target }}}_valid" />-->
+      <variable_component var_ref="{{{ variable }}}" />
+    </split>
+  </local_variable>
+
+  <local_variable datatype="string" id="var_split_{{{ auth }}}_{{{ target }}}_value" version="1" comment="regexps derived from the {{{ auth }}}{{{ target }}} parameter - split on space" >
+    <concat>
+      <literal_component datatype="string">\b</literal_component>
+      <split delimiter=" ">
+        <object_component item_field="subexpression" object_ref="obj_sshd_{{{ auth }}}_{{{ target }}}_value" />
+      </split>
+      <literal_component datatype="string">\b</literal_component>
+    </concat>
+  </local_variable>
+
+  <local_variable datatype="int" id="var_num_{{{ auth }}}_{{{ target }}}_user" version="1" comment="number of {{{ target }}} set to the {{{ auth }}}{{{ target }}} parameter" >
+    <count>
+      <variable_component var_ref="var_split_{{{ auth }}}_{{{ target }}}_value" />
+    </count>
+  </local_variable>
+
+  <local_variable datatype="int" id="var_dif_num_valid_list_and_parameter_list_{{{ auth }}}_{{{ target }}}" version="1" comment="Calculates difference between list of valid {{{ target }}} and entries in {{{ auth }}}{{{ target }}}">
+    <arithmetic arithmetic_operation="add">
+      <arithmetic arithmetic_operation="multiply">
+        <literal_component datatype="int">-1</literal_component>
+        <variable_component var_ref="var_num_{{{ auth }}}_{{{ target }}}_user" />
+      </arithmetic>
+      <count>
+        <variable_component var_ref="var_split_{{{ auth }}}_{{{ target }}}_valid" />
+      </count>
+    </arithmetic>
+  </local_variable>
+
+</def-group>
+
+{{% endif %}}
+<!-- Invalid parameter set to macro -->
+{{%- endmacro -%}}
