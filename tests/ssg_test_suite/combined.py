@@ -56,7 +56,7 @@ class CombinedChecker(rule.RuleChecker):
         # be tested using the self.profile and we return empty profiles
         # metadata.
         if not params["profiles"]:
-            params["profiles"].extend(self.profile)
+            params["profiles"] = [self.profile]
             logging.debug(
                 "Added the {0} profile to the list of available profiles for {1}"
                 .format(self.profile, script))
