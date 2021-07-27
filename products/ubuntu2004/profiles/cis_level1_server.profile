@@ -872,7 +872,9 @@ selections:
 
     ## 6.2 User and Group Settings ##
     ### 6.2.1 Ensure password fields are not empty (Automated)
-    - no_empty_password_field
+    # Needs rule
+    # no_empty_passwords does not work because it uses PAM (and thus, we
+    # believe, happens at runtime) versus looking at /etc/shadow directly.
 
     ### 6.2.2 Ensure root is the only UID 0 account (Automated)
     - accounts_no_uid_except_zero
