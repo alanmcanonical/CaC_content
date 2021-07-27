@@ -708,6 +708,10 @@ selections:
     - sshd_set_login_grace_time
 
     ### 5.2.17 Ensure SSH access is limited (Automated)
+    - var_sshd_allow_users_valid=ubuntu_cis
+    - var_sshd_allow_groups_valid=ubuntu_cis
+    - var_sshd_deny_users_valid=ubuntu_cis
+    - var_sshd_deny_groups_valid=ubuntu_cis
     - sshd_configure_allow_users
     - sshd_configure_deny_users
     - sshd_configure_allow_groups
