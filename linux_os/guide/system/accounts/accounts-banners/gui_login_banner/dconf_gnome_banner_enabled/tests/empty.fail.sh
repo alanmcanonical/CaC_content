@@ -1,6 +1,7 @@
 #!/bin/bash
 # profiles = xccdf_org.ssgproject.content_profile_ncp
-# packages = dconf,gdm
+
+# we don't use packages statement here since Ubuntu uses different packages from other distros.
 
 source $SHARED/dconf_test_functions.sh
 
