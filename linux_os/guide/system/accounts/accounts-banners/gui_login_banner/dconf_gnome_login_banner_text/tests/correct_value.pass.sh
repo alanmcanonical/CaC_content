@@ -1,12 +1,12 @@
 #!/bin/bash
 # profiles = xccdf_org.ssgproject.content_profile_ncp
-# packages = dconf,gdm
 
 {{% set dconf_db = "distro.d" %}}
 {{% if product not in ("fedora", "rhel9") %}}
 {{% set dconf_db = "gdm.d" %}}
 {{% endif %}}
 
+{{% if 'ubuntu' not in product %}}
 source $SHARED/dconf_test_functions.sh
 
 install_dconf_and_gdm_if_needed
@@ -19,3 +19,4 @@ add_dconf_setting "org/gnome/login-screen" "banner-message-text" "'${expanded}'"
 add_dconf_lock "org/gnome/login-screen" "banner-message-text" "{{{ dconf_db }}}" "00-security-settings-lock"
 
 dconf update
+{{% endif %}}
