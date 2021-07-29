@@ -1,6 +1,7 @@
-##ssg## platform = multi_platform_ubuntu
-##ssg## check-import = stdout
 #!/bin/bash
+#
+# platform = multi_platform_ubuntu
+# check-import = stdout
 #
 # "Copyright 2019 Canonical Limited. All rights reserved."
 #

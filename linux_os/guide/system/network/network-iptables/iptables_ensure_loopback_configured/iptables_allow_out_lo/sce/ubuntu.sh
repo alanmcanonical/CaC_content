@@ -1,7 +1,8 @@
-##ssg## platform = multi_platform_ubuntu
-##ssg## check-import = stdout
-##ssg## check-export = var_firewall_package=fw_choice
 #!/bin/bash
+#
+# platform = multi_platform_ubuntu
+# check-import = stdout
+# check-export = var_firewall_package=fw_choice
 #
 # "Copyright 2021 Canonical Limited. All rights reserved."
 #
