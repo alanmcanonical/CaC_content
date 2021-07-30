@@ -34,9 +34,3 @@ ocil: |-
     external media.
     If the script file does not exist or does not offload audit logs, this
     is a finding.
-
-template:
-    name: "lineinfile"
-    vars:
-        text: "audit-offload"
-        path: "/etc/cron.weekly"
