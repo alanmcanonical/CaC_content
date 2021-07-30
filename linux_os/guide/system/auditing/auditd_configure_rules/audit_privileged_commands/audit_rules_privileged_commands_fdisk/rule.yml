@@ -34,3 +34,8 @@ ocil: |-
 
     If the command does not return a line, or the line is commented out, this
     is a finding.
+
+template:
+    name: audit_rules_privileged_commands
+    vars:
+        path: /sbin/fdisk
