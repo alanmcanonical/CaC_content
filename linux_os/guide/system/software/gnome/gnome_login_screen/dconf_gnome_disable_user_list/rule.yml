@@ -11,6 +11,7 @@ description: |-
     to <tt>true</tt>.
     <br /><br />
     To disable, add or edit <tt>disable-user-list</tt> to
+    {{% if 'ubuntu' not in product %}}
     <tt>/etc/dconf/db/{{{ dconf_gdm_dir }}}/00-security-settings</tt>. For example:
     <pre>[org/gnome/login-screen]
     disable-user-list=true</pre>
@@ -18,6 +19,12 @@ description: |-
     <tt>/etc/dconf/db/{{{ dconf_gdm_dir }}}/locks/00-security-settings-lock</tt> to prevent
     user modification. For example:
     <pre>/org/gnome/login-screen/disable-user-list</pre>
+    {{% else %}}
+    <tt>/etc/gdm3/greeter.dconf-defaults</tt>. For example:
+    <pre>[org/gnome/login-screen]
+    disable-user-list=true</pre>
+    {{% endif %}}
+
     After the settings have been set, run <tt>dconf update</tt>.
 
 rationale: |-
@@ -39,11 +46,17 @@ references:
 ocil_clause: 'disable-user-list has not been configured or is not disabled'
 
 ocil: |-
+    {{% if 'ubuntu' not in product %}}
     To ensure the user list is disabled, run the following command:
     <pre>$ grep disable-user-list /etc/dconf/db/{{{ dconf_gdm_dir }}}/*</pre>
     The output should be <tt>true</tt>.
     To ensure that users cannot enable displaying the user list, run the following:
     <pre>$ grep disable-user-list /etc/dconf/db/{{{ dconf_gdm_dir }}}/locks/*</pre>
     If properly configured, the output should be <tt>/org/gnome/login-screen/disable-user-list</tt>
+    {{% else %}}
+    To ensure a login warning banner is enabled, run the following:
+    <pre>$ grep disable-user-list /etc/gdm3/greeter.dconf-defaults</pre>
+    If properly configured, the output should be <tt>true</tt>.
+    {{% endif %}}
 
 platform: machine
