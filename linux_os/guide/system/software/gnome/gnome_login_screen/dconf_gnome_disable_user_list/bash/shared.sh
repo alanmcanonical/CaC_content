@@ -1,4 +1,4 @@
-# platform = multi_platform_all
+# platform = Red Hat Enterprise Linux 7,Red Hat Enterprise Linux 8,multi_platform_fedora,multi_platform_ol,multi_platform_sle
 
 
 {{{ bash_dconf_settings("org/gnome/login-screen", "disable-user-list", "true", dconf_gdm_dir, "00-security-settings") }}}
