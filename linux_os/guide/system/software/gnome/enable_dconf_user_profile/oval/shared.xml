@@ -2,7 +2,11 @@
   <definition class="compliance" id="enable_dconf_user_profile" version="1">
     {{{ oval_metadata("The DConf User profile should have the local DB configured.") }}}
     <criteria operator="OR">
+      {{% if 'ubuntu' not in product %}}
       <extend_definition comment="dconf installed" definition_ref="package_dconf_installed" negate="true" />
+      {{% else %}}
+      <extend_definition comment="gdm installed" definition_ref="package_gdm_installed" negate="true" />
+      {{% endif %}}
       <criterion comment="dconf user profile exists" test_ref="test_dconf_user_profile" />
     </criteria>
   </definition>
@@ -13,7 +17,7 @@
   </ind:textfilecontent54_test>
   <ind:textfilecontent54_object id="obj_dconf_user_profile"
   version="2">
-    {{% if product in ['sle12', 'sle15'] %}}
+    {{% if product in ['sle12', 'sle15'] or 'ubuntu' in product %}}
       <ind:filepath>/etc/dconf/profile/gdm</ind:filepath>
       <ind:pattern operation="pattern match">^user-db:user\nsystem-db:gdm$</ind:pattern>
     {{% else %}}
