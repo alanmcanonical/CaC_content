@@ -11,14 +11,32 @@
     </criteria>
   </definition>
 
+  <ind:textfilecontent54_object id="object_audit_log_file_path_d" version="1">
+    <ind:filepath>/etc/audit/auditd.conf</ind:filepath>
+    <ind:pattern operation="pattern match">^(log_file\s*=\s*.*)</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <ind:textfilecontent54_test id="test_log_file_not_defined_d"
+    comment="log_file not defined in /etc/audit/auditd.conf" check="all"
+    check_existence="none_exist" version="1">
+    <ind:object object_ref="object_audit_log_file_path_d" />
+  </ind:textfilecontent54_test>
+
+  <local_variable id="var_log_file_path_d" datatype="string" version="1" comment="path to audit log files">
+    <regex_capture pattern="^log_file\s*=\s*(.*)\/([^\/]+$)">
+      <object_component item_field="subexpression" object_ref="object_audit_log_file_path_d" />
+    </regex_capture>
+  </local_variable>
+
   <unix:file_test check="all" check_existence="at_least_one_exists" comment="/var/log/audit files mode 0750" id="test_dir_permissions_var_log_audit-non_root" version="1">
     <unix:object object_ref="object_var_log_audit_directory-non_root" />
     <unix:state state_ref="state_not_mode_0750" />
   </unix:file_test>
   <unix:file_object comment="/var/log/audit files" id="object_var_log_audit_directory-non_root" version="1">
     <unix:behaviors recurse="directories" recurse_direction="down" max_depth="-1" recurse_file_system="local" />
-    <unix:path operation="equals">/var/log/audit</unix:path>
-    <unix:filename operation="pattern match">^.*$</unix:filename>
+    <unix:path operation="equals" var_ref="var_log_file_path_d">*</unix:path>
+    <unix:filename xsi:nil="true" />
     <filter action="include">state_not_mode_0750</filter>
   </unix:file_object>
 
@@ -28,8 +46,8 @@
   </unix:file_test>
   <unix:file_object comment="/var/log/audit files" id="object_var_log_audit_directory" version="1">
     <unix:behaviors recurse="directories" recurse_direction="down" max_depth="-1" recurse_file_system="local" />
-    <unix:path operation="equals">/var/log/audit</unix:path>
-    <unix:filename operation="pattern match">^.*$</unix:filename>
+    <unix:path operation="equals" var_ref="var_log_file_path_d">*</unix:path>
+    <unix:filename xsi:nil="true" />
     <filter action="include">state_not_mode_0700</filter>
   </unix:file_object>
 
@@ -51,7 +69,6 @@
     <unix:suid datatype="boolean">true</unix:suid>
     <unix:sgid datatype="boolean">true</unix:sgid>
     <unix:sticky datatype="boolean">true</unix:sticky>
-    <unix:uexec datatype="boolean">true</unix:uexec>
     <unix:gwrite datatype="boolean">true</unix:gwrite>
     <unix:oread datatype="boolean">true</unix:oread>
     <unix:owrite datatype="boolean">true</unix:owrite>
