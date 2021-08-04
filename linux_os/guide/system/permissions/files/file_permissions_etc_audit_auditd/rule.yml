@@ -2,11 +2,11 @@ documentation_complete: true
 
 prodtype: fedora,rhel8,ubuntu2004
 
-title: 'Verify Permissions on /etc/audit/auditd.conf'
+title: 'Verify Permissions on /etc/audit/auditd.conf and /etc/audit/audit.rules'
 
 description: |-
     {{{ describe_file_permissions(file="/etc/audit/auditd.conf", perms="0640") }}}
-
+    {{{ describe_file_permissions(file="/etc/audit/audit.rules", perms="0640") }}}
 
 rationale: |-
     Without the capability to restrict the roles and individuals that can select which events
@@ -31,6 +31,7 @@ references:
 template:
     name: file_permissions
     vars:
-      filepath: /etc/audit/auditd.conf
+      filepath: /etc/audit/
+      file_regex: ^audit(\.rules|d\.conf)$
       allow_stricter_permissions: "true"
       filemode: '0640'
