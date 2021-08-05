@@ -1,0 +1,15 @@
+documentation_complete: true
+
+title: 'SSH Valid List of DenyGroups'
+
+description: "Specify the list of valid groups that can be set to the DenyGroups parameter of the SSH server."
+
+type: string
+
+operator: equals
+
+interactive: false
+
+options:
+    ubuntu_cis: e39d05b72f25767869d44391919434896bb055772d7969f74472032b03bc18418911f3b0e6dd47ff8f3b2323728225286c3cb36914d28dc7db40bdd786159c0a
+    default: e39d05b72f25767869d44391919434896bb055772d7969f74472032b03bc18418911f3b0e6dd47ff8f3b2323728225286c3cb36914d28dc7db40bdd786159c0a
