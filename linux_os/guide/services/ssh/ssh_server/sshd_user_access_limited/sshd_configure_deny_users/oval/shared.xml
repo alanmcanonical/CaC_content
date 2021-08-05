@@ -1,0 +1,1 @@
+{{{ oval_check_sshd_users_or_groups_access( auth='deny', target='users', variable='var_sshd_deny_users_valid' ) }}}
