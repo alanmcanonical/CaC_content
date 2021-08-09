@@ -868,7 +868,7 @@ selections:
 
     ## 6.2 User and Group Settings ##
     ### 6.2.1 Ensure password fields are not empty (Automated)
-    - no_empty_passwords
+    - no_empty_password_field
 
     ### 6.2.2 Ensure root is the only UID 0 account (Automated)
     - accounts_no_uid_except_zero
