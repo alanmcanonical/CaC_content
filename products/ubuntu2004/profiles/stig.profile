@@ -26,6 +26,7 @@ selections:
     - vlock_installed
 
     # UBTU-20-010006 The Ubuntu operating system must map the authenticated identity to the user or group account for PKI-based authentication.
+    - verify_use_mappers
 
     # UBTU-20-010007 The Ubuntu operating system must enforce 24 hours/1 day as the minimum password lifetime. Passwords for new users must have a 24 hours/1 day minimum password lifetime restriction.
     - var_accounts_minimum_age_login_defs=1
@@ -137,6 +138,7 @@ selections:
     - smartcard_configure_cert_checking
 
     # UBTU-20-010066 The Ubuntu operating system for PKI-based authentication, must implement a local cache of revocation data in case of the inability to access revocation information via the network.
+    - smartcard_configure_crl
 
     # UBTU-20-010070 The Ubuntu operating system must prohibit password reuse for a minimum of five generations.
     - var_password_pam_unix_remember=5
@@ -202,7 +204,7 @@ selections:
     - audit_rules_privileged_commands_chfn
 
     # UBTU-20-010138 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the mount command.
-    - audit_rules_privileged_commands_mount 
+    - audit_rules_privileged_commands_mount
 
     # UBTU-20-010139 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the umount command.
     - audit_rules_privileged_commands_umount
@@ -314,7 +316,6 @@ selections:
     - audit_rules_privileged_commands_chage
 
     # UBTU-20-010176 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the usermod command.
-    # different path in ubuntu for usermod
     - audit_rules_privileged_commands_usermod
 
     # UBTU-20-010177 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the crontab command.
@@ -361,7 +362,7 @@ selections:
     - auditd_audispd_configure_remote_server
 
     # UBTU-20-010217 The Ubuntu operating system must immediately notify the SA and ISSO (at a minimum) when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity.
-    - var_auditd_space_left=250MB
+    - var_auditd_space_left=25%
     - var_auditd_space_left_action=email
     - auditd_data_retention_space_left_action
     - auditd_data_retention_space_left
