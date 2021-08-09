@@ -1,0 +1,32 @@
+documentation_complete: true
+
+title: 'Lock Accounts With Empty Password Field'
+
+description: |-
+    If an account is configured for password authentication
+    but does not have an assigned password, it may be possible to log
+    into the account without authentication. Lock all accounts with empty
+    password field on <pre>/etc/shadow</pre> to prevent logins with empty
+    passwords.
+
+rationale: |-
+    If an account has an empty password, anyone could log in and
+    run commands with the privileges of that account. Accounts with
+    empty passwords should never be used in operational environments.
+
+severity: high
+
+platform: machine
+
+references:
+    cis@ubuntu2004: 6.2.1
+
+ocil_clause: 'accounts with empty password can be used'
+
+ocil: |-
+    To verify that null passwords cannot be used, run the following command:
+    <pre>awk -F: '($2 == "" ) { print $1 }' /etc/shadow</pre>
+    If this produces any output, it may be possible to log into accounts
+    with empty passwords. Lock all displayed accounts with the command
+    <pre>passwd -l ${user}</pre> (where <pre>${user}</pre> represent users
+    shown by the awk command above) to prevent logins with empty passwords.
