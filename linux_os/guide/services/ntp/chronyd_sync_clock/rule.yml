@@ -36,3 +36,9 @@ ocil: |-
     <pre>makestep 1 -1</pre>
     Restart the chrony service:
     <pre>$ sudo systemctl restart chrony.service</pre>
+
+template:
+    name: "lineinfile"
+    vars:
+        text: "makestep 1 -1"
+        path: "/etc/chrony/chrony.conf"
