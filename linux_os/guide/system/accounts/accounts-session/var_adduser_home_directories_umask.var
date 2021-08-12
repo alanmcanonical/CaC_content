@@ -1,0 +1,17 @@
+documentation_complete: true
+
+title: 'umask for adduser'
+
+description: |-
+    When creating the adduser tool will create new home directories
+    using this value as the umask.
+
+type: string
+
+operator: equals
+
+interactive: false
+
+options:
+    ubuntu_cis: "0750"
+    default: "0750"
