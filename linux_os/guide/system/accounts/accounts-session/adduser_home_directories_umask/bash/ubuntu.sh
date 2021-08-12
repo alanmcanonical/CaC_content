@@ -1,14 +1,13 @@
 # platform = multi_platform_ubuntu
 
-# Needs default mode variable.
+. /usr/share/scap-security-guide/remediation_functions
+{{{ bash_instantiate_variables("var_adduser_home_directories_umask") }}}
 
+valid_umask=${var_adduser_home_directories_umask}
 adduser_conf=/etc/adduser.conf
-v=$(grep -Po '(?<=^DIR_MODE=)\d?\d{3}' ${adduser_conf})
-if [ -n "${v}" ]; then
-    # check if num passes valid mask
-    if [ $((0${v} & 07027)) -ne 0 ]; then
-        sed -E -i 's/(^DIR_MODE=).*$/\10750/g' ${adduser_conf}
-    fi
-else
-    echo 'DIR_MODE=0750' >> ${adduser_conf}
+
+dir_mode="$(awk -F= '/^\s*DIR_MODE\s*=\s*[0-7]?[0-7]{3}/{ printf("%04d", strtonum($2)) }' ${adduser_conf})"
+if [ -z "${dir_mode}" ] || [ $(( $dir_mode & 0$valid_umask )) -ne "${dir_mode}" ]; then
+    sed -i '/^\s*DIR_MODE\b/d' ${adduser_conf}
+    echo 'DIR_MODE='"${valid_umask}" >> ${adduser_conf}
 fi
