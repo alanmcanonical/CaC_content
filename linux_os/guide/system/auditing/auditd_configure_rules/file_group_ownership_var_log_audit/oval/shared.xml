@@ -25,8 +25,7 @@
   </unix:file_test>
 
   <unix:file_object comment="audit log files" id="object_group_ownership_audit_log_files" version="1">
-    <unix:behaviors recurse="directories" recurse_direction="down" max_depth="-1" recurse_file_system="all" />
-    <unix:filepath operation="pattern match" var_ref="audit_log_file_path">*</unix:filepath>
+    <unix:filepath operation="pattern match" var_ref="audit_log_file_path" />
     <filter action="include">state_group_owner_not_root_var_log_audit</filter>
   </unix:file_object>
 
@@ -50,8 +49,7 @@
   </unix:file_test>
 
   <unix:file_object comment="audit log files" id="object_group_ownership_audit_log_files-non_root" version="1">
-    <unix:behaviors recurse="directories" recurse_direction="down" max_depth="-1" recurse_file_system="all" />
-    <unix:filepath operation="pattern match" var_ref="audit_log_file_path">*</unix:filepath>
+    <unix:filepath operation="pattern match" var_ref="audit_log_file_path" />
     <filter action="include">state_group_owner_not_root_var_log_audit-non_root</filter>
   </unix:file_object>
 

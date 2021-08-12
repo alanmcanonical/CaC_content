@@ -25,8 +25,7 @@
     <unix:state state_ref="state_not_mode_0640" />
   </unix:file_test>
   <unix:file_object comment="audit log files" id="object_audit_log_files-non_root" version="1">
-    <unix:behaviors recurse="directories" recurse_direction="down" max_depth="-1" recurse_file_system="local" />
-    <unix:filepath operation="pattern match" var_ref="audit_log_file_path">*</unix:filepath>
+    <unix:filepath operation="pattern match" var_ref="audit_log_file_path" />
     <filter action="include">state_not_mode_0640</filter>
   </unix:file_object>
 
@@ -46,8 +45,7 @@
     <unix:state state_ref="state_not_mode_0600" />
   </unix:file_test>
   <unix:file_object comment="/var/log/audit files" id="object_audit_log_files" version="1">
-    <unix:behaviors recurse="directories" recurse_direction="down" max_depth="-1" recurse_file_system="local" />
-    <unix:filepath operation="pattern match" var_ref="audit_log_file_path">*</unix:filepath>
+    <unix:filepath operation="pattern match" var_ref="audit_log_file_path" />
     <filter action="include">state_not_mode_0600</filter>
   </unix:file_object>
 

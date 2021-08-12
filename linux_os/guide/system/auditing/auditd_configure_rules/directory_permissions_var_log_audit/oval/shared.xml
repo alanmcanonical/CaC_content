@@ -43,7 +43,7 @@
   </unix:file_test>
   <unix:file_object comment="audit log files" id="object_audit_log_directory-non_root" version="1">
     <unix:behaviors recurse="directories" recurse_direction="down" max_depth="-1" recurse_file_system="local" />
-    <unix:path operation="equals" var_ref="audit_log_dir">*</unix:path>
+    <unix:path operation="equals" var_ref="audit_log_dir" />
     <unix:filename xsi:nil="true" />
     <filter action="include">state_not_mode_0750</filter>
   </unix:file_object>
@@ -65,7 +65,7 @@
   </unix:file_test>
   <unix:file_object comment="audit log files" id="object_audit_log_directory" version="1">
     <unix:behaviors recurse="directories" recurse_direction="down" max_depth="-1" recurse_file_system="local" />
-    <unix:path operation="equals" var_ref="audit_log_dir">*</unix:path>
+    <unix:path operation="equals" var_ref="audit_log_dir" />
     <unix:filename xsi:nil="true" />
     <filter action="include">state_not_mode_0700</filter>
   </unix:file_object>
