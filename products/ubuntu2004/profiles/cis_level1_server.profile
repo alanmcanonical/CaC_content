@@ -881,7 +881,7 @@ selections:
 
     ### 6.2.5 Ensure users' home directories permissions are 750 or more restrictive (Automated)
     - file_permissions_home_directories
-    # Needs variable
+    - var_adduser_home_directories_umask=ubuntu_cis
     - adduser_home_directories_umask
     - useradd_home_directories_umask
 
