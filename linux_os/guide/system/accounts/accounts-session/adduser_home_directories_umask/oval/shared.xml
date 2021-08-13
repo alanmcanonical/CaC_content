@@ -1,0 +1,139 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="2">
+    {{{ oval_metadata("The DIRMODE parameter of /etc/adduser.conf contains allowed value") }}}
+    <criteria operator="OR">
+      <criteria operator="AND">
+        <criterion test_ref="tst_dirmode_from_adduser_defs_exists" comment="DIRMODE parameter exists in /etc/adduser.conf"/>
+        <criterion test_ref="tst_dirmode_from_adduser_defs_valid" comment="DIRMODE is valid" />
+      </criteria>
+      <criteria operator="AND">
+        <criterion test_ref="tst_dirmode_from_adduser_defs_exists" negate="true" comment="DIRMODE parameter does not exist in /etc/adduser.conf"/>
+        <criterion test_ref="tst_dirmode_default_valid" comment="DIRMODE default value is valid" />
+      </criteria>
+    </criteria>
+  </definition>
+
+
+  <external_variable comment="DIRMODE reference value in octal" datatype="string" id="var_adduser_home_directories_umask" version="1" />
+
+  <local_variable id="var_first_digit_of_var_adduser_home_directories_umask"
+  comment="First octal digit of var_adduser_home_directories_umask"
+  datatype="int" version="1">
+    <regex_capture pattern="\d?(\d)\d\d$">
+      <variable_component var_ref="var_adduser_home_directories_umask" />
+    </regex_capture>
+  </local_variable>
+
+  <local_variable id="var_second_digit_of_var_adduser_home_directories_umask"
+  comment="Second octal digit of var_adduser_home_directories_umask"
+  datatype="int" version="1">
+    <regex_capture pattern="\d?\d(\d)\d$">
+      <variable_component var_ref="var_adduser_home_directories_umask" />
+    </regex_capture>
+  </local_variable>
+
+  <local_variable id="var_third_digit_of_var_adduser_home_directories_umask"
+  comment="Third octal digit of var_adduser_home_directories_umask"
+  datatype="int" version="1">
+    <regex_capture pattern="\d?\d\d(\d)$">
+      <variable_component var_ref="var_adduser_home_directories_umask" />
+    </regex_capture>
+  </local_variable>
+
+  <local_variable id="var_adduser_home_directories_umask_as_number"
+  comment="var_adduser_home_directories_umask converted to a mode number"
+  datatype="int" version="1">
+  <arithmetic arithmetic_operation="add">
+    <arithmetic arithmetic_operation="multiply">
+      <literal_component datatype="int">64</literal_component>
+      <variable_component var_ref="var_first_digit_of_var_adduser_home_directories_umask" />
+    </arithmetic>
+    <arithmetic arithmetic_operation="multiply">
+      <literal_component datatype="int">8</literal_component>
+      <variable_component var_ref="var_second_digit_of_var_adduser_home_directories_umask" />
+    </arithmetic>
+    <variable_component var_ref="var_third_digit_of_var_adduser_home_directories_umask" />
+  </arithmetic>
+  </local_variable>
+
+
+  <ind:textfilecontent54_object id="obj_dirmode_from_adduser_defs"
+  comment="DIRMODE value from /etc/adduser.conf" version="1">
+    <ind:filepath>/etc/adduser.conf</ind:filepath>
+    <ind:pattern operation="pattern match">^[\s]*DIR_MODE[\s]*=[\s]*[0-9]?([0-9]{3})</ind:pattern>
+    <ind:instance datatype="int" operation="greater than or equal">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <local_variable id="var_first_digit_of_obj_dirmode_from_adduser_defs"
+  comment="First octal digit of umask from /etc/login.defs"
+  datatype="int" version="1">
+    <substring substring_start="1" substring_length="1">
+      <object_component item_field="subexpression" object_ref="obj_dirmode_from_adduser_defs" />
+    </substring>
+  </local_variable>
+
+  <local_variable id="var_second_digit_of_obj_dirmode_from_adduser_defs"
+  comment="Second octal digit of umask from /etc/login.defs"
+  datatype="int" version="1">
+    <substring substring_start="2" substring_length="1">
+      <object_component item_field="subexpression" object_ref="obj_dirmode_from_adduser_defs" />
+    </substring>
+  </local_variable>
+
+  <local_variable id="var_third_digit_of_obj_dirmode_from_adduser_defs"
+  comment="Third octal digit of umask from /etc/login.defs"
+  datatype="int" version="1">
+    <substring substring_start="3" substring_length="1">
+      <object_component item_field="subexpression" object_ref="obj_dirmode_from_adduser_defs" />
+    </substring>
+  </local_variable>
+
+  <local_variable id="var_dirmode_from_adduser_defs_as_number"
+  comment="/etc/adduser.conf DIRMODE converted from string to a number"
+  datatype="int" version="1">
+    <arithmetic arithmetic_operation="add">
+      <arithmetic arithmetic_operation="multiply">
+        <literal_component datatype="int">64</literal_component>
+        <variable_component var_ref="var_first_digit_of_obj_dirmode_from_adduser_defs" />
+      </arithmetic>
+      <arithmetic arithmetic_operation="multiply">
+        <literal_component datatype="int">8</literal_component>
+        <variable_component var_ref="var_second_digit_of_obj_dirmode_from_adduser_defs" />
+      </arithmetic>
+      <variable_component var_ref="var_third_digit_of_obj_dirmode_from_adduser_defs" />
+    </arithmetic>
+  </local_variable>
+
+  <!-- We use the info extracted from adduser.conf in the state because the bitwise operation only passes, if
+  the object value bitwise and state value is equal to the state value -->
+  <ind:variable_test id="tst_dirmode_from_adduser_defs_valid" version="1" check="all"
+  comment="Test if the retrieved /etc/adduser.conf DIRMODE value(s) match the var_adduser_home_directories_umask requirement">
+    <ind:object object_ref="obj_numeric_valid_dirmode_from_var" />
+    <ind:state state_ref="ste_numeric_dirmode_from_adduser_defs" />
+  </ind:variable_test>
+
+  <ind:variable_object id="obj_numeric_valid_dirmode_from_var" version="1">
+    <ind:var_ref>var_adduser_home_directories_umask_as_number</ind:var_ref>
+  </ind:variable_object>
+
+  <ind:variable_state id="ste_numeric_dirmode_from_adduser_defs" version="1">
+    <ind:value datatype="int" operation="bitwise and" var_ref="var_dirmode_from_adduser_defs_as_number" />
+  </ind:variable_state>
+
+  <ind:variable_test id="tst_dirmode_default_valid" version="1" check="all"
+  comment="Test if the default DIRMODE value (755) matches the var_adduser_home_directories_umask requirement">
+    <ind:object object_ref="obj_numeric_valid_dirmode_from_var" />
+    <ind:state state_ref="ste_numeric_dirmode_default" />
+  </ind:variable_test>
+
+  <ind:variable_state id="ste_numeric_dirmode_default" version="1">
+    <!-- MODE octal 755 converted to decimal: 7 * 64 + 5 * 8 + 5 = 493 -->
+    <ind:value datatype="int" operation="bitwise and">493</ind:value>
+  </ind:variable_state>
+
+  <ind:textfilecontent54_test id="tst_dirmode_from_adduser_defs_exists" check="all" check_existence="all_exist"
+  comment="DIRMODE parameter exists in /etc/adduser.conf" version="1">
+    <ind:object object_ref="obj_dirmode_from_adduser_defs" />
+  </ind:textfilecontent54_test>
+
+</def-group>
