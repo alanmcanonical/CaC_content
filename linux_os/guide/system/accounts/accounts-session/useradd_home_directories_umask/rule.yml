@@ -2,14 +2,14 @@ documentation_complete: true
 
 prodtype: ubuntu2004
 
-title: 'Ensure appropriate umask set for adduser'
+title: 'Ensure appropriate homedir mode set for useradd'
 
 description: |-
     While the system administrator can establish secure permissions for users' home
     directories, the users can easily override these.
 
-    Setting <pre>UMASK=027</pre> for <pre>useradd</pre> helps ensure safe
-    default permissions are chosen.
+    Setting <pre>HOME_MODE=750</pre> on /etc/login.defs for <pre>useradd</pre> helps
+    ensure safe default permissions are chosen.
 
 rationale: |-
     Group or world-writable user home directories may enable malicious users to steal or
