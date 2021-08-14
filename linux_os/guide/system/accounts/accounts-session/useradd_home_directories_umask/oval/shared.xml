@@ -1,0 +1,230 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="2">
+    {{{ oval_metadata("The HOME_MODE parameter of /etc/login.defs contains allowed value") }}}
+    <criteria operator="OR">
+      <criteria operator="AND">
+        <criterion test_ref="tst_homemode_from_login_defs_exists" comment="HOME_MODE parameter exists in /etc/login.defs"/>
+        <criterion test_ref="tst_homemode_from_login_defs_valid" comment="HOME_MODE parameter is valid" />
+      </criteria>
+      <criteria operator="AND">
+        <criterion test_ref="tst_homemode_from_login_defs_exists" negate="true" comment="HOME_MODE parameter does not exist in /etc/login.defs"/>
+        <criterion test_ref="tst_umask_from_login_defs_exists" comment="UMASK parameter exists in /etc/login.defs"/>
+        <criterion test_ref="tst_umask_from_login_defs_valid" comment="UMASK parameter is valid" />
+      </criteria>
+      <criteria operator="AND">
+        <criterion test_ref="tst_homemode_from_login_defs_exists" negate="true" comment="HOME_MODE parameter does not exist in /etc/login.defs"/>
+        <criterion test_ref="tst_umask_from_login_defs_exists" negate="true" comment="UMASK parameter does not exist in /etc/login.defs"/>
+        <criterion test_ref="tst_umask_default_valid" comment="UMASK default value is valid" />
+      </criteria>
+    </criteria>
+  </definition>
+
+
+  <!-- var_useradd_home_directories_mode processing -->
+  <external_variable comment="HOME_MODE reference value in octal" datatype="string" id="var_useradd_home_directories_mode" version="1" />
+
+  <local_variable id="var_first_digit_of_var_useradd_home_directories_mode"
+  comment="First octal digit of var_useradd_home_directories_mode"
+  datatype="int" version="1">
+    <regex_capture pattern="\d?(\d)\d\d$">
+      <variable_component var_ref="var_useradd_home_directories_mode" />
+    </regex_capture>
+  </local_variable>
+
+  <local_variable id="var_second_digit_of_var_useradd_home_directories_mode"
+  comment="Second octal digit of var_useradd_home_directories_mode"
+  datatype="int" version="1">
+    <regex_capture pattern="\d?\d(\d)\d$">
+      <variable_component var_ref="var_useradd_home_directories_mode" />
+    </regex_capture>
+  </local_variable>
+
+  <local_variable id="var_third_digit_of_var_useradd_home_directories_mode"
+  comment="Third octal digit of var_useradd_home_directories_mode"
+  datatype="int" version="1">
+    <regex_capture pattern="\d?\d\d(\d)$">
+      <variable_component var_ref="var_useradd_home_directories_mode" />
+    </regex_capture>
+  </local_variable>
+
+  <local_variable id="var_useradd_home_directories_mode_as_number"
+  comment="var_useradd_home_directories_mode converted to a mode number"
+  datatype="int" version="1">
+  <arithmetic arithmetic_operation="add">
+    <arithmetic arithmetic_operation="multiply">
+      <literal_component datatype="int">64</literal_component>
+      <variable_component var_ref="var_first_digit_of_var_useradd_home_directories_mode" />
+    </arithmetic>
+    <arithmetic arithmetic_operation="multiply">
+      <literal_component datatype="int">8</literal_component>
+      <variable_component var_ref="var_second_digit_of_var_useradd_home_directories_mode" />
+    </arithmetic>
+    <variable_component var_ref="var_third_digit_of_var_useradd_home_directories_mode" />
+  </arithmetic>
+  </local_variable>
+
+  <!-- END of var_useradd_home_directories_mode processing -->
+
+  <!-- obj_homemode_from_login_defs processing -->
+  <ind:textfilecontent54_object id="obj_homemode_from_login_defs"
+  comment="HOME_MODE value from /etc/login.defs" version="1">
+    <ind:filepath>/etc/login.defs</ind:filepath>
+    <ind:pattern operation="pattern match">^[\s]*HOME_MODE[\s]+[0-9]?([0-9]{3})</ind:pattern>
+    <ind:instance datatype="int" operation="greater than or equal">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <local_variable id="var_first_digit_of_obj_homemode_from_login_defs"
+  comment="First octal digit of umask from /etc/login.defs"
+  datatype="int" version="1">
+    <substring substring_start="1" substring_length="1">
+      <object_component item_field="subexpression" object_ref="obj_homemode_from_login_defs" />
+    </substring>
+  </local_variable>
+
+  <local_variable id="var_second_digit_of_obj_homemode_from_login_defs"
+  comment="Second octal digit of umask from /etc/login.defs"
+  datatype="int" version="1">
+    <substring substring_start="2" substring_length="1">
+      <object_component item_field="subexpression" object_ref="obj_homemode_from_login_defs" />
+    </substring>
+  </local_variable>
+
+  <local_variable id="var_third_digit_of_obj_homemode_from_login_defs"
+  comment="Third octal digit of umask from /etc/login.defs"
+  datatype="int" version="1">
+    <substring substring_start="3" substring_length="1">
+      <object_component item_field="subexpression" object_ref="obj_homemode_from_login_defs" />
+    </substring>
+  </local_variable>
+
+  <local_variable id="var_homemode_from_login_defs_as_number"
+  comment="/etc/login.defs HOME_MODE converted from string to a number"
+  datatype="int" version="1">
+    <arithmetic arithmetic_operation="add">
+      <arithmetic arithmetic_operation="multiply">
+        <literal_component datatype="int">64</literal_component>
+        <variable_component var_ref="var_first_digit_of_obj_homemode_from_login_defs" />
+      </arithmetic>
+      <arithmetic arithmetic_operation="multiply">
+        <literal_component datatype="int">8</literal_component>
+        <variable_component var_ref="var_second_digit_of_obj_homemode_from_login_defs" />
+      </arithmetic>
+      <variable_component var_ref="var_third_digit_of_obj_homemode_from_login_defs" />
+    </arithmetic>
+  </local_variable>
+
+  <!-- END of obj_homemode_from_login_defs processing -->
+  
+  <!-- obj_umask_from_login_defs processing -->
+  <ind:textfilecontent54_object id="obj_umask_from_login_defs"
+  comment="UMASK value from /etc/login.defs" version="1">
+    <ind:filepath>/etc/login.defs</ind:filepath>
+    <ind:pattern operation="pattern match">^[\s]*UMASK[\s]+([0-9]{3})</ind:pattern>
+    <ind:instance datatype="int" operation="greater than or equal">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <local_variable id="var_first_digit_of_obj_umask_from_login_defs"
+  comment="First octal digit of umask from /etc/login.defs"
+  datatype="int" version="1">
+    <substring substring_start="1" substring_length="1">
+      <object_component item_field="subexpression" object_ref="obj_umask_from_login_defs" />
+    </substring>
+  </local_variable>
+
+  <local_variable id="var_second_digit_of_obj_umask_from_login_defs"
+  comment="Second octal digit of umask from /etc/login.defs"
+  datatype="int" version="1">
+    <substring substring_start="2" substring_length="1">
+      <object_component item_field="subexpression" object_ref="obj_umask_from_login_defs" />
+    </substring>
+  </local_variable>
+
+  <local_variable id="var_third_digit_of_obj_umask_from_login_defs"
+  comment="Third octal digit of umask from /etc/login.defs"
+  datatype="int" version="1">
+    <substring substring_start="3" substring_length="1">
+      <object_component item_field="subexpression" object_ref="obj_umask_from_login_defs" />
+    </substring>
+  </local_variable>
+
+  <local_variable id="var_umask_from_login_defs_as_mode_number"
+  comment="/etc/login.defs UMASK converted from string to a number and converted to a MODE value"
+    datatype="int" version="1">
+    <!-- operations below flip the bits of the mask (multiplies by minus one and subtracts one).
+         Since the result is a negative number, the value 512 is added to transform it back
+         into a positive one (to clear all the bits after the most significant one)
+         Note this OVAL only works on architectures which use a 2-complement arithmetic system -->
+    <arithmetic arithmetic_operation="add">
+      <literal_component datatype="int">511</literal_component> <!-- -1 - (-512) -->
+      <arithmetic arithmetic_operation="multiply">
+        <literal_component datatype="int">-1</literal_component>
+        <arithmetic arithmetic_operation="add">
+          <arithmetic arithmetic_operation="multiply">
+            <literal_component datatype="int">64</literal_component>
+            <variable_component var_ref="var_first_digit_of_obj_umask_from_login_defs" />
+          </arithmetic>
+          <arithmetic arithmetic_operation="multiply">
+            <literal_component datatype="int">8</literal_component>
+            <variable_component var_ref="var_second_digit_of_obj_umask_from_login_defs" />
+          </arithmetic>
+          <variable_component var_ref="var_third_digit_of_obj_umask_from_login_defs" />
+        </arithmetic>
+      </arithmetic>
+    </arithmetic>
+  </local_variable>
+
+  <!-- END of obj_umask_from_login_defs processing -->
+
+  <!-- HOME_MODE value tests -->
+  <!-- We use the info extracted from /etc/login.defs in the state because the bitwise operation only passes, if
+  the object value 'bitwise and' state value is equal to the state value -->
+  <ind:variable_test id="tst_homemode_from_login_defs_valid" version="1" check="all"
+  comment="Test if the retrieved /etc/login.defs HOME_MODE value(s) match the var_useradd_home_directories_mode requirement">
+    <ind:object object_ref="obj_numeric_valid_homemode_from_var" />
+    <ind:state state_ref="ste_numeric_homemode_from_login_defs" />
+  </ind:variable_test>
+
+  <ind:variable_object id="obj_numeric_valid_homemode_from_var" version="1">
+    <ind:var_ref>var_useradd_home_directories_mode_as_number</ind:var_ref>
+  </ind:variable_object>
+
+  <ind:variable_state id="ste_numeric_homemode_from_login_defs" version="1">
+    <ind:value datatype="int" operation="bitwise and" var_ref="var_homemode_from_login_defs_as_number" />
+  </ind:variable_state>
+
+  <ind:textfilecontent54_test id="tst_homemode_from_login_defs_exists" check="all" check_existence="all_exist"
+  comment="HOME_MODE parameter exists in /etc/login.defs" version="1">
+    <ind:object object_ref="obj_homemode_from_login_defs" />
+  </ind:textfilecontent54_test>
+
+  <!-- END of HOME_MODE value tests -->
+
+  <!-- UMASK value tests -->
+  <ind:variable_test id="tst_umask_from_login_defs_valid" version="1" check="all"
+  comment="Test if the retrieved /etc/login.defs UMASK value(s), converted to MODE, match the var_useradd_home_directories_mode requirement">
+    <ind:object object_ref="obj_numeric_valid_homemode_from_var" />
+    <ind:state state_ref="ste_numeric_umask_mode_from_login_defs" />
+  </ind:variable_test>
+
+  <ind:variable_state id="ste_numeric_umask_mode_from_login_defs" version="1">
+    <ind:value datatype="int" operation="bitwise and" var_ref="var_umask_from_login_defs_as_mode_number" />
+  </ind:variable_state>
+
+  <ind:variable_test id="tst_umask_default_valid" version="1" check="all"
+  comment="Test if the default UMASK value (022) matches the var_useradd_home_directories_mode requirement">
+    <ind:object object_ref="obj_numeric_valid_homemode_from_var" />
+    <ind:state state_ref="ste_numeric_umask_mode_default" />
+  </ind:variable_test>
+
+  <ind:variable_state id="ste_numeric_umask_mode_default" version="1">
+    <!-- UMASK 022: MODE octal 755 converted to decimal: 7 * 64 + 5 * 8 + 5 = 493 -->
+    <ind:value datatype="int" operation="bitwise and">493</ind:value>
+  </ind:variable_state>
+
+  <ind:textfilecontent54_test id="tst_umask_from_login_defs_exists" check="all" check_existence="all_exist"
+  comment="UMASK parameter exists in /etc/login.defs" version="1">
+    <ind:object object_ref="obj_umask_from_login_defs" />
+  </ind:textfilecontent54_test>
+
+  <!-- END of UMASK value tests -->
+</def-group>
