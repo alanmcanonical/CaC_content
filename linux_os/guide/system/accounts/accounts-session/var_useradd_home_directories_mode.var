@@ -1,0 +1,17 @@
+documentation_complete: true
+
+title: 'mode number for useradd'
+
+description: |-
+    When creating a new user, the useradd tool will create new home directories
+    using this value as the mode number.
+
+type: string
+
+operator: equals
+
+interactive: false
+
+options:
+    ubuntu_cis: "0750"
+    default: "0750"
