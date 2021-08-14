@@ -1,15 +1,13 @@
 # platform = multi_platform_ubuntu
 
-# Needs variable for default umask.
+. /usr/share/scap-security-guide/remediation_functions
+{{{ bash_instantiate_variables("var_useradd_home_directories_mode") }}}
 
+valid_mode=${var_useradd_home_directories_mode}
 useradd_conf=/etc/login.defs
 
-v=$(grep -Po '(?<=^UMASK\b)' ${useradd_conf} | sed -E s/^\s+//)
-if [ -n "${v}" ]; then
-    # check if num passes valid mask
-    if [ $((0${v} & 00750)) -ne 0 ]; then
-        sed -E -i 's/(^UMASK\s+).*$/\1027/g' "${useradd_conf}"
-    fi
-else
-    echo 'UMASK           027' >> "${useradd_conf}"
+home_mode="$(awk -F= '/^\s*HOME_MODE\s*=\s*[0-7]?[0-7]{3}/{ printf("%04d", strtonum($2)) }' ${useradd_conf})"
+if [ -z "${home_mode}" ] || [ $(( $home_mode & 0$valid_mode )) -ne "${home_mode}" ]; then
+    sed -i '/^\s*HOME_MODE\b/d' ${useradd_conf}
+    echo -e 'HOME_MODE\t'"${valid_mode}" >> ${useradd_conf}
 fi
