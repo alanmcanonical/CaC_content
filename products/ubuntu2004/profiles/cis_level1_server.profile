@@ -883,6 +883,7 @@ selections:
     - file_permissions_home_directories
     - var_adduser_home_directories_mode=ubuntu_cis
     - adduser_home_directories_mode
+    - var_useradd_home_directories_mode=ubuntu_cis
     - useradd_home_directories_umask
 
     ### 6.2.6 Ensure users own their home directories (Automated)
