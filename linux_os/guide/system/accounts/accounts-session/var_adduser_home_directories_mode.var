@@ -1,10 +1,10 @@
 documentation_complete: true
 
-title: 'umask for adduser'
+title: 'directory mode for adduser'
 
 description: |-
     When creating the adduser tool will create new home directories
-    using this value as the umask.
+    using this value as the directory mode.
 
 type: string
 
