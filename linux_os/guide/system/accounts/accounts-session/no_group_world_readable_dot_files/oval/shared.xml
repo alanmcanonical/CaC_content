@@ -1,0 +1,46 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="2">
+    {{{ oval_metadata("While the system administrator can establish secure permissions for users' \"dot\" files, the
+users can easily override these.") }}}
+    <criteria operator="AND">
+      <criterion test_ref="tst_dotfiles_not_group_writable" comment="users' dot files are not group writable" />
+      <criterion test_ref="tst_dotfiles_not_world_writable" comment="users' dot files are not world writable" />
+    </criteria>
+  </definition>
+
+  <local_variable datatype="string" id="var_homedir_interact_users" version="1" comment="home directories for interacive users" >
+    <object_component item_field="subexpression" object_ref="obj_homedir_interact_users" />
+  </local_variable>
+
+  <unix:file_test check="all" check_existence="none_exist" id="tst_dotfiles_not_group_writable" version="1" comment="no users' dot file is group writable">
+    <unix:object object_ref="obj_dotfile_group_writable" />
+  </unix:file_test>
+  <unix:file_test check="all" check_existence="none_exist" id="tst_dotfiles_not_world_writable" version="1" comment="no users' dot file is world writable">
+    <unix:object object_ref="obj_dotfile_world_writable" />
+  </unix:file_test>
+
+  <unix:file_object id="obj_dotfile_group_writable" version="1">
+    <unix:path datatype="string" var_ref="var_homedir_interact_users" var_check="at least one"/>
+    <unix:filename operation="pattern match">^\..*</unix:filename>
+    <filter action="include">ste_perm_group_write</filter>
+  </unix:file_object>
+  <unix:file_object id="obj_dotfile_world_writable" version="1">
+    <unix:path datatype="string" var_ref="var_homedir_interact_users" var_check="at least one"/>
+    <unix:filename operation="pattern match">^\..*</unix:filename>
+    <filter action="include">ste_perm_other_write</filter>
+  </unix:file_object>
+
+  <ind:textfilecontent54_object id="obj_homedir_interact_users" version="1">
+    <ind:filepath datatype="string">/etc/passwd</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^(?!\bhalt\b|\bsync\b|\bshutdown\b).*:.*:.*:.*:.*:(.*):(?!\/usr\/sbin\/nologin\b|\/bin\/false\b).*$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <unix:file_state id="ste_perm_group_write" version="1">
+    <unix:gwrite datatype="boolean">true</unix:gwrite>
+  </unix:file_state>
+  <unix:file_state id="ste_perm_other_write" version="1">
+    <unix:owrite datatype="boolean">true</unix:owrite>
+  </unix:file_state>
+
+</def-group>
