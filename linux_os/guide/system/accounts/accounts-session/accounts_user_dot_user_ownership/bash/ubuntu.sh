@@ -4,5 +4,5 @@
 
 fetch_users_and_homedir |\
 while read user dir; do
-    find "$dir" -iname '.*' -type f -execdir chown "$user" {} \;
+    find "$dir" -maxdepth 1 -iname '.*' -type f -execdir chown "$user" {} \;
 done
