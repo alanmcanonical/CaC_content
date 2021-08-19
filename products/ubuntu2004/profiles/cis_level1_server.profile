@@ -896,7 +896,7 @@ selections:
     ### 6.2.7 Ensure users' dot files are not group or world writable (Automated)
     - accounts_user_dot_user_ownership
     - accounts_user_dot_group_ownership
-    - no_group_world_readable_dot_files
+    - no_group_world_writable_dot_files
 
     ### 6.2.8 Ensure no users have .forward files (Automated)
     # Needs variable
