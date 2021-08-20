@@ -1,0 +1,37 @@
+<def-group>
+  <definition class="compliance" id="{{{ rule_id }}}" version="2">
+    {{{ oval_metadata("While the system administrator can establish secure permissions for users' home
+directories, the users can easily override these.") }}}
+    <criteria operator="AND">
+      <criterion test_ref="tst_no_homedir_more_permissive" comment="no home directory with permission higher than 750" />
+    </criteria>
+  </definition>
+
+  <local_variable datatype="string" id="var_homedir_interact_users_1" version="1" comment="home directories for interacive users" >
+    <object_component item_field="subexpression" object_ref="obj_homedir_interact_users_1" />
+  </local_variable>
+
+  <unix:file_test check="all" check_existence="none_exist" id="tst_no_homedir_more_permissive" version="1" comment="no home directory with permission higher than 750">
+    <unix:object object_ref="obj_homedir_more_permissive" />
+  </unix:file_test>
+
+  <unix:file_object id="obj_homedir_more_permissive" version="1">
+    <unix:path datatype="string" var_ref="var_homedir_interact_users_1" var_check="at least one"/>
+    <unix:filename xsi:nil="true"/>
+    <filter action="include">ste_perm_greater_750</filter>
+  </unix:file_object>
+
+  <ind:textfilecontent54_object id="obj_homedir_interact_users_1" version="1">
+    <ind:filepath datatype="string">/etc/passwd</ind:filepath>
+    <ind:pattern operation="pattern match" datatype="string">^(?!\bhalt\b|\bsync\b|\bshutdown\b).*:.*:.*:.*:.*:(.*):(?!\/usr\/sbin\/nologin\b|\/bin\/false\b).*$</ind:pattern>
+    <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <unix:file_state id="ste_perm_greater_750" version="1" operator="OR">
+    <unix:gwrite datatype="boolean">true</unix:gwrite>
+    <unix:oread datatype="boolean">true</unix:oread>
+    <unix:owrite datatype="boolean">true</unix:owrite>
+    <unix:oexec datatype="boolean">true</unix:oexec>
+  </unix:file_state>
+
+</def-group>
