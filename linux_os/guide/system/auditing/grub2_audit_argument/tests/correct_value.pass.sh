@@ -9,4 +9,8 @@ else
 	sed -i 's/\(^GRUB_CMDLINE_LINUX=".*\)"/\1 audit=1"/'  '/etc/default/grub'
 fi
 
+{{% if 'ubuntu' not in product %}}
 grubby --update-kernel=ALL --args="audit=1"
+{{% else %}}
+update-grub
+{{% endif %}}

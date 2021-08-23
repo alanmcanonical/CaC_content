@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# platform = Red Hat Enterprise Linux 7
+# platform = Red Hat Enterprise Linux 7,multi_platform_ubuntu
 
 # Removes audit argument from kernel command line in /etc/default/grub
 if grep -q '^GRUB_CMDLINE_LINUX=.*audit=.*"'  '/etc/default/grub' ; then

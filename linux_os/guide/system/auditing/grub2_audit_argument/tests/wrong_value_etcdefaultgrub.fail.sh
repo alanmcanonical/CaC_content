@@ -1,5 +1,5 @@
 #!/bin/bash
-# platform = Red Hat Enterprise Linux 7
+# platform = Red Hat Enterprise Linux 7,multi_platform_ubuntu
 
 # Break the audit argument in kernel command line in /etc/default/grub
 if grep -q '^GRUB_CMDLINE_LINUX=.*audit=.*"'  '/etc/default/grub' ; then
