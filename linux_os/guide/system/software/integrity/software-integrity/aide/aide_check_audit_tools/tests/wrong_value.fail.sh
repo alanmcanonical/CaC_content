@@ -1,5 +1,5 @@
 #!/bin/bash
-# platform = multi_platform_rhel,multi_platform_fedora,multi_platform_ubuntu
+
 # packages = aide
 
 {{% set auditfiles = [
@@ -14,7 +14,7 @@
 {{% set auditfiles = auditfiles + ["/usr/sbin/audispd"] %}}
 {{% endif %}}
 
-{{% set configString = "p+i+n+u+g+s+b+acl+xattrs+sha512" %}}
+{{% set configString = "p+i+n+u+g+s+b+acl" %}}
 
 {{% for file in auditfiles %}}
 echo "{{{ file }}} {{{ configString }}}" >> {{{ aide_conf_path }}}
