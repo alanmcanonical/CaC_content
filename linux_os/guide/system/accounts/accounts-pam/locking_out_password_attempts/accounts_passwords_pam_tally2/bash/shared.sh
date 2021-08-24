@@ -1,4 +1,4 @@
-# platform = multi_platform_sle
+# platform = multi_platform_sle,multi_platform_ubuntu
 . /usr/share/scap-security-guide/remediation_functions
 
 {{{ bash_instantiate_variables("var_accounts_passwords_pam_tally2_deny") }}}
