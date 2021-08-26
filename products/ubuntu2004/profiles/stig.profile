@@ -278,19 +278,15 @@ selections:
     - audit_rules_unsuccessful_file_modification_open_by_handle_at
 
     # UBTU-20-010161 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the sudo command.
-    # missing -F perm=x
     - audit_rules_privileged_commands_sudo
 
     # UBTU-20-010162 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the sudoedit command.
-    # missing -F perm=x
     - audit_rules_privileged_commands_sudoedit
 
     # UBTU-20-010163 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chsh command.
-    # missing -F perm=x
     - audit_rules_privileged_commands_chsh
 
     # UBTU-20-010164 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the newgrp command.
-    # missing -F perm=x
     - audit_rules_privileged_commands_newgrp
 
     # UBTU-20-010165 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chcon command.
@@ -315,29 +311,24 @@ selections:
     - audit_rules_login_events_lastlog
 
     # UBTU-20-010172 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the passwd command.
-    # missing -F perm=x
     - audit_rules_privileged_commands_passwd
 
     # UBTU-20-010173 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the unix_update command.
     - audit_rules_privileged_commands_unix_update
 
     # UBTU-20-010174 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the gpasswd command.
-    # missing -F perm=x
     - audit_rules_privileged_commands_gpasswd
 
     # UBTU-20-010175 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chage command.
-    # missing -F perm=x
     - audit_rules_privileged_commands_chage
 
     # UBTU-20-010176 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the usermod command.
     - audit_rules_privileged_commands_usermod
 
     # UBTU-20-010177 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the crontab command.
-    # missing -F perm=x
     - audit_rules_privileged_commands_crontab
 
     # UBTU-20-010178 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the pam_timestamp_check command.
-    # missing -F perm=x
     - audit_rules_privileged_commands_pam_timestamp_check
 
     # UBTU-20-010179 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the init_module syscall.
