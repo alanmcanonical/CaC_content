@@ -5,4 +5,4 @@
 
 {{{ bash_instantiate_variables("sshd_approved_kexs") }}}
 
-replace_or_append '/etc/ssh/sshd_config' '^KexAlgorithms' "$sshd_approved_kexs" '@CCENUM@' '%s %s'
+{{{ bash_replace_or_append('/etc/ssh/sshd_config', '^KexAlgorithms', "$sshd_approved_kexs", '@CCENUM@', '%s %s') }}}
