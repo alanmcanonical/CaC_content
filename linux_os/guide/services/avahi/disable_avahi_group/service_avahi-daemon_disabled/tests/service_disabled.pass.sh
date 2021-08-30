@@ -1,5 +1,5 @@
 #!/bin/bash
-# packages = {{{- ssgts_package("avahi") -}}}
+# packages = {{{ ssgts_package("avahi") }}}
 #
 
 

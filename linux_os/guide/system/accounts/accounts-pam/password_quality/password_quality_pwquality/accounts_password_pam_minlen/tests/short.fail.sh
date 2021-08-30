@@ -1,5 +1,5 @@
 #!/bin/bash
-# packages = {{{- ssgts_package("pam_pwquality") -}}}
+# packages = {{{ ssgts_package("pam_pwquality") }}}
 
 {{% if 'ubuntu' in product or 'debian' in product %}}
 echo "password requisite pam_pwquality.so" > /etc/pam.d/common-password
