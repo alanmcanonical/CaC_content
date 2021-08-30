@@ -698,10 +698,10 @@ selections:
     - sshd_use_approved_kexs
 
     ### 5.2.15 Ensure SSH Idle Timeout Interval is configured (Automated)
-    - sshd_idle_timeout_value=5_minutes
-    - sshd_set_idle_timeout
     - var_sshd_set_keepalive=3
     - sshd_set_keepalive
+    - sshd_idle_timeout_value=5_minutes
+    - sshd_set_idle_timeout
 
     ### 5.2.16 Ensure SSH LoginGraceTime is set to one minute or less (Automated)
     - var_sshd_login_grace_time=60
