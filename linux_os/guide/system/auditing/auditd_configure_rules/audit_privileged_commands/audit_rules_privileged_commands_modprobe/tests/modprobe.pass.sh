@@ -1,4 +1,5 @@
 #!/bin/bash
+# packages = {{{ ssgts_package("audit") }}}
 
 res=`cat /etc/audit/rules.d/audit.rules | grep -w "\-w /sbin/modprobe -p x -k modules" | wc -l`
 

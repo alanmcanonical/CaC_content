@@ -1,4 +1,5 @@
 #!/bin/bash
+# packages = {{{ ssgts_package("audit") }}}
 
 echo '-a always -F arch=b32 -S delete_module -F key=modules' >> /etc/audit/audit.rules
 echo '-a always -F arch=b64 -S delete_module -F key=modules' >> /etc/audit/audit.rules

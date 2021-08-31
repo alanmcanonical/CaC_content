@@ -1,4 +1,5 @@
 #!/bin/bash
+# packages = {{{ ssgts_package("audit") }}}
 
 {{%- if product in ["rhel8", "rhel9", "sle12", "sle15", "ubuntu2004"] %}}
   {{%- set perm_x=" -F perm=x" %}}

@@ -1,4 +1,5 @@
 #!/bin/bash
+# packages = {{{ ssgts_package("audit") }}}
 
 touch /var/log/audit/audit.log.1
 useradd testuser_123

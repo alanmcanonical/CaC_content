@@ -1,4 +1,5 @@
 #!/bin/bash
+# packages = {{{ ssgts_package("audit") }}}
 
 groupadd group_test
 
