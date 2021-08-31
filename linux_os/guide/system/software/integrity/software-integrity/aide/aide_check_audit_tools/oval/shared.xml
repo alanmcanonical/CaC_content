@@ -1,9 +1,9 @@
 <def-group>
   <definition class="compliance" id="aide_check_audit_tools" version="1">
-      {{{ oval_metadata("The {{{ full_name }}} operating system file integrity tool must be configured to protect the integrity of the audit tools.", title="Configure AIDE to Verify the Audit Tools") }}}
+    {{{ oval_metadata("The {{{ full_name }}} operating system file integrity tool must be configured to protect the integrity of the audit tools.", title="Configure AIDE to Verify the Audit Tools") }}}
     <criteria operator="AND">
       <extend_definition comment="Aide is installed" definition_ref="package_aide_installed" />
-      <criterion comment="auditctl is checked in {{{ aide_conf_path  }}}" test_ref="test_aide_verify_auditctl" />
+      <criterion comment="auditctl is checked in {{{ aide_conf_path }}}" test_ref="test_aide_verify_auditctl" />
       <criterion comment="auditd is checked in {{{ aide_conf_path }}}" test_ref="test_aide_verify_auditd" />
       <criterion comment="ausearch is checked in {{{ aide_conf_path }}}" test_ref="test_aide_verify_ausearch" />
       <criterion comment="aureport is checked in {{{ aide_conf_path }}}" test_ref="test_aide_verify_aureport" />
@@ -16,15 +16,10 @@
   </definition>
 
   <ind:textfilecontent54_state id="state_aide_check_attributes" version="1">
-    {{% set path='/sbin' %}}
-    {{% if 'ubuntu' not in product %}}
-      {{% set path='/usr/sbin' %}}
-    {{% endif %}}
-
     {{% if 'rhel' not in product and 'ubuntu' not in product %}}
     <ind:subexpression operation="equals">p+i+n+u+g+s+b+acl+selinux+xattrs+sha512</ind:subexpression>
     {{% else %}}
-    <ind:subexpression operation="equals">p+i+n+u+g+s+b+acl+xattrs+sha512</ind:subexpression>
+    <ind:subexpression operation="pattern match">p\+i\+n\+u\+g\+s\+b\+acl(|\+selinux)\+xattrs\+sha512</ind:subexpression>
     {{% endif %}}
   </ind:textfilecontent54_state>
 
@@ -37,7 +32,7 @@
   <ind:textfilecontent54_object id="object_aide_verify_auditctl"
   version="1">
     <ind:filepath>{{{ aide_conf_path }}}</ind:filepath>
-    <ind:pattern operation="pattern match">^{{{ path }}}/auditctl\s+([^\n]+)$</ind:pattern>
+    <ind:pattern operation="pattern match">^\/usr\/sbin\/auditctl\s+([^\n]+)$</ind:pattern>
     <ind:instance datatype="int" operation="equals">1</ind:instance>
   </ind:textfilecontent54_object>
 
@@ -50,7 +45,7 @@
   <ind:textfilecontent54_object id="object_aide_verify_auditd"
   version="1">
     <ind:filepath>{{{ aide_conf_path }}}</ind:filepath>
-    <ind:pattern operation="pattern match">^{{{ path }}}/auditd\s+([^\n]+)$</ind:pattern>
+    <ind:pattern operation="pattern match">^/usr/sbin/auditd\s+([^\n]+)$</ind:pattern>
     <ind:instance datatype="int" operation="equals">1</ind:instance>
   </ind:textfilecontent54_object>
 
@@ -63,7 +58,7 @@
   <ind:textfilecontent54_object id="object_aide_verify_ausearch"
   version="1">
     <ind:filepath>{{{ aide_conf_path }}}</ind:filepath>
-    <ind:pattern operation="pattern match">^{{{ path }}}/ausearch\s+([^\n]+)$</ind:pattern>
+    <ind:pattern operation="pattern match">^/usr/sbin/ausearch\s+([^\n]+)$</ind:pattern>
     <ind:instance datatype="int" operation="equals">1</ind:instance>
   </ind:textfilecontent54_object>
 
@@ -76,7 +71,7 @@
   <ind:textfilecontent54_object id="object_aide_verify_aureport"
   version="1">
     <ind:filepath>{{{ aide_conf_path }}}</ind:filepath>
-    <ind:pattern operation="pattern match">^{{{ path }}}/aureport\s+([^\n]+)$</ind:pattern>
+    <ind:pattern operation="pattern match">^/usr/sbin/aureport\s+([^\n]+)$</ind:pattern>
     <ind:instance datatype="int" operation="equals">1</ind:instance>
   </ind:textfilecontent54_object>
 
@@ -89,7 +84,7 @@
   <ind:textfilecontent54_object id="object_aide_verify_autrace"
   version="1">
     <ind:filepath>{{{ aide_conf_path }}}</ind:filepath>
-    <ind:pattern operation="pattern match">^{{{ path }}}/autrace\s+([^\n]+)$</ind:pattern>
+    <ind:pattern operation="pattern match">^/usr/sbin/autrace\s+([^\n]+)$</ind:pattern>
     <ind:instance datatype="int" operation="equals">1</ind:instance>
   </ind:textfilecontent54_object>
 
@@ -102,19 +97,19 @@
   <ind:textfilecontent54_object id="object_aide_verify_audispd"
   version="1">
     <ind:filepath>{{{ aide_conf_path }}}</ind:filepath>
-    <ind:pattern operation="pattern match">^{{{ path }}}/audispd\s+([^\n]+)$</ind:pattern>
+    <ind:pattern operation="pattern match">^/usr/sbin/audispd\s+([^\n]+)$</ind:pattern>
     <ind:instance datatype="int" operation="equals">1</ind:instance>
   </ind:textfilecontent54_object>
 
   <ind:textfilecontent54_test id="test_aide_verify_rsyslogd"
-  comment="rsyslogd is checked in /etc/aide.conf" check="all"
+  comment="rsyslogd is checked in {{{ aide_conf_path }}}" check="all"
   check_existence="all_exist" version="1">
     <ind:object object_ref="object_aide_verify_rsyslogd" />
     <ind:state state_ref="state_aide_check_attributes" />
   </ind:textfilecontent54_test>
   <ind:textfilecontent54_object id="object_aide_verify_rsyslogd"
   version="1">
-    <ind:filepath>/etc/aide.conf</ind:filepath>
+    <ind:filepath>{{{ aide_conf_path }}}</ind:filepath>
     <ind:pattern operation="pattern match">^/usr/sbin/rsyslogd\s+([^\n]+)$</ind:pattern>
     <ind:instance datatype="int" operation="equals">1</ind:instance>
   </ind:textfilecontent54_object>
@@ -129,7 +124,7 @@
   <ind:textfilecontent54_object id="object_aide_verify_augenrules"
   version="1">
     <ind:filepath>{{{ aide_conf_path }}}</ind:filepath>
-    <ind:pattern operation="pattern match">^{{{ path }}}/augenrules\s+([^\n]+)$</ind:pattern>
+    <ind:pattern operation="pattern match">^/usr/sbin/augenrules\s+([^\n]+)$</ind:pattern>
     <ind:instance datatype="int" operation="equals">1</ind:instance>
   </ind:textfilecontent54_object>
 
