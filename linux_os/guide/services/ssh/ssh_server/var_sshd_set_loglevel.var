@@ -1,0 +1,15 @@
+documentation_complete: true
+
+title: 'SSH LogLevel setting'
+
+description: 'Configure parameters for level of information logged by the SSH daemon.'
+
+type: string
+
+operator: equals
+
+interactive: true
+
+options:
+    default: "INFO"
+    "ubuntu_cis": "INFO"
