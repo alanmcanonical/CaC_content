@@ -661,7 +661,8 @@ selections:
     - file_permissions_sshd_pub_key
 
     ### 5.2.4 Ensure SSH LogLevel is appropriate (Automated)
-    - sshd_set_loglevel_info
+    - var_sshd_set_loglevel=ubuntu_cis
+    - sshd_set_loglevel_info_or_verbose
 
     ### 5.2.5 Ensure SSH X11 forwarding is disabled (Automated)
     # Skip due to being Level 2
