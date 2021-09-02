@@ -1,5 +1,5 @@
 #!/bin/bash
-# packages = {{{ ssgts_package("audit") }}}
+# packages = audit
 
 useradd testuser_123
 chown testuser_123 /etc/audit/audit.rules
