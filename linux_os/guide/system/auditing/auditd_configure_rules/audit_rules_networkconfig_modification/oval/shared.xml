@@ -11,7 +11,11 @@
         <criterion comment="audit /etc/issue augenrules" test_ref="test_arnm_etc_issue_augenrules" />
         <criterion comment="audit /etc/issue.net augenrules" test_ref="test_arnm_etc_issue_net_augenrules" />
         <criterion comment="audit /etc/hosts augenrules" test_ref="test_arnm_etc_hosts_augenrules" />
+        {{% if 'ubuntu' not in product %}}
         <criterion comment="audit /etc/sysconfig/network augenrules" test_ref="test_arnm_etc_sysconfig_network_augenrules" />
+        {{% else %}}
+        <criterion comment="audit /etc/network augenrules" test_ref="test_arnm_etc_network_augenrules" />
+        {{% endif %}}
         <extend_definition comment="audit augenrules sethostname" definition_ref="audit_rules_networkconfig_modification_hostname" />
         <extend_definition comment="audit augenrules setdomainname" definition_ref="audit_rules_networkconfig_modification_domainname" />
       </criteria>
@@ -22,7 +26,11 @@
         <criterion comment="audit /etc/issue auditctl" test_ref="test_arnm_etc_issue_auditctl" />
         <criterion comment="audit /etc/issue.net auditctl" test_ref="test_arnm_etc_issue_net_auditctl" />
         <criterion comment="audit /etc/hosts auditctl" test_ref="test_arnm_etc_hosts_auditctl" />
+        {{% if 'ubuntu' not in product %}}
         <criterion comment="audit /etc/sysconfig/network auditctl" test_ref="test_arnm_etc_sysconfig_network_auditctl" />
+        {{% else %}}
+        <criterion comment="audit /etc/network auditctl" test_ref="test_arnm_etc_network_auditctl" />
+        {{% endif %}}
         <extend_definition comment="audit augenrules sethostname" definition_ref="audit_rules_networkconfig_modification_hostname" />
         <extend_definition comment="audit augenrules setdomainname" definition_ref="audit_rules_networkconfig_modification_domainname" />
       </criteria>
@@ -57,6 +65,7 @@
     <ind:instance datatype="int">1</ind:instance>
   </ind:textfilecontent54_object>
 
+  {{% if 'ubuntu' not in product %}}
   <ind:textfilecontent54_test check="all" comment="audit /etc/sysconfig/network augenrules" id="test_arnm_etc_sysconfig_network_augenrules" version="1">
     <ind:object object_ref="object_arnm_etc_sysconfig_network_augenrules" />
   </ind:textfilecontent54_test>
@@ -65,6 +74,17 @@
     <ind:pattern operation="pattern match">^\-w[\s]+/etc/sysconfig/network[\s]+\-p[\s]+\b([rx]*w[rx]*a[rx]*|[rx]*a[rx]*w[rx]*)\b[\s]+(-k[\s]+|-F[\s]+key=)[-\w]+[\s]*$</ind:pattern>
     <ind:instance datatype="int">1</ind:instance>
   </ind:textfilecontent54_object>
+  {{% else %}}
+  <ind:textfilecontent54_test check="all" comment="audit /etc/network augenrules" id="test_arnm_etc_network_augenrules" version="1">
+    <ind:object object_ref="object_arnm_etc_network_augenrules" />
+  </ind:textfilecontent54_test>
+  <ind:textfilecontent54_object id="object_arnm_etc_network_augenrules" version="1">
+    <ind:filepath operation="pattern match">^/etc/audit/rules\.d/.*\.rules$</ind:filepath>
+    <ind:pattern operation="pattern match">^\-w[\s]+/etc/network[\s]+\-p[\s]+\b([rx]*w[rx]*a[rx]*|[rx]*a[rx]*w[rx]*)\b[\s]+(-k[\s]+|-F[\s]+key=)[-\w]+[\s]*$</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  {{% endif %}}
+
 
   <ind:textfilecontent54_test check="all" comment="audit /etc/issue auditctl" id="test_arnm_etc_issue_auditctl" version="1">
     <ind:object object_ref="object_arnm_etc_issue_auditctl" />
@@ -93,6 +113,7 @@
     <ind:instance datatype="int">1</ind:instance>
   </ind:textfilecontent54_object>
 
+  {{% if 'ubuntu' not in product %}}
   <ind:textfilecontent54_test check="all" comment="audit /etc/sysconfig/network auditctl" id="test_arnm_etc_sysconfig_network_auditctl" version="1">
     <ind:object object_ref="object_arnm_etc_sysconfig_network_auditctl" />
   </ind:textfilecontent54_test>
@@ -101,5 +122,15 @@
     <ind:pattern operation="pattern match">^\-w[\s]+/etc/sysconfig/network[\s]+\-p[\s]+\b([rx]*w[rx]*a[rx]*|[rx]*a[rx]*w[rx]*)\b[\s]+(-k[\s]+|-F[\s]+key=)[-\w]+[\s]*$</ind:pattern>
     <ind:instance datatype="int">1</ind:instance>
   </ind:textfilecontent54_object>
+  {{% else %}}
+  <ind:textfilecontent54_test check="all" comment="audit /etc/network auditctl" id="test_arnm_etc_network_auditctl" version="1">
+    <ind:object object_ref="object_arnm_etc_network_auditctl" />
+  </ind:textfilecontent54_test>
+  <ind:textfilecontent54_object id="object_arnm_etc_network_auditctl" version="1">
+    <ind:filepath>/etc/audit/audit.rules</ind:filepath>
+    <ind:pattern operation="pattern match">^\-w[\s]+/etc/network[\s]+\-p[\s]+\b([rx]*w[rx]*a[rx]*|[rx]*a[rx]*w[rx]*)\b[\s]+(-k[\s]+|-F[\s]+key=)[-\w]+[\s]*$</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  {{% endif %}}
 
 </def-group>
