@@ -28,5 +28,10 @@ fix_audit_watch_rule "auditctl" "/etc/issue.net" "wa" "audit_rules_networkconfig
 fix_audit_watch_rule "augenrules" "/etc/issue.net" "wa" "audit_rules_networkconfig_modification"
 fix_audit_watch_rule "auditctl" "/etc/hosts" "wa" "audit_rules_networkconfig_modification"
 fix_audit_watch_rule "augenrules" "/etc/hosts" "wa" "audit_rules_networkconfig_modification"
+{{% if 'ubuntu' not in product %}}
 fix_audit_watch_rule "auditctl" "/etc/sysconfig/network" "wa" "audit_rules_networkconfig_modification"
 fix_audit_watch_rule "augenrules" "/etc/sysconfig/network" "wa" "audit_rules_networkconfig_modification"
+{{% else %}}
+fix_audit_watch_rule "auditctl" "/etc/network" "wa" "audit_rules_networkconfig_modification"
+fix_audit_watch_rule "augenrules" "/etc/network" "wa" "audit_rules_networkconfig_modification"
+{{% endif %}}
