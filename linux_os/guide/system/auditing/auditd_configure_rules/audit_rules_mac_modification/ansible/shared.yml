@@ -1,9 +1,19 @@
-# platform = multi_platform_rhel,multi_platform_fedora,multi_platform_ol,multi_platform_rhv
+# platform = multi_platform_rhel,multi_platform_fedora,multi_platform_ol,multi_platform_rhv,multi_platform_ubuntu
 # reboot = true
 # strategy = restrict
 # complexity = low
 # disruption = low
 
+{{% if 'ubuntu' not in product %}}
 {{{ ansible_audit_augenrules_add_watch_rule(path="/etc/selinux/", permissions="wa", key="MAC-policy") }}}
 
 {{{ ansible_audit_auditctl_add_watch_rule(path="/etc/selinux/", permissions="wa", key="MAC-policy") }}}
+{{% else %}}
+{{{ ansible_audit_augenrules_add_watch_rule(path="/etc/apparmor/", permissions="wa", key="MAC-policy") }}}
+
+{{{ ansible_audit_augenrules_add_watch_rule(path="/etc/apparmor.d/", permissions="wa", key="MAC-policy") }}}
+
+{{{ ansible_audit_auditctl_add_watch_rule(path="/etc/apparmor/", permissions="wa", key="MAC-policy") }}}
+
+{{{ ansible_audit_auditctl_add_watch_rule(path="/etc/apparmor.d/", permissions="wa", key="MAC-policy") }}}
+{{% endif %}}
