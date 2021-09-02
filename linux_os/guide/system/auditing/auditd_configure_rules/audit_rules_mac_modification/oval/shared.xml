@@ -1,40 +1,75 @@
+{{% set mac_name="SELinux" %}}
+{{% set mac_used="selinux"%}}
+{{% set mac_path="/etc/selinux" %}}
+{{% if 'ubuntu' in product %}}
+  {{% set mac_name="AppArmor" %}}
+  {{% set mac_used="apparmor"%}}
+  {{% set mac_path="/etc/apparmor" %}}
+{{% endif %}}
+
 <def-group>
   <definition class="compliance" id="audit_rules_mac_modification" version="1">
-    {{{ oval_metadata("Audit rules that detect changes to the system's mandatory access controls (SELinux) are enabled.") }}}
+    {{{ oval_metadata("Audit rules that detect changes to the system's mandatory access controls (" + mac_name + ") are enabled.") }}}
 
     <criteria operator="OR">
 
       <!-- Test the augenrules case -->
       <criteria operator="AND">
         <extend_definition comment="audit augenrules" definition_ref="audit_rules_augenrules" />
-        <criterion comment="audit selinux changes augenrules" test_ref="test_armm_selinux_watch_augenrules" />
+        <criterion comment="audit {{{ mac_used }}} changes augenrules" test_ref="test_armm_{{{ mac_used }}}_watch_augenrules" />
+        {{% if 'ubuntu' in product %}}
+        <criterion comment="audit {{{ mac_used }}}.d changes augenrules" test_ref="test_armm_{{{ mac_used }}}d_watch_augenrules" />
+        {{% endif %}}
       </criteria>
 
       <!-- Test the auditctl case -->
       <criteria operator="AND">
         <extend_definition comment="audit auditctl" definition_ref="audit_rules_auditctl" />
-        <criterion comment="audit selinux changes auditctl" test_ref="test_armm_selinux_watch_auditctl" />
+        <criterion comment="audit {{{ mac_used }}} changes auditctl" test_ref="test_armm_{{{ mac_used }}}_watch_auditctl" />
+        {{% if 'ubuntu' in product %}}
+        <criterion comment="audit {{{ mac_used }}}.d changes auditctl" test_ref="test_armm_{{{ mac_used }}}d_watch_auditctl" />
+        {{% endif %}}
       </criteria>
 
     </criteria>
   </definition>
 
-  <ind:textfilecontent54_test check="all" comment="audit selinux changes augenrules" id="test_armm_selinux_watch_augenrules" version="1">
-    <ind:object object_ref="object_armm_selinux_watch_augenrules" />
+  <ind:textfilecontent54_test check="all" comment="audit {{{ mac_used }}} changes augenrules" id="test_armm_{{{ mac_used }}}_watch_augenrules" version="1">
+    <ind:object object_ref="object_armm_{{{ mac_used }}}_watch_augenrules" />
   </ind:textfilecontent54_test>
-  <ind:textfilecontent54_object id="object_armm_selinux_watch_augenrules" version="1">
+  <ind:textfilecontent54_object id="object_armm_{{{ mac_used }}}_watch_augenrules" version="1">
     <ind:filepath operation="pattern match">^/etc/audit/rules\.d/.*\.rules$</ind:filepath>
-    <ind:pattern operation="pattern match">^\-w[\s]+/etc/selinux/[\s]+\-p[\s]+\b([rx]*w[rx]*a[rx]*|[rx]*a[rx]*w[rx]*)\b[\s]+(-k[\s]+|-F[\s]+key=)[-\w]+[\s]*$</ind:pattern>
+    <ind:pattern operation="pattern match">^\-w[\s]+{{{ mac_path }}}/[\s]+\-p[\s]+\b([rx]*w[rx]*a[rx]*|[rx]*a[rx]*w[rx]*)\b[\s]+(-k[\s]+|-F[\s]+key=)[-\w]+[\s]*$</ind:pattern>
     <ind:instance datatype="int">1</ind:instance>
   </ind:textfilecontent54_object>
 
-  <ind:textfilecontent54_test check="all" comment="audit selinux changes auditctl" id="test_armm_selinux_watch_auditctl" version="1">
-    <ind:object object_ref="object_armm_selinux_watch_auditctl" />
+  <ind:textfilecontent54_test check="all" comment="audit {{{ mac_used }}} changes auditctl" id="test_armm_{{{ mac_used }}}_watch_auditctl" version="1">
+    <ind:object object_ref="object_armm_{{{ mac_used }}}_watch_auditctl" />
   </ind:textfilecontent54_test>
-  <ind:textfilecontent54_object id="object_armm_selinux_watch_auditctl" version="1">
+  <ind:textfilecontent54_object id="object_armm_{{{ mac_used }}}_watch_auditctl" version="1">
     <ind:filepath>/etc/audit/audit.rules</ind:filepath>
-    <ind:pattern operation="pattern match">^\-w[\s]+/etc/selinux/[\s]+\-p[\s]+\b([rx]*w[rx]*a[rx]*|[rx]*a[rx]*w[rx]*)\b[\s]+(-k[\s]+|-F[\s]+key=)[-\w]+[\s]*$</ind:pattern>
+    <ind:pattern operation="pattern match">^\-w[\s]+{{{ mac_path }}}/[\s]+\-p[\s]+\b([rx]*w[rx]*a[rx]*|[rx]*a[rx]*w[rx]*)\b[\s]+(-k[\s]+|-F[\s]+key=)[-\w]+[\s]*$</ind:pattern>
     <ind:instance datatype="int">1</ind:instance>
   </ind:textfilecontent54_object>
+
+  {{% if 'ubuntu' in product %}}
+  <ind:textfilecontent54_test check="all" comment="audit {{{ mac_used }}}.d changes augenrules" id="test_armm_{{{ mac_used }}}d_watch_augenrules" version="1">
+    <ind:object object_ref="object_armm_{{{ mac_used }}}d_watch_augenrules" />
+  </ind:textfilecontent54_test>
+  <ind:textfilecontent54_object id="object_armm_{{{ mac_used }}}d_watch_augenrules" version="1">
+    <ind:filepath operation="pattern match">^/etc/audit/rules\.d/.*\.rules$</ind:filepath>
+    <ind:pattern operation="pattern match">^\-w[\s]+{{{ mac_path }}}\.d/[\s]+\-p[\s]+\b([rx]*w[rx]*a[rx]*|[rx]*a[rx]*w[rx]*)\b[\s]+(-k[\s]+|-F[\s]+key=)[-\w]+[\s]*$</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <ind:textfilecontent54_test check="all" comment="audit {{{ mac_used }}}.d changes auditctl" id="test_armm_{{{ mac_used }}}d_watch_auditctl" version="1">
+    <ind:object object_ref="object_armm_{{{ mac_used }}}d_watch_auditctl" />
+  </ind:textfilecontent54_test>
+  <ind:textfilecontent54_object id="object_armm_{{{ mac_used }}}d_watch_auditctl" version="1">
+    <ind:filepath>/etc/audit/audit.rules</ind:filepath>
+    <ind:pattern operation="pattern match">^\-w[\s]+{{{ mac_path }}}\.d/[\s]+\-p[\s]+\b([rx]*w[rx]*a[rx]*|[rx]*a[rx]*w[rx]*)\b[\s]+(-k[\s]+|-F[\s]+key=)[-\w]+[\s]*$</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  {{% endif %}}
 
 </def-group>
