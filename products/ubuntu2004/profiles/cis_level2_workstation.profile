@@ -95,7 +95,7 @@ selections:
     - audit_rules_networkconfig_modification
 
     ### 4.1.6 Ensure events that modify the system's Mandatory Access Controls are collected (Automated)
-    # Needs rule
+    - audit_rules_mac_modification
 
     ### 4.1.7 Ensure login and logout events are collected (Automated)
     - audit_rules_login_events_faillog
@@ -178,7 +178,7 @@ selections:
     - audit_rules_privileged_commands_unix_chkpwd
 
     ### 4.1.12 Ensure successful file system mounts are collected (Automated)
-    # Needs rule
+    - audit_rules_media_export
 
     ### 4.1.13 Ensure file deletion events by users are collected (Automated)
     - audit_rules_file_deletion_events_rename
