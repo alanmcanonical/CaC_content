@@ -165,7 +165,7 @@ selections:
     - audit_rules_privileged_commands_unix_chkpwd
 
     ### 4.1.12 Ensure successful file system mounts are collected (Automated)
-    # Needs rule
+    - audit_rules_media_export
 
     ### 4.1.13 Ensure file deletion events by users are collected (Automated)
     - audit_rules_file_deletion_events_rename
