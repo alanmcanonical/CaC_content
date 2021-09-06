@@ -4,10 +4,8 @@
 
 for file in /etc/apt/apt.conf.d/*; do
     if [ -e "$file" ]; then
-        if grep -q "APT::Get::AllowUnauthenticated" $file; then
-            # even though we use replace_or_append, the interest here is only in replace
-            # as we won't be appending because of the above 'if' check
-            {{{ bash_replace_or_append("$file", 'APT::Get::AllowUnauthenticated', 'false', '@CCENUM@', '%s %s') }}}
+        if grep -qi "APT::Get::AllowUnauthenticated" $file; then
+            sed -i --follow-symlinks "s/^.*APT::Get::AllowUnauthenticated.*/APT::Get::AllowUnauthenticated \"false\";/I" $file
         fi
     fi
 done
