@@ -84,6 +84,7 @@ ocil: |-
 
 {{% if product == 'sle12' %}}
 platform: zypper
+{{% elif 'ubuntu' in product %}}
 {{% else %}}
 platform: yum
 {{% endif %}}
