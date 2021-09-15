@@ -756,7 +756,7 @@ selections:
     - accounts_passwords_pam_tally2
 
     ### 5.3.3 Ensure password reuse is limited (Automated)
-    # Needs variable
+    - var_password_pam_remember=5
     - accounts_password_pam_pwhistory_remember
 
     ### 5.3.4 Ensure password hashing algorithm is SHA-512 (Automated)
