@@ -10,9 +10,17 @@ description: |-
     <tt>pam_pwhistory</tt> PAM modules.
     <br /><br />
     In the file <tt>/etc/pam.d/common-password</tt>, make sure the parameters
+    {{% if 'ubuntu' not in product %}}
     <tt>remember</tt> and <tt>use_authtok</tt> are present, and that the value
+    {{% else %}}
+    <tt>remember</tt> is present, and that the value
+    {{% endif %}}
     for the <tt>remember</tt> parameter is {{{ xccdf_value("var_password_pam_remember") }}} or greater. For example:
+    {{% if 'ubuntu' not in product %}}
     <pre>password requisite pam_pwhistory.so <i>...existing_options...</i> remember={{{ xccdf_value("var_password_pam_remember") }}} use_authtok</pre>
+    {{% else %}}
+    <pre>password required pam_pwhistory.so <i>...existing_options...</i> remember={{{ xccdf_value("var_password_pam_remember") }}}</pre>
+    {{% endif %}}
     The DoD STIG requirement is 5 passwords.
 
 rationale: 'Preventing re-use of previous passwords helps ensure that a compromised password is not re-used by a user.'
@@ -36,15 +44,24 @@ ocil: |-
     Check that the SUSE operating system prohibits the reuse of a password for
     a minimum of <tt>{{{ xccdf_value("var_password_pam_remember") }}}</tt> generations with the following command:
     <pre># grep pam_pwhistory.so /etc/pam.d/common-password
+    {{%- if 'ubuntu' not in product %}}
     password requisite pam_pwhistory.so remember={{{ xccdf_value("var_password_pam_remember") }}} use_authtok</pre>
+    {{%- else %}}
+    password required pam_pwhistory.so remember={{{ xccdf_value("var_password_pam_remember") }}}</pre>
+    {{%- endif %}}
     If the command does not return a result, or the returned line is commented
     out, has a second column value different from "requisite", does not contain
     "remember" value, the value is less than
+    {{%- if 'ubuntu' not in product %}}
     <tt>{{{ xccdf_value("var_password_pam_remember") }}}</tt>, or is missing the
     "use_authtok" keyword, this is a finding.
+    {{%- else %}}
+    <tt>{{{ xccdf_value("var_password_pam_remember") }}}</tt>, this is a finding.
+    {{% endif %}}
 
 platform: pam
 
+{{%- if 'ubuntu' not in product %}}
 template:
     name: pam_options
     vars:
@@ -57,3 +74,4 @@ template:
           operation: greater than or equal
         - argument: use_authtok
           new_argument: use_authtok
+{{%- endif %}}
