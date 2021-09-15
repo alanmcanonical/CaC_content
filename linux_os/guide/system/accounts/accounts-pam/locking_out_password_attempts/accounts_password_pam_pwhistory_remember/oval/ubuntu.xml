@@ -1,7 +1,8 @@
 <def-group xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5" xmlns:ind="http://oval.mitre.org/XMLSchema/oval-definitions-5#independent">
   <definition class="compliance" id="{{{ rule_id }}}" version="1">
-    {{{ oval_metadata("Forcing users not to reuse their past 5 passwords make it less likely that an attacker will be
-      able to guess the password. Note that these change only apply to accounts configured on the local system.") }}}
+    {{{ oval_metadata("Forcing users not to reuse their past passwords make it less likely that an attacker will be
+    able to guess the password. Note that these change only apply to accounts configured on the local system. Variable var_password_pam_remember
+    provides the minimum password history size.") }}}
     <criteria>
       <criterion test_ref="test_password_reuse_limited" comment="password reuse is limited" />
     </criteria>
@@ -11,13 +12,13 @@
     <ind:pattern operation="pattern match" datatype="string">^password\s+(?:(?:required)|(?:requisite))\s+pam_pwhistory\.so\b.*\bremember=(\d+).*$</ind:pattern>
     <ind:instance operation="greater than or equal" datatype="int">1</ind:instance>
   </ind:textfilecontent54_object>
-  <ind:textfilecontent54_state id="ste_greater_or_equal_var" version="1">
-    <!-- Needs variable -->
-    <ind:instance operation="greater than or equal" datatype="int">5</ind:instance>
-    <!-- <ind:subexpression datatype="int" operation="greater than or equal" var_ref="missing_variable" />-->
+  <ind:textfilecontent54_state id="ste_pam_d_common-password_pwhistory" version="1">
+    <ind:subexpression datatype="int" operation="greater than or equal" var_ref="var_password_pam_remember" />
   </ind:textfilecontent54_state>
   <ind:textfilecontent54_test check="all" id="test_password_reuse_limited" version="1" comment="password reuse is limited">
     <ind:object object_ref="obj_pam_d_common-password_pwhistory" />
-    <ind:state state_ref="ste_greater_or_equal_var" />
+    <ind:state state_ref="ste_pam_d_common-password_pwhistory" />
   </ind:textfilecontent54_test>
+
+  <external_variable comment="number of passwords that should be remembered" datatype="int" id="var_password_pam_remember" version="1" />
 </def-group>
