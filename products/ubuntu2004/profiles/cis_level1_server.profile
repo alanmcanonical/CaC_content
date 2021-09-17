@@ -136,7 +136,7 @@ selections:
     - file_permissions_grub2_cfg
 
     ### 1.5.3 Ensure authentication required for single user mode (Automated)
-    # Needs variable
+    - var_root_passwd_hash=cis_default
     - single_user_authentication
 
     ## 1.6 Additional Process Hardening ##
