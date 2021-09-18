@@ -3,11 +3,11 @@
 # remediation = none
 
 {{% if 'ubuntu' not in product %}}
-touch /home/.netrc
+ln -sf /bin/bash /home/.netrc
 {{% else %}}
 
 useradd -m -U joas
 useradd -m -U canonical
 
-touch ~joas/.netrc
+ln -sf /bin/bash ~joas/.netrc
 {{% endif %}}
