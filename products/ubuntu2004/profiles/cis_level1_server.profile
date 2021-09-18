@@ -901,11 +901,9 @@ selections:
     - no_group_world_writable_dot_files
 
     ### 6.2.8 Ensure no users have .forward files (Automated)
-    # Needs variable
     - no_forward_files
 
     ### 6.2.9 Ensure no users have .netrc files (Automated)
-    # Needs variable
     - no_netrc_files
 
     ### 6.2.10 Ensure users' .netrc Files are not group or world accessible (Automated)
