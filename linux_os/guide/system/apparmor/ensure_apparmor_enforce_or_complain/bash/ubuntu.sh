@@ -2,9 +2,11 @@
 # reboot = true
 # disruption = high
 
-# Needs variable.
-# local lvl1_aa_enforce=$(read_usr_param lvl1_apparmor_enforce)
-local lvl1_aa_enforce="false"
+# Include source function library.
+. /usr/share/scap-security-guide/remediation_functions
+
+{{{ bash_instantiate_variables("var_set_apparmor_enforce_mode") }}}
+local lvl1_aa_enforce=${var_set_apparmor_enforce_mode}
 
 # apparmor and apparmor-utils must be installed to be compliant to this rule.
 {{{ bash_package_installed("apparmor") }}} || DEBIAN_FRONTEND=noninteractive apt-get install apparmor -y
