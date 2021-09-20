@@ -25,7 +25,7 @@ selections:
     - partition_for_home
 
     #### 1.7.1.4 Ensure all AppArmor Profiles are enforcing (Automated)
-    # Needs variable; set above appropriately.
+    - ensure_apparmor_enforce
 
     ### 3.4.1 Ensure DCCP is disabled (Automated)
     - kernel_module_dccp_disabled
