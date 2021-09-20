@@ -1,0 +1,19 @@
+documentation_complete: true
+
+prodtype: ubuntu2004
+
+title: 'Ensure all AppArmor Profiles are in enforce mode'
+
+description: |-
+    AppArmor profiles define what resources applications are able to access.
+
+rationale: |-
+    Security configuration requirements vary from site to site. Some sites
+    may mandate a policy that is stricter than the default policy, which is
+    perfectly acceptable. This item is intended to ensure that any policies
+    that exist on the system are activated.
+
+severity: medium
+
+references:
+    cis@ubuntu2004: 1.7.1.4
