@@ -162,7 +162,7 @@ selections:
     - grub2_enable_apparmor
 
     #### 1.7.1.3 Ensure all AppArmor Profiles are in enforce or complain mode (Automated)
-    # Needs variable
+    - var_set_apparmor_enforce_mode=false
     - ensure_apparmor_enforce_or_complain
 
     #### 1.7.1.4 Ensure all AppArmor Profiles are enforcing (Automated)
