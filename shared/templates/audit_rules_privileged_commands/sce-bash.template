@@ -13,7 +13,7 @@ set -u
 GROUP="privileged"
 
 auditctl -l -k "$GROUP" |\
-    grep -q '^-a always,exit.*-F path={{{ PATH }}}.*-F auid>={{{ auid }}}.*-F auid!=unset'
+    grep -Eq '^-a always,exit.*-F path={{{ PATH }}}.*-F auid>={{{ auid }}}.*-F auid!=(-1|unset)'\
     || exit ${XCCDF_RESULT_FAIL}
 
 exit ${XCCDF_RESULT_PASS}
