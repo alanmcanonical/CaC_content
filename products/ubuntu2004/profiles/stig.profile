@@ -411,7 +411,7 @@ selections:
     - audit_rules_privileged_commands_modprobe
 
     # UBTU-20-010297 The Ubuntu operating system must generate audit records when successful/unsuccessful attempts to use the kmod command.
-    - audit_rules_privileged_commands_kmod
+    - audit_rules_privileged_commands_kmod_0
 
     # UBTU-20-010298 The Ubuntu operating system must generate audit records when successful/unsuccessful attempts to use the fdisk command.
     - audit_rules_privileged_commands_fdisk
