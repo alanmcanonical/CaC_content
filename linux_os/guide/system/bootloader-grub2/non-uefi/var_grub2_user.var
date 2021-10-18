@@ -1,0 +1,18 @@
+documentation_complete: true
+
+title: 'Username of the superuser account of grub2'
+
+
+description: |-
+    Username set as the superuser account for the grub2 bootloader, to be used for
+    authentication of users trying to modify the bootloader parameters.
+
+type: string
+
+operator: equals
+
+interactive: false
+
+options:
+    default: "root"
+    cis_default: "root"
