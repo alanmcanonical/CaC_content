@@ -152,6 +152,7 @@ selections:
     - package_prelink_removed
 
     ### 1.6.4 Ensure core dumps are restricted (Automated)
+    - service_apport_disabled
     - disable_users_coredumps
     - sysctl_fs_suid_dumpable
 
