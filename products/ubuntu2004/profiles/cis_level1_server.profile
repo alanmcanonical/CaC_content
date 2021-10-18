@@ -129,6 +129,8 @@ selections:
 
     ## 1.5 Secure Boot Settings ##
     ### 1.5.1 Ensure bootloader password is set (Automated)
+    - var_grub2_user=cis_default
+    - var_grub2_passwd_hash=cis_default
     - grub2_password
 
     ### 1.5.2 Ensure permissions on bootloader config are configured (Automated)
