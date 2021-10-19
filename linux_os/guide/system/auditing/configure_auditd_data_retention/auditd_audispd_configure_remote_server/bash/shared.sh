@@ -1,4 +1,4 @@
-# platform = Red Hat Virtualization 4,multi_platform_fedora,multi_platform_ol,multi_platform_rhel,multi_platform_sle,multi_platform_wrlinux
+# platform = Red Hat Virtualization 4,multi_platform_fedora,multi_platform_ol,multi_platform_rhel,multi_platform_sle,multi_platform_ubuntu,multi_platform_wrlinux
 # Include source function library.
 . /usr/share/scap-security-guide/remediation_functions
 
@@ -8,6 +8,11 @@
 AUDITCONFIG=/etc/audit/audisp-remote.conf
 {{% else %}}
 AUDITCONFIG=/etc/audisp/audisp-remote.conf
+AUREMOTECONFIG=/etc/audisp/plugins.d/au-remote.conf
+{{% endif %}}
+
+{{% if 'ubuntu' in product %}}
+{{{ bash_replace_or_append("$AUREMOTECONFIG", '^active', 'yes') }}}
 {{% endif %}}
 
 {{{ bash_replace_or_append("$AUDITCONFIG", '^remote_server', "$var_audispd_remote_server", "@CCENUM@") }}}
