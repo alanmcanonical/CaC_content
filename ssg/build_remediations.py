@@ -154,7 +154,7 @@ def get_populate_replacement(remediation_type, text):
         varname = re.search(r'\npopulate (\S+)\n',
                             text, re.DOTALL).group(1)
         # Define fix text part to contribute to main fix text
-        fixtextcontribution = '\n%s="' % varname
+        fixtextcontribution = '\n%s=\'' % varname
         return (varname, fixtextcontribution)
 
     sys.stderr.write("ERROR: Unknown remediation type '%s'!\n"
@@ -1004,10 +1004,10 @@ def expand_xccdf_subs(fix, remediation_type, remediation_functions):
                         # If second pair element is not empty, append it as
                         # tail for the subelement (prefixed with closing '"')
                         if fixparts[idx + 1] is not None:
-                            xccdfvarsub.tail = '"' + '\n' + fixparts[idx + 1]
+                            xccdfvarsub.tail = '\'' + '\n' + fixparts[idx + 1]
                         # Otherwise append just enclosing '"'
                         else:
-                            xccdfvarsub.tail = '"' + '\n'
+                            xccdfvarsub.tail = '\'' + '\n'
                         # Append the new subelement to the fix element
                         fix.append(xccdfvarsub)
                     # This chunk contains call of other remediation function
