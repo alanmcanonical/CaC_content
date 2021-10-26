@@ -282,18 +282,9 @@ selections:
     - package_net-snmp_removed
 
     ### 2.2.15 Ensure mail transfer agent is configured for local-only mode (Automated)
+    - var_postfix_inet_interfaces=loopback-only
+    - postfix_network_listening_disabled
     - has_nonlocal_mta
-    - exim4_configtype_local
-    - exim4_local_interfaces
-    - exim4_readhost
-    - exim4_relay_domains
-    - exim4_minimaldns
-    - exim4_relay_nets
-    - exim4_smarthosts
-    - exim4_use_split_config
-    - exim4_hide_mailname
-    - exim4_mailname_in_oh
-    - exim4_localdelivery
 
     ### 2.2.16 Ensure rsync service is not installed (Automated)
     - package_rsync_removed
