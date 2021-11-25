@@ -2,6 +2,7 @@
 
 if [ ! -f /etc/pam_pkcs11/pam_pkcs11.conf ]; then
     cp /usr/share/doc/libpam-pkcs11/examples/pam_pkcs11.conf.example /etc/pam_pkcs11/pam_pkcs11.conf
+    sed -i -e 's/debug = true/debug = false/g' -e 's|module = /usr/lib/opensc-pkcs11|module = /usr/lib/x86_64-linux-gnu/pkcs11/opensc-pkcs11|' /etc/pam_pkcs11/pam_pkcs11.conf
 fi
 
 if grep -v "^\s*\#+cert_policy" /etc/pam_pkcs11/pam_pkcs11.conf | grep -Eqv 'crl_auto|crl_offline'; then
