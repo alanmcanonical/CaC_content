@@ -14,7 +14,7 @@ description: |-
     option is selected the system will prompt for a passphrase to use in
     decrypting the partition. The passphrase will subsequently need to be entered manually
     every time the system boots.
-    {{% if product not in ["sle12", "sle15"] %}}
+    {{% if product not in ["sle12", "sle15", "ubuntu1804", "ubuntu2004"] %}}
     <br /><br />
     For automated/unattended installations, it is possible to use Kickstart by adding
     the <tt>--encrypted</tt> and <tt>--passphrase=</tt> options to the definition of each partition to be
@@ -39,6 +39,8 @@ description: |-
         {{{ weblink(link="https://www.suse.com/documentation/sled-12/book_security/data/sec_security_cryptofs_y2.html") }}}
     {{% elif product == "rhel7" %}}
         {{{ weblink(link="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-encryption") }}}.
+    {{% elif product == "ubuntu2004" %}}
+        {{{ weblink(link="https://help.ubuntu.com/community/Full_Disk_Encryption_Howto_2019") }}}.
     {{% else %}}
         {{{ weblink(link="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/encrypting-block-devices-using-luks_security-hardening") }}}.
     {{% endif %}}

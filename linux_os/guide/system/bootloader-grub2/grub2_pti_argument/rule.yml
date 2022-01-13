@@ -55,6 +55,8 @@ warnings:
         <li>On UEFI-based machines, issue the following command as <tt>root</tt>:
 {{% if product in ["rhel8", "ol8"] %}}
         <pre>~]# grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg</pre></li>
+{{% elif product in ["ubuntu1804", "ubuntu2004"] %}}
+        <pre>~]# update-grub</pre></li>
 {{% else %}}
         <pre>~]# grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg</pre></li>
 {{% endif %}}
