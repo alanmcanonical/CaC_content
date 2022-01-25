@@ -1,8 +1,9 @@
-#!/bin/bash
+# platform = multi_platform_sle,Red Hat Enterprise Linux 8,multi_platform_fedora,multi_platform_ubuntu
 
-for LIBDIR in /usr/lib /usr/lib64 /lib /lib64
+for SYSLIBDIRS in /lib /lib64 /usr/lib /usr/lib64
 do
-    if [ -d $LIBDIR ]; then
-        find -L $LIBDIR \! -user root -exec chown root {} \;
+    if [[ -d $SYSLIBDIRS  ]]
+    then
+        find $SYSLIBDIRS ! -user root -type f -exec chown root '{}' \;
     fi
 done

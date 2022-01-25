@@ -1,10 +1,11 @@
-#!/bin/bash
+# platform = multi_platform_sle,Red Hat Enterprise Linux 8,multi_platform_fedora,multi_platform_ubuntu
 
-useradd testuser_123
-
-for LIBDIR in /usr/lib /usr/lib64 /lib /lib64
+useradd user_test
+for TESTFILE in /lib/test_me /lib64/test_me /usr/lib/test_me /usr/lib64/test_me
 do
-    if [ -d $LIBDIR ]; then
-        find -L $LIBDIR \! -user testuser_123 -exec chown testuser_123 {} \;
-    fi
+   if [[ ! -f $TESTFILE ]]
+   then
+     touch $TESTFILE
+   fi
+   chown user_test $TESTFILE
 done
