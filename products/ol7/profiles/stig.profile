@@ -4,7 +4,7 @@ title: 'DISA STIG for Oracle Linux 7'
 
 description: |-
     This profile contains configuration checks that align to the
-    DISA STIG for Oracle Linux V2R3.
+    DISA STIG for Oracle Linux V2R6.
 
 selections:
     - login_banner_text=dod_banners
@@ -18,10 +18,10 @@ selections:
     - var_password_pam_ocredit=1
     - var_password_pam_lcredit=1
     - var_password_pam_ucredit=1
+    - var_accounts_authorized_local_users_regex=ol7
     - var_accounts_passwords_pam_faillock_unlock_time=never
     - var_accounts_passwords_pam_faillock_fail_interval=900
     - var_accounts_passwords_pam_faillock_deny=3
-    - var_password_pam_unix_remember=5
     - var_password_pam_maxclassrepeat=4
     - var_password_pam_difok=8
     - var_password_pam_dcredit=1
@@ -29,7 +29,7 @@ selections:
     - var_accounts_minimum_age_login_defs=1
     - var_password_pam_maxrepeat=3
     - var_accounts_maximum_age_login_defs=60
-    - var_account_disable_post_pw_expiration=0
+    - var_account_disable_post_pw_expiration=35
     - var_removable_partition=dev_cdrom
     - var_auditd_action_mail_acct=root
     - var_auditd_space_left_action=email
@@ -37,7 +37,9 @@ selections:
     - var_password_pam_retry=3
     - var_accounts_max_concurrent_login_sessions=10
     - var_accounts_tmout=15_min
-    - var_time_service_set_maxpoll=system_default
+    - var_password_pam_remember=5
+    - var_password_pam_remember_control_flag=required
+    - var_time_service_set_maxpoll=18_hours
     - sysctl_net_ipv4_conf_all_accept_source_route_value=disabled
     - sysctl_net_ipv4_conf_default_accept_source_route_value=disabled
     - sysctl_net_ipv4_icmp_echo_ignore_broadcasts_value=enabled
@@ -73,7 +75,6 @@ selections:
     - accounts_password_set_min_life_existing
     - accounts_maximum_age_login_defs
     - accounts_password_set_max_life_existing
-    - accounts_password_pam_unix_remember
     - accounts_password_pam_minlen
     - no_empty_passwords
     - sshd_disable_empty_passwords
@@ -161,7 +162,6 @@ selections:
     - auditd_data_retention_space_left
     - auditd_data_retention_space_left_action
     - auditd_data_retention_action_mail_acct
-    - audit_rules_privileged_commands
     - audit_rules_dac_modification_chown
     - audit_rules_dac_modification_fchown
     - audit_rules_dac_modification_lchown
@@ -187,6 +187,7 @@ selections:
     - audit_rules_execution_setfiles
     - audit_rules_login_events_faillock
     - audit_rules_login_events_lastlog
+    - audit_rules_suid_privilege_function
     - audit_rules_privileged_commands_passwd
     - audit_rules_privileged_commands_unix_chkpwd
     - audit_rules_privileged_commands_gpasswd
@@ -219,7 +220,6 @@ selections:
     - accounts_max_concurrent_login_sessions
     - configure_firewalld_ports
     - sshd_use_approved_ciphers_ordered_stig
-    - sshd_use_approved_kex_ordered_stig
     - accounts_tmout
     - sshd_enable_warning_banner
     - sssd_ldap_start_tls
@@ -295,7 +295,6 @@ selections:
     - dconf_gnome_disable_autorun
     - audit_rules_privileged_commands_mount
     - dir_perms_world_writable_system_owned_group
-    - package_MFEhiplsm_installed
     - sssd_ldap_configure_tls_reqcert
     - uefi_no_removeable_media
     - require_emergency_target_auth
@@ -305,3 +304,16 @@ selections:
     - sudoers_validate_passwd
     - sudo_restrict_privilege_elevation_to_authorized
     - xwindows_remove_packages
+    - package_mcafeetp_installed
+    - agent_mfetpd_running
+    - sudo_require_reauthentication
+    - auditd_overflow_action
+    - accounts_authorized_local_users
+    - accounts_password_pam_pwhistory_remember_password_auth
+    - accounts_password_pam_pwhistory_remember_system_auth
+    - sebool_ssh_sysadm_login
+    - selinux_confine_to_least_privilege
+    - selinux_context_elevation_for_sudo
+    - sudoers_default_includedir
+    - disallow_bypass_password_sudo
+    - no_empty_passwords_etc_shadow
