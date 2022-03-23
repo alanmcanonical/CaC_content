@@ -18,6 +18,7 @@
   file:
     path: "{{ item.path }}"
     owner: "{{{ FILEUID }}}"
+  when: item.uid != {{{ FILEUID }}}
   with_items:
     - "{{ files_found.files }}"
 
