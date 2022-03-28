@@ -31,7 +31,7 @@
   file:
     path: "{{ item }}"
     mode: "{{{ FILEMODE }}}"
-  when: item.mode != '{{{ FILEMODE}}}'
+    state: file
   with_items:
     - "{{ files_found.stdout_lines}}"
 
