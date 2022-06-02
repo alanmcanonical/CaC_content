@@ -51,6 +51,10 @@ function ensure_pam_module_options {
 		sed --follow-symlinks -i -E -e "s/^(\\s*${_type}\\s+${_control}\\s+${_module}[^\\n]*)/\\1 ${_option}${_defaultValue}/" "${_pamFile}"
 	# add a new entry if none exists
 	elif ! grep -q -P "^\\s*${_type}\\s+${_control}\\s+${_module}(\\s.+)?\\s+${_option}${_valueRegex}(\\s|\$)" < "${_pamFile}" ; then
-		echo "${_type} ${_control} ${_module} ${_option}${_defaultValue}" >> "${_pamFile}"
+        if [ "${_pamFile}" == "/etc/pam.d/common-auth" ] ; then
+            sed --follow-symlinks -i "/pam_unix.so/i ${_type} ${_control} ${_module} ${_option}${_defaultValue}" "${_pamFile}"
+        else
+            echo "${_type} ${_control} ${_module} ${_option}${_defaultValue}" >> "${_pamFile}"
+        fi
 	fi
 }
