@@ -2,4 +2,4 @@
 . /usr/share/scap-security-guide/remediation_functions
 {{{ bash_instantiate_variables("var_password_pam_retry") }}}
 
-ensure_pam_module_options '/etc/pam.d/common-password' 'password' 'requisite' 'pam_pwquality.so' 'retry' $var_password_pam_retry $var_password_pam_retry
+ensure_pam_module_options '/etc/pam.d/common-password' 'password' 'requisite' 'pam_pwquality.so' 'retry' $var_password_pam_retry $var_password_pam_retry 'bottom'

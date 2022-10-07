@@ -1,12 +1,12 @@
 function ensure_pam_module_options {
-	if [ $# -lt 7 ] || [ $# -gt 8 ] ; then
-                echo "$0 requires seven or eight arguments" >&2
+	if [ $# -lt 8 ] || [ $# -gt 9 ] ; then
+                echo "$0 requires eight or nine arguments" >&2
                 exit 1
         fi
-	local _pamFile="$1" _type="$2" _control="$3" _module="$4" _option="$5" _valueRegex="$6" _defaultValue="$7"
+	local _pamFile="$1" _type="$2" _control="$3" _module="$4" _option="$5" _valueRegex="$6" _defaultValue="$7" _position="$8"
 	local _remove_argument=""
-	if [ $# -eq 8 ] ; then
-        	_remove_argument="$8"
+	if [ $# -eq 9 ] ; then
+		_remove_argument="$9"
 		# convert it to lowercase
 		_remove_argument=${_remove_argument,,}
 	fi
@@ -51,10 +51,10 @@ function ensure_pam_module_options {
 		sed --follow-symlinks -i -E -e "s/^(\\s*${_type}\\s+${_control}\\s+${_module}[^\\n]*)/\\1 ${_option}${_defaultValue}/" "${_pamFile}"
 	# add a new entry if none exists
 	elif ! grep -q -P "^\\s*${_type}\\s+${_control}\\s+${_module}(\\s.+)?\\s+${_option}${_valueRegex}(\\s|\$)" < "${_pamFile}" ; then
-        if [ "${_pamFile}" == "/etc/pam.d/common-auth" ] ; then
-            sed --follow-symlinks -i "/pam_unix.so/i ${_type} ${_control} ${_module} ${_option}${_defaultValue}" "${_pamFile}"
-        else
-            echo "${_type} ${_control} ${_module} ${_option}${_defaultValue}" >> "${_pamFile}"
+		if [ "${_position}" = "top" ] ; then
+			sed --follow-symlinks -i "/\"Primary\"/i ${_type} ${_control} ${_module} ${_option}${_defaultValue}" "${_pamFile}"
+		else
+			echo "${_type} ${_control} ${_module} ${_option}${_defaultValue}" >> "${_pamFile}"
         fi
 	fi
 }
