@@ -729,6 +729,7 @@ selections:
 
     ## 5.3 Configure PAM ##
     ### 5.3.1 Ensure password creation requirements are configured (Automated)
+    - package_pam_pwquality_installed
     - var_password_pam_minlen=14
     - accounts_password_pam_minlen
     - var_password_pam_minclass=4
