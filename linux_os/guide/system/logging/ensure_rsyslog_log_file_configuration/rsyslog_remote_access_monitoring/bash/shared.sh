@@ -1,6 +1,6 @@
 # platform = Red Hat Enterprise Linux 8,multi_platform_fedora
 
-declare -A REMOTE_METHODS=( ['auth.*']='^.*auth\.\*.*$' ['authpriv.*']='^.*authpriv\.\*.*$' ['daemon.*']='^.*daemon\.\*.*$' )
+declare -A REMOTE_METHODS=( ['auth.*']='^[^#]*auth\.\*.*$' ['authpriv.*']='^[^#]*authpriv\.\*.*$' ['daemon.*']='^[^#]*daemon\.\*.*$' )
 
 if [[ ! -f /etc/rsyslog.conf ]]; then
 	# Something is not right, create the file
