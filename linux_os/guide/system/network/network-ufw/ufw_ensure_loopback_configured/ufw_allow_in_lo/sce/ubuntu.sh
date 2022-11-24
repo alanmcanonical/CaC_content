@@ -22,7 +22,7 @@ if [ $? -ne 0 ]; then
 fi
 
 if [ -e /proc/sys/net/ipv6/conf/all/disable_ipv6 ] && [ "$(cat /proc/sys/net/ipv6/conf/all/disable_ipv6)" -eq 0 ]; then
-    ufw status verbose | grep -P "^Anywhere \(v6\) on lo\s+ALLOW IN\s+Anywhere \(v6\)\b"
+    ufw status verbose | grep -P "^Anywhere \(v6\) on lo\s+ALLOW IN\s+Anywhere \(v6\)"
     if [ $? -ne 0 ]; then
         exit ${XCCDF_RESULT_FAIL}
     fi
