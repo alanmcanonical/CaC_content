@@ -1,6 +1,6 @@
 description: 'This profile contains configuration checks that align to the
 
-    DISA STIG for Red Hat Enterprise Linux 8 V1R3.
+    DISA STIG for Red Hat Enterprise Linux 8 V1R9.
 
 
     In addition to being applicable to Red Hat Enterprise Linux 8, DISA recognizes
@@ -20,11 +20,17 @@ description: 'This profile contains configuration checks that align to the
     - Red Hat Storage
 
     - Red Hat Containers with a Red Hat Enterprise Linux 8 image'
-documentation_complete: true
+extends: null
+metadata:
+    version: V1R9
+    SMEs:
+    - mab879
+    - ggbecker
 reference: https://public.cyber.mil/stigs/downloads/?_dl_facet_stigs=operating-systems%2Cunix-linux
 selections:
 - account_disable_post_pw_expiration
 - account_emergency_expire_date
+- account_password_selinux_faillock_dir
 - account_temp_expire_date
 - account_unique_id
 - accounts_authorized_local_users
@@ -35,7 +41,6 @@ selections:
 - accounts_minimum_age_login_defs
 - accounts_no_uid_except_zero
 - accounts_password_all_shadowed_sha512
-- accounts_password_minlen_login_defs
 - accounts_password_pam_dcredit
 - accounts_password_pam_dictcheck
 - accounts_password_pam_difok
@@ -47,29 +52,36 @@ selections:
 - accounts_password_pam_ocredit
 - accounts_password_pam_pwhistory_remember_password_auth
 - accounts_password_pam_pwhistory_remember_system_auth
+- accounts_password_pam_pwquality_password_auth
+- accounts_password_pam_pwquality_system_auth
 - accounts_password_pam_retry
 - accounts_password_pam_ucredit
-- accounts_password_pam_unix_rounds_password_auth
-- accounts_password_pam_unix_rounds_system_auth
 - accounts_password_set_max_life_existing
 - accounts_password_set_min_life_existing
+- accounts_passwords_pam_faillock_audit
 - accounts_passwords_pam_faillock_deny
 - accounts_passwords_pam_faillock_deny_root
+- accounts_passwords_pam_faillock_dir
 - accounts_passwords_pam_faillock_interval
+- accounts_passwords_pam_faillock_silent
 - accounts_passwords_pam_faillock_unlock_time
 - accounts_umask_etc_bashrc
+- accounts_umask_etc_csh_cshrc
 - accounts_umask_etc_login_defs
+- accounts_umask_etc_profile
 - accounts_umask_interactive_users
 - accounts_user_dot_no_world_writable_programs
 - accounts_user_home_paths_only
 - accounts_user_interactive_home_directory_defined
 - accounts_user_interactive_home_directory_exists
-- aide_check_audit_tools
+- accounts_users_home_files_groupownership
+- accounts_users_home_files_permissions
 - agent_mfetpd_running
+- aide_build_database
+- aide_check_audit_tools
 - aide_scan_notification
 - aide_verify_acls
 - aide_verify_ext_attributes
-- audit_immutable_login_uids
 - audit_rules_dac_modification_chmod
 - audit_rules_dac_modification_chown
 - audit_rules_dac_modification_fchmod
@@ -95,6 +107,7 @@ selections:
 - audit_rules_file_deletion_events_unlink
 - audit_rules_file_deletion_events_unlinkat
 - audit_rules_immutable
+- audit_rules_immutable_login_uids
 - audit_rules_kernel_module_loading_delete
 - audit_rules_kernel_module_loading_finit
 - audit_rules_kernel_module_loading_init
@@ -138,7 +151,6 @@ selections:
 - auditd_data_disk_error_action
 - auditd_data_disk_full_action
 - auditd_data_retention_action_mail_acct
-- auditd_data_retention_max_log_file_action
 - auditd_data_retention_space_left_action
 - auditd_data_retention_space_left_percentage
 - auditd_local_events
@@ -150,8 +162,9 @@ selections:
 - chronyd_client_only
 - chronyd_no_chronyc_network
 - chronyd_or_ntpd_set_maxpoll
+- chronyd_server_directive
 - clean_components_post_updating
-- configure_bashrc_exec_tmux
+- configure_bashrc_tmux
 - configure_bind_crypto_policy
 - configure_crypto_policy
 - configure_firewalld_ports
@@ -163,18 +176,26 @@ selections:
 - configure_ssh_crypto_policy
 - configure_tmux_lock_after_time
 - configure_tmux_lock_command
+- configure_tmux_lock_keybinding
 - configure_usbguard_auditbackend
 - coredump_disable_backtraces
 - coredump_disable_storage
 - dconf_gnome_banner_enabled
 - dconf_gnome_disable_ctrlaltdel_reboot
+- dconf_gnome_disable_user_list
 - dconf_gnome_lock_screen_on_smartcard_removal
 - dconf_gnome_login_banner_text
 - dconf_gnome_screensaver_idle_delay
+- dconf_gnome_screensaver_lock_delay
 - dconf_gnome_screensaver_lock_enabled
+- dconf_gnome_screensaver_user_locks
+- dconf_gnome_session_idle_user_locks
 - dir_group_ownership_library_dirs
+- dir_ownership_library_dirs
+- dir_permissions_library_dirs
 - dir_perms_world_writable_root_owned
 - dir_perms_world_writable_sticky_bits
+- dir_perms_world_writable_system_owned_group
 - directory_group_ownership_var_log_audit
 - directory_ownership_var_log_audit
 - directory_permissions_var_log_audit
@@ -182,11 +203,18 @@ selections:
 - disable_ctrlaltdel_reboot
 - disable_users_coredumps
 - display_login_attempts
+- enable_authselect
 - enable_dracut_fips_module
 - enable_fips_mode
 - encrypt_partitions
 - ensure_gpgcheck_globally_activated
 - ensure_gpgcheck_local_packages
+- ensure_gpgcheck_never_disabled
+- ensure_redhat_gpgkey_installed
+- fapolicy_default_deny
+- file_audit_tools_group_ownership
+- file_audit_tools_ownership
+- file_audit_tools_permissions
 - file_group_ownership_var_log_audit
 - file_groupowner_var_log
 - file_groupowner_var_log_messages
@@ -235,6 +263,7 @@ selections:
 - kernel_module_sctp_disabled
 - kernel_module_tipc_disabled
 - kernel_module_usb-storage_disabled
+- mount_option_boot_efi_nosuid
 - mount_option_boot_nosuid
 - mount_option_dev_shm_nodev
 - mount_option_dev_shm_noexec
@@ -269,10 +298,7 @@ selections:
 - no_user_host_based_files
 - package_abrt-addon-ccpp_removed
 - package_abrt-addon-kerneloops_removed
-- package_abrt-addon-python_removed
 - package_abrt-cli_removed
-- package_abrt-plugin-logger_removed
-- package_abrt-plugin-rhtsupport_removed
 - package_abrt-plugin-sosreport_removed
 - package_abrt_removed
 - package_aide_installed
@@ -281,11 +307,16 @@ selections:
 - package_firewalld_installed
 - package_gssproxy_removed
 - package_iprutils_removed
+- package_krb5-server_removed
 - package_krb5-workstation_removed
+- package_libreport-plugin-logger_removed
+- package_libreport-plugin-rhtsupport_removed
 - package_mcafeetp_installed
 - package_opensc_installed
 - package_openssh-server_installed
 - package_policycoreutils_installed
+- package_postfix_installed
+- package_python3-abrt-addon_removed
 - package_rng-tools_installed
 - package_rsh-server_removed
 - package_rsyslog-gnutls_installed
@@ -303,7 +334,8 @@ selections:
 - partition_for_var_log
 - partition_for_var_log_audit
 - partition_for_var_tmp
-- postfix_client_configure_mail_alias
+- postfix_client_configure_mail_alias_postmaster
+- postfix_prevent_unrestricted_relay
 - require_emergency_target_auth
 - require_singleuser_auth
 - root_permissions_syslibrary_files
@@ -316,6 +348,7 @@ selections:
 - security_patches_up_to_date
 - selinux_policytype
 - selinux_state
+- selinux_user_login_roles
 - service_auditd_enabled
 - service_autofs_disabled
 - service_debug-shell_disabled
@@ -328,8 +361,9 @@ selections:
 - service_systemd-coredump_disabled
 - service_usbguard_enabled
 - set_password_hashing_algorithm_logindefs
+- set_password_hashing_algorithm_passwordauth
 - set_password_hashing_algorithm_systemauth
-- sshd_disable_compression
+- set_password_hashing_min_rounds_logindefs
 - sshd_disable_empty_passwords
 - sshd_disable_gssapi_auth
 - sshd_disable_kerb_auth
@@ -342,7 +376,8 @@ selections:
 - sshd_print_last_log
 - sshd_rekey_limit
 - sshd_set_idle_timeout
-- sshd_set_keepalive_0
+- sshd_set_keepalive
+- sshd_use_approved_kex_ordered_stig
 - sshd_use_strong_rng
 - sshd_x11_use_localhost
 - sssd_certificate_verification
@@ -353,6 +388,7 @@ selections:
 - sudo_remove_nopasswd
 - sudo_require_reauthentication
 - sudo_restrict_privilege_elevation_to_authorized
+- sudoers_default_includedir
 - sudoers_validate_passwd
 - sysctl_crypto_fips_enabled
 - sysctl_fs_protected_hardlinks
@@ -368,16 +404,17 @@ selections:
 - sysctl_net_core_bpf_jit_harden
 - sysctl_net_ipv4_conf_all_accept_redirects
 - sysctl_net_ipv4_conf_all_accept_source_route
+- sysctl_net_ipv4_conf_all_forwarding
 - sysctl_net_ipv4_conf_all_rp_filter
 - sysctl_net_ipv4_conf_all_send_redirects
 - sysctl_net_ipv4_conf_default_accept_redirects
 - sysctl_net_ipv4_conf_default_accept_source_route
 - sysctl_net_ipv4_conf_default_send_redirects
 - sysctl_net_ipv4_icmp_echo_ignore_broadcasts
-- sysctl_net_ipv4_ip_forward
 - sysctl_net_ipv6_conf_all_accept_ra
 - sysctl_net_ipv6_conf_all_accept_redirects
 - sysctl_net_ipv6_conf_all_accept_source_route
+- sysctl_net_ipv6_conf_all_forwarding
 - sysctl_net_ipv6_conf_default_accept_ra
 - sysctl_net_ipv6_conf_default_accept_redirects
 - sysctl_net_ipv6_conf_default_accept_source_route
@@ -386,22 +423,21 @@ selections:
 - usbguard_generate_policy
 - wireless_disable_interfaces
 - xwindows_remove_packages
+- xwindows_runlevel_target
 - var_rekey_limit_size=1G
 - var_rekey_limit_time=1hour
 - var_accounts_user_umask=077
 - var_password_pam_difok=8
 - var_password_pam_maxrepeat=3
-- var_sshd_disable_compression=no
 - var_password_hashing_algorithm=SHA512
 - var_password_pam_maxclassrepeat=4
 - var_password_pam_minclass=4
 - var_accounts_minimum_age_login_defs=1
 - var_accounts_max_concurrent_login_sessions=10
 - var_password_pam_remember=5
-- var_password_pam_remember_control_flag=required
+- var_password_pam_remember_control_flag=requisite
 - var_selinux_state=enforcing
 - var_selinux_policy_name=targeted
-- var_accounts_password_minlen_login_defs=15
 - var_password_pam_unix_rounds=5000
 - var_password_pam_minlen=15
 - var_password_pam_ocredit=1
@@ -410,7 +446,7 @@ selections:
 - var_password_pam_ucredit=1
 - var_password_pam_lcredit=1
 - var_password_pam_retry=3
-- var_sshd_set_keepalive=0
+- var_sshd_set_keepalive=1
 - sshd_approved_macs=stig
 - sshd_approved_ciphers=stig
 - sshd_idle_timeout_value=10_minutes
@@ -427,10 +463,20 @@ selections:
 - var_accounts_maximum_age_login_defs=60
 - var_auditd_space_left_percentage=25pc
 - var_auditd_space_left_action=email
-- var_auditd_disk_error_action=halt
+- var_auditd_disk_error_action=rhel8
 - var_auditd_max_log_file_action=syslog
-- var_auditd_disk_full_action=halt
+- var_auditd_disk_full_action=rhel8
 - var_sssd_certificate_verification_digest_function=sha1
+- login_banner_text=dod_banners
+- var_authselect_profile=sssd
 - var_system_crypto_policy=fips
 - var_sudo_timestamp_timeout=always_prompt
+- var_slub_debug_options=P
+- var_screensaver_lock_delay=5_seconds
+unselected_groups: []
+platforms: !!set {}
+cpe_names: !!set {}
+platform: null
+filter_rules: ''
 title: DISA STIG for Red Hat Enterprise Linux 8
+documentation_complete: true
