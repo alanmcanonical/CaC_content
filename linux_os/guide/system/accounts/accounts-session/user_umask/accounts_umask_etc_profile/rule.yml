@@ -7,6 +7,10 @@ description: |-
     add or correct the <tt>umask</tt> setting in <tt>/etc/profile</tt> to read as follows:
     <pre>umask {{{ xccdf_value("var_accounts_user_umask") }}}</pre>
 
+    Note that <tt>/etc/profile</tt> also reads scrips within <tt>/etc/profile.d</tt> directory.
+    These scripts are also valid files to set umask value. Therefore, they should also be
+    considered during the check and properly remediated, if necessary.
+
 rationale: |-
     The umask value influences the permissions assigned to files when they are created.
     A misconfigured umask value could result in files with excessive permissions that can be read or
@@ -38,9 +42,7 @@ references:
 ocil_clause: 'the above command returns no output, or if the umask is configured incorrectly'
 
 ocil: |-
-    Verify the <tt>umask</tt> setting is configured correctly in the <tt>/etc/profile</tt> file by
-    running the following command:
-    <pre># grep "umask" /etc/profile</pre>
-    All output must show the value of <tt>umask</tt> set as shown in the below:
-    <pre># grep "umask" /etc/profile
-    umask {{{ xccdf_value("var_accounts_user_umask") }}}</pre>
+    Verify the <tt>umask</tt> setting is configured correctly in the <tt>/etc/profile</tt> file
+    or scripts within <tt>/etc/profile.d</tt> directory with the following command:
+    <pre>$ grep "umask" /etc/profile*</pre>
+    <pre>umask {{{ xccdf_value("var_accounts_user_umask") }}}</pre>
