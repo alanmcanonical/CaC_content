@@ -13,12 +13,12 @@ rule_type="ufw"
 
 # verify if rule type matches the current firewall being audited
 if [ "${XCCDF_VALUE_fw_choice}" != "${rule_type}" ]; then
-    exit ${XCCDF_RESULT_NOT_APPLICABLE}
+    exit "${XCCDF_RESULT_NOT_APPLICABLE}"
 fi
 
-ufw status verbose | grep -P "^Anywhere\s+DENY IN\s+127.0.0.0/8\b"
-if [ $? -ne 0 ]; then
-    exit ${XCCDF_RESULT_FAIL}
+ufw_status=$(ufw status verbose)
+if ! grep -q -E "^Anywhere\s+DENY IN\s+127.0.0.0/8" <<< "$ufw_status"; then
+    exit "${XCCDF_RESULT_FAIL}"
 fi
 
-exit ${XCCDF_RESULT_PASS}
+exit "${XCCDF_RESULT_PASS}"
