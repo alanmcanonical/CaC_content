@@ -28,5 +28,5 @@ ocil: |-
 template:
     name: file_groupowner
     vars:
-        filepath: /etc/kubernetes/kubelet.conf
-        filegid: '0'
+        filepath: {{{ kubeletconf_path }}}
+        gid_or_name: '0'

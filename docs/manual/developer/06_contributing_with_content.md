@@ -1482,7 +1482,7 @@ the following to `rule.yml`:
         processed, only `file.txt` is tested against **file_regex**. Can
         be a list of regexes.
 
-    -   **filegid** - group ID (GID)
+    -   **gid_or_name** - group ID (GID)
 
 -   Languages: Ansible, Bash, OVAL
 

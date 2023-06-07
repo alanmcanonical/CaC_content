@@ -68,4 +68,15 @@ template:
             - /usr/lib/
             - /usr/lib64/
         file_regex: ^.*$
-        filegid: '0'
+        recursive: 'true'
+        gid_or_name: '0'
+
+fixtext: |-
+    Configure the system-wide shared library files (/lib, /lib64, /usr/lib and /usr/lib64) to be protected from unauthorized access.
+
+    Run the following command, replacing "[FILE]" with any library file not group-owned by "root".
+
+    $ sudo chgrp root [FILE]
+
+srg_requirement:
+    {{{ full_name }}} library files must be group-owned by root or a system account.

@@ -61,6 +61,5 @@ platform: machine
 template:
     name: file_groupowner
     vars:
-        filepath: /boot/efi/EFI/redhat/grub.cfg
-        filepath@fedora: /boot/efi/EFI/fedora/grub.cfg
-        filegid: '0'
+        filepath: {{{ grub2_uefi_boot_path }}}/grub.cfg
+        gid_or_name: '0'

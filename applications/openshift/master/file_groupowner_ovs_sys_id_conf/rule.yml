@@ -32,4 +32,4 @@ template:
     name: file_groupowner
     vars:
         filepath: /etc/openvswitch/system-id.conf
-        filegid: '801'
+        gid_or_name: '801'
