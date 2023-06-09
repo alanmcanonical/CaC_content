@@ -325,3 +325,64 @@ def check_conflict_regex_directory(data):
                 "Used 'file_regex' key in rule '{0}' but filepath '{1}' does not "
                 "specify a directory. Append '/' to the filepath or remove the "
                 "'file_regex' key.".format(data["_rule_id"], f))
+
+
+def enum(*args):
+    enums = dict(zip(args, range(len(args))))
+    return type('Enum', (), enums)
+
+
+def recurse_or_substitute_or_do_nothing(
+        v, string_dict, ignored_keys=frozenset()):
+    if isinstance(v, dict):
+        return apply_formatting_on_dict_values(v, string_dict, ignored_keys)
+    elif isinstance(v, str):
+        return v.format(**string_dict)
+    else:
+        return v
+
+
+def apply_formatting_on_dict_values(source_dict, string_dict, ignored_keys=frozenset()):
+    """
+    Uses Python built-in string replacement.
+    It replaces strings marked by {token} if "token" is a key in the string_dict parameter.
+    It skips keys in source_dict which are listed in ignored_keys parameter.
+    This works only for dictionaries whose values are dicts or strings
+    """
+    new_dict = {}
+    for k, v in source_dict.items():
+        if k not in ignored_keys:
+            new_dict[k] = recurse_or_substitute_or_do_nothing(
+                v, string_dict, ignored_keys)
+        else:
+            new_dict[k] = v
+    return new_dict
+
+
+def ensure_file_paths_and_file_regexes_are_correctly_defined(data):
+    """
+    This function is common for the file_owner, file_groupowner
+    and file_permissions templates.
+    It ensures that the data structure meets certain rules, e.g. the file_path
+    item is a list and number of list items in file_regex
+    equals to number of items in file_path.
+    """
+    # this avoids code duplicates
+    if isinstance(data["filepath"], str):
+        data["filepath"] = [data["filepath"]]
+
+    if "file_regex" in data:
+        # we can have a list of filepaths, but only one regex
+        # instead of declaring the same regex multiple times
+        if isinstance(data["file_regex"], str):
+            data["file_regex"] = [data["file_regex"]] * len(data["filepath"])
+
+        # if the length of filepaths and file_regex are not the same, then error.
+        # in case we have multiple regexes for just one filepath, than we need
+        # to declare that filepath multiple times
+        if len(data["filepath"]) != len(data["file_regex"]):
+            raise ValueError(
+                "You should have one file_path per file_regex. Please check "
+                "rule '{0}'".format(data["_rule_id"]))
+
+    check_conflict_regex_directory(data)
