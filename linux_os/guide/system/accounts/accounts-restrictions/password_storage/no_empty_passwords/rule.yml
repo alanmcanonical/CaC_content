@@ -9,6 +9,8 @@ description: |-
     <tt>nullok</tt> in
     {{% if product in ["sle12", "sle15"] %}}
     password authentication configurations in <tt>/etc/pam.d/</tt>
+    {{% elif 'ubuntu' in product %}}
+    <tt>/etc/pam.d/common-password</tt>
     {{% else %}}
     <tt>/etc/pam.d/system-auth</tt>
     {{% endif %}}
@@ -56,6 +58,7 @@ references:
     stigid@rhel8:  RHEL-08-020331
     stigid@sle12: SLES-12-010231
     stigid@sle15: SLES-15-020300
+    stigid@ubuntu2004: UBTU-20-010463
 
 ocil_clause: 'NULL passwords can be used'
 
@@ -63,9 +66,23 @@ ocil: |-
     To verify that null passwords cannot be used, run the following command:
     {{% if product in ["sle12", "sle15"] %}}
     <pre>$ grep pam_unix.so /etc/pam.d/* | grep nullok</pre>
+    {{% elif 'ubuntu' in product %}}
+    <pre>grep nullok /etc/pam.d/common-password</pre>
     {{% else %}}
     <pre>$ grep nullok /etc/pam.d/system-auth</pre>
     {{% endif %}}
     If this produces any output, it may be possible to log into accounts
     with empty passwords. Remove any instances of the <tt>nullok</tt> option to
     prevent logins with empty passwords.
+
+warnings:
+    - general: |-
+       If the system relies on <tt>authselect</tt> tool to manage PAM settings, the remediation
+       will also use <tt>authselect</tt> tool. However, if any manual modification was made in
+       PAM files, the <tt>authselect</tt> integrity check will fail and the remediation will be
+       aborted in order to preserve intentional changes. In this case, an informative message will
+       be shown in the remediation report.
+       Note that this rule is not applicable for systems running within a
+       container. Having user with empty password within a container is not
+       considered a risk, because it should not be possible to directly login into
+       a container anyway.

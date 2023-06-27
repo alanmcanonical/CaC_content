@@ -11,6 +11,8 @@
   <ind:textfilecontent54_object id="object_no_empty_passwords" version="1">
 {{% if product in ['sle12', 'sle15'] %}}
     <ind:filepath operation="pattern match">^/etc/pam.d/.*$</ind:filepath>
+{{% elif 'ubuntu' in product %}}
+    <ind:filepath operation="pattern match">^/etc/pam.d/common-password</ind:filepath>
 {{% else %}}
     <ind:filepath>/etc/pam.d/system-auth</ind:filepath>
 {{% endif %}}
