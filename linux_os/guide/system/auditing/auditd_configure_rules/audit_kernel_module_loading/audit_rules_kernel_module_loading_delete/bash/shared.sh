@@ -1,5 +1,8 @@
 # platform = multi_platform_all
 
+# Include source function library.
+. /usr/share/scap-security-guide/remediation_functions
+
 # First perform the remediation of the syscall rule
 # Retrieve hardware architecture of the underlying system
 # Note: 32-bit and 64-bit kernel syscall numbers not always line up =>
@@ -13,7 +16,7 @@ do
 	ACTION_ARCH_FILTERS="-a always,exit -F arch=$ARCH"
 	OTHER_FILTERS=""
 	{{% if "ol" in product or 'rhel' in product or 'ubuntu' in product %}}
-	AUID_FILTERS="-F auid>={{{ auid }}} -F auid!=unset"
+	AUID_FILTERS="-F auid>=1000 -F auid!=unset"
 	{{% else %}}
 	AUID_FILTERS=""
 	{{% endif %}}
@@ -21,6 +24,6 @@ do
 	KEY="modules"
 	SYSCALL_GROUPING="delete_module"
 	# Perform the remediation for both possible tools: 'auditctl' and 'augenrules'
-	{{{ bash_fix_audit_syscall_rule("augenrules", "$ACTION_ARCH_FILTERS", "$OTHER_FILTERS", "$AUID_FILTERS", "$SYSCALL", "$SYSCALL_GROUPING", "$KEY") }}}
-	{{{ bash_fix_audit_syscall_rule("auditctl", "$ACTION_ARCH_FILTERS", "$OTHER_FILTERS", "$AUID_FILTERS", "$SYSCALL", "$SYSCALL_GROUPING", "$KEY") }}}
+	fix_audit_syscall_rule "augenrules" "$ACTION_ARCH_FILTERS" "$OTHER_FILTERS" "$AUID_FILTERS" "$SYSCALL" "$SYSCALL_GROUPING" "$KEY"
+	fix_audit_syscall_rule "auditctl" "$ACTION_ARCH_FILTERS" "$OTHER_FILTERS" "$AUID_FILTERS" "$SYSCALL" "$SYSCALL_GROUPING" "$KEY"
 done
