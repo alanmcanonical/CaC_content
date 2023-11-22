@@ -5,7 +5,7 @@
 # strategy = configure
 
 {{% if "ol" in product or 'rhel' in product or 'ubuntu' in product %}}
-{{% set auid_filters = "-F auid>=" ~ auid ~ " -F auid!=unset" %}}
+{{% set auid_filters = "-F auid>=1000 -F auid!=unset" %}}
 {{% else %}}
 {{% set auid_filters = "" %}}
 {{% endif %}}
