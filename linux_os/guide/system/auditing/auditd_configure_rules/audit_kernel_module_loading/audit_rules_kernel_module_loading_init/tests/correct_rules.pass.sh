@@ -1,5 +1,5 @@
 #!/bin/bash
-# packages = audit
+# packages = {{{ ssgts_package("audit") }}}
 
 {{% if "ol" in product or 'rhel' in product or 'ubuntu' in product %}}
 echo "-a always,exit -F arch=b32 -S init_module -F auid>=1000 -F auid!=unset -k modules" >> /etc/audit/rules.d/modules.rules
