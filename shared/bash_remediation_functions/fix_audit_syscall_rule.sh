@@ -92,7 +92,7 @@ then
 	default_file="/etc/audit/rules.d/${key}.rules"
 	# As other_filters may include paths, lets use a different delimiter for it
 	# The "F" script expression tells sed to print the filenames where the expressions matched
-	readarray -t files_to_inspect < <(sed -s -n -e "/${action_arch_filters}/!d" -e "\#${other_filters}#!d" -e "/${auid_filters}/!d" -e "F" /etc/audit/rules.d/*.rules)
+	readarray -t files_to_inspect < <(sed -s -n -e "/^${action_arch_filters}/!d" -e "\#${other_filters}#!d" -e "/${auid_filters}/!d" -e "F" /etc/audit/rules.d/*.rules)
 	if [ $? -ne 0 ]
 	then
 		retval=1
@@ -121,7 +121,7 @@ do
 	# * the action, list and arch, (2-nd argument)
 	# * the other filters, (3-rd argument)
 	# * the auid filters, (4-rd argument)
-	readarray -t similar_rules < <(sed -e "/${action_arch_filters}/!d"  -e "\#${other_filters}#!d" -e "/${auid_filters}/!d" "$audit_file")
+	readarray -t similar_rules < <(sed -e "/^${action_arch_filters}/!d"  -e "\#${other_filters}#!d" -e "/${auid_filters}/!d" "$audit_file")
 	if [ $? -ne 0 ]
 	then
 		retval=1
@@ -133,7 +133,7 @@ do
 	do
 		# Strip all the options and fields we know of,
 		# than check if there was any field left over
-		extra_fields=$(sed -E -e "s/${action_arch_filters}//"  -e "s#${other_filters}##" -e "s/${auid_filters}//" -e "s/((:?-S [[:alnum:],]+)+)//g" -e "s/-F key=\w+|-k \w+//"<<< "$s_rule")
+		extra_fields=$(sed -E -e "s/^${action_arch_filters}//"  -e "s#${other_filters}##" -e "s/${auid_filters}//" -e "s/((:?-S [[:alnum:],]+)+)//g" -e "s/-F key=\w+|-k \w+//"<<< "$s_rule")
 		grep -q -- "-F" <<< "$extra_fields"
 		if [ $? -ne 0 ]
 		then
