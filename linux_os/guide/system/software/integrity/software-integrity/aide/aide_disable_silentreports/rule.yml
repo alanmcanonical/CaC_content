@@ -33,14 +33,6 @@ ocil: |-
 
     If SILENTREPORTS is not set to "no", this is a finding.
 
-fixtext: |-
-    Configure the {{{ full_name }}} operating system to notify designated personnel if baseline configurations are changed in an unauthorized manner.
-
-    Modify the "SILENTREPORTS" parameter in the "{{{ aide_default_path }}}" file with a value of "no" if it does not already exist.
-
-srg_requirement:
-    {{{ full_name }}} must notify designated personnel if baseline configurations are changed in an unauthorized manner.
-
 template:
     name: key_value_pair_in_file
     vars:
