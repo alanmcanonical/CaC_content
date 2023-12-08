@@ -3,7 +3,7 @@
 auth_files[0]="/etc/pam.d/system-auth"
 auth_files[1]="/etc/pam.d/password-auth"
 
-# Make sure pam_faillock is configured,
+# Make sure pam_faillock is configured
 # default value of var_accounts_passwords_pam_faillock_unlock_time is 0
 for file in "${auth_files[@]}" ; do
     sed -i --follow-symlinks '/^auth.*sufficient.*pam_unix.so.*/i auth        required      pam_faillock.so preauth silent '"unlock_time"'='"never" "$file"
