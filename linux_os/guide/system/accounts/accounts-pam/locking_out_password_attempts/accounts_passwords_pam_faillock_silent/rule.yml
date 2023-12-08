@@ -40,29 +40,3 @@ ocil: |-
     attempts occur, run the following command:
     <pre>$ grep silent /etc/security/faillock.conf</pre>
     The output should show <tt>silent</tt>.
-
-fixtext: |-
-    To configure the system to prevent messages from being shown when three unsuccessful logon
-    attempts occur using <tt>pam_faillock.so</tt>, first enable the faillock feature using the
-    following command:
-    
-    $ sudo authselect enable-feature with-faillock
-
-    Then edit the <tt>/etc/security/faillock.conf</tt> file as follows:
-    add or uncomment the following line:
-    <pre>silent</pre>
-
-platform: package[pam]
-
-warnings:
-    - general: |-
-        If the system relies on <tt>authselect</tt> tool to manage PAM settings, the remediation
-        will also use <tt>authselect</tt> tool. However, if any manual modification was made in
-        PAM files, the <tt>authselect</tt> integrity check will fail and the remediation will be
-        aborted in order to preserve intentional changes. In this case, an informative message will
-        be shown in the remediation report.
-        If the system supports the <tt>/etc/security/faillock.conf</tt> file, the pam_faillock
-        parameters should be defined in <tt>faillock.conf</tt> file.
-
-srg_requirement: |-
-    {{{ full_name }}} must prevent from showing any messages when unsuccessful logon attempts occur.

@@ -36,11 +36,3 @@ ocil: |-
 
     audit
 
-fixtext: |-
-    Configure {{{ full_name }}} to log user name information when unsuccessful logon attempts occur.
-
-    Add/Modify the "/etc/security/faillock.conf" file to match the following line:
-
-    audit
-
-srg_requirement: '{{{ full_name }}} must log user name information when unsuccessful logon attempts occur.'

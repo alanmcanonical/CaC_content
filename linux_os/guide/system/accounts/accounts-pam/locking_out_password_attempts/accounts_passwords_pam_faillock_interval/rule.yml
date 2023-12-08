@@ -58,8 +58,6 @@ references:
     stigid@rhel9: RHEL-09-411085
     stigid@ubuntu2004: UBTU-20-010072
 
-platform: package[pam]
-
 ocil_clause: |-
     the "fail_interval" option is not set to "{{{ xccdf_value("var_accounts_passwords_pam_faillock_fail_interval") }}}"
     or less (but not "0"), the line is commented out, or the line is missing
@@ -73,45 +71,6 @@ ocil: |-
     <pre>$ grep fail_interval /etc/security/faillock.conf</pre>
     The output should show <tt>fail_interval = &lt;interval-in-seconds&gt;</tt> where <tt>interval-in-seconds</tt> is <tt>{{{ xccdf_value("var_accounts_passwords_pam_faillock_fail_interval") }}}</tt> or greater.
     {{% endif %}}
-
-fixtext: |-
-    Configure {{{ full_name }}} to lock out an account after a number of incorrect login attempts
-    within 15 minutes using <tt>pam_faillock.so</tt>. First enable the feature using the following
-    command:
-
-    {{% if product in ["rhel7"] %}}
-    $ sudo authconfig --enablefaillock --update
-
-    Then modify the content of both <tt>/etc/pam.d/system-auth</tt> and
-    <tt>/etc/pam.d/password-auth</tt> as follows:
-    edit the fail_interval parameter in the following line <tt>before</tt> the <tt>pam_unix.so</tt>
-    statement in the <tt>auth</tt> section, like this:
-    <pre>auth required pam_faillock.so preauth silent deny={{{ xccdf_value("var_accounts_passwords_pam_faillock_deny") }}} unlock_time={{{ xccdf_value("var_accounts_passwords_pam_faillock_unlock_time") }}} <tt>fail_interval={{{ xccdf_value("var_accounts_passwords_pam_faillock_fail_interval") }}}</tt></pre>
-
-    edit the deny parameter in the following line <tt>after</tt> the <tt>pam_unix.so</tt>
-    statement in the <tt>auth</tt> section, like this:
-    <pre>auth required pam_faillock.so authfail deny={{{ xccdf_value("var_accounts_passwords_pam_faillock_deny") }}} unlock_time={{{ xccdf_value("var_accounts_passwords_pam_faillock_unlock_time") }}} <tt>fail_interval={{{ xccdf_value("var_accounts_passwords_pam_faillock_fail_interval") }}}</tt></pre>
-    {{% else %}}
-    $ sudo authselect enable-feature with-faillock
-
-    Then edit the <tt>/etc/security/faillock.conf</tt> file as follows:
-    <pre>fail_interval = {{{ xccdf_value("var_accounts_passwords_pam_faillock_fail_interval") }}}</pre>
-    {{% endif %}}
-
-checktext: |-
-    Verify {{{ full_name }}} locks an account after {{{ xccdf_value("var_accounts_passwords_pam_faillock_deny") }}}
-    unsuccessful logon attempts within a period of 15 minutes with the following command:
-
-    Note: If the System Administrator demonstrates the use of an approved centralized account
-    management method that locks an account after three unsuccessful logon attempts within a
-    period of 15 minutes, this requirement is not applicable.
-
-    $ grep fail_interval /etc/security/faillock.conf
-
-    <pre>fail_interval = 900</pre>
-
-srg_requirement: |-
-    {{{ full_name }}} must automatically lock an account when three unsuccessful logon attempts occur during a 15-minute time period.
 
 warnings:
     - general: |-
