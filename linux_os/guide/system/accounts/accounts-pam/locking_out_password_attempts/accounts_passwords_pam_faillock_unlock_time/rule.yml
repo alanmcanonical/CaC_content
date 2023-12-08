@@ -76,15 +76,15 @@ ocil_clause: |-
 
 ocil: |-
     Verify {{{ full_name }}} is configured to lock an account until released by an administrator
-    after {{{ xccdf_value("var_accounts_passwords_pam_faillock_deny") }}} unsuccessful logon
+    after <tt> {{{ xccdf_value("var_accounts_passwords_pam_faillock_deny") }}} unsuccessful logon </tt>
     attempts with the command:
 
     {{% if product in ["rhel7"] %}}
     <pre>$ grep pam_faillock /etc/pam.d/system-auth /etc/pam.d/password-auth</pre>
     For each file, the output should show <tt>unlock_time=&lt;interval-in-seconds&gt;</tt> where <tt>interval-in-seconds</tt> is <tt>{{{ xccdf_value("var_accounts_passwords_pam_faillock_unlock_time") }}}</tt> or greater.
     {{% else %}}
-    <pre>$ grep 'unlock_time =' /etc/security/faillock.conf</pre>
-    <tt>unlock_time = {{{ xccdf_value("var_accounts_passwords_pam_faillock_unlock_time") }}}</tt>
+    <pre>$ grep 'unlock_time =' /etc/security/faillock.conf
+    unlock_time = {{{ xccdf_value("var_accounts_passwords_pam_faillock_unlock_time") }}} </pre>
     {{% endif %}}
 
 warnings:
