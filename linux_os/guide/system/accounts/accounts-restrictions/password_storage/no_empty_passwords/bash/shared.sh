@@ -4,6 +4,7 @@
 # complexity = low
 # disruption = medium
 
-for FILE in "/etc/pam.d/common-auth" "/etc/pam.d/common-password"; do
+#for FILE in "/etc/pam.d/common-auth" "/etc/pam.d/common-password"; do
+for FILE in "/etc/pam.d/common-password"; do
     sed -i 's/\(.*pam_unix\.so.*\)\s\<nullok\>\(.*\)/\1\2/g' ${FILE}
 done
