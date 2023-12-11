@@ -42,7 +42,7 @@ ocil_clause: 'FIPS ciphers are not configured or the enabled ciphers are not FIP
 ocil: |-
     Only FIPS ciphers should be used. To verify that only FIPS-approved
     ciphers are in use, run the following command:
-    <pre>$ sudo grep Ciphers /etc/ssh/sshd_config</pre>
+    <pre>$ sudo grep -r 'Ciphers' /etc/ssh/sshd_config*</pre>
     The output should contain only following ciphers (or a subset) in the exact order:
     <pre>aes256-ctr,aes192-ctr,aes128-ctr</pre>
 
