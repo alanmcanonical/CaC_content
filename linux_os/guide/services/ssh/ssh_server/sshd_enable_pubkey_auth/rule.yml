@@ -5,7 +5,7 @@ title: 'Enable PubkeyAuthentication'
 description: |-
     Verify the sshd daemon allows public key authentication with the
     following:
-    <pre>$ grep ^Pubkeyauthentication /etc/ssh/sshd_config
+    <pre>$ grep -ir pubkeyauthentication /etc/ssh/sshd_config*
     PubkeyAuthentication yes</pre>
 
 rationale: |-
@@ -29,7 +29,7 @@ ocil_clause: 'it is not disable'
 ocil: |-
     To check if PubkeyAuthentication is enabled or set correctly, run the
     following command:
-    <pre>$ sudo grep ^PubkeyAuthentication /etc/ssh/sshd_config</pre>
+    <pre>$ sudo grep -ir pubkeyauthentication /etc/ssh/sshd_config*</pre>
     If configured properly, output should be <pre>yes</pre>
 
 template:
