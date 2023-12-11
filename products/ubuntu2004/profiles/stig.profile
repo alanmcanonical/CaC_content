@@ -225,61 +225,31 @@ selections:
     # UBTU-20-010141 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the ssh-keysign command.
     - audit_rules_privileged_commands_ssh_keysign
 
-    # UBTU-20-010142 The Ubuntu operating system must generate audit records for any use of the setxattr system call.
+    # UBTU-20-010142 The Ubuntu operating system must generate audit records for any use of the setxattr, fsetxattr, lsetxattr, removexattr, fremovexattr, and lremovexattr system calls
     - audit_rules_dac_modification_setxattr
-
-    # UBTU-20-010143 The Ubuntu operating system must generate audit records for any use of the lsetxattr system call.
     - audit_rules_dac_modification_lsetxattr
-
-    # UBTU-20-010144 The Ubuntu operating system must generate audit records for any use of the fsetxattr system call.
     - audit_rules_dac_modification_fsetxattr
-
-    # UBTU-20-010145 The Ubuntu operating system must generate audit records for any use of the removexattr system call.
     - audit_rules_dac_modification_removexattr
-
-    # UBTU-20-010146 The Ubuntu operating system must generate audit records for any use of the lremovexattr system call.
     - audit_rules_dac_modification_lremovexattr
-
-    # UBTU-20-010147 The Ubuntu operating system must generate audit records for any use of the fremovexattr system call.
     - audit_rules_dac_modification_fremovexattr
 
-    # UBTU-20-010148 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chown system call.
+    # UBTU-20-010148 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chown, fchown, fchownat, and lchown system calls.
     - audit_rules_dac_modification_chown
-
-    # UBTU-20-010149 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the fchown system call.
     - audit_rules_dac_modification_fchown
-
-    # UBTU-20-010150 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the fchownat system call.
     - audit_rules_dac_modification_fchownat
-
-    # UBTU-20-010151 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the lchown system call.
     - audit_rules_dac_modification_lchown
 
-    # UBTU-20-010152 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chmod system call.
+    # UBTU-20-010152 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the chmod, fchmod, and fchmodat system calls.
     - audit_rules_dac_modification_chmod
-
-    # UBTU-20-010153 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the fchmod system call.
     - audit_rules_dac_modification_fchmod
-
-    # UBTU-20-010154 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the fchmodat system call.
     - audit_rules_dac_modification_fchmodat
 
-    # UBTU-20-010155 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the open system call.
+    # UBTU-20-010155 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the creat, open, openat, open_by_handle_at, truncate, and ftruncate system calls.
     - audit_rules_unsuccessful_file_modification_open
-
-    # UBTU-20-010156 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the truncate system call.
     - audit_rules_unsuccessful_file_modification_truncate
-
-    # UBTU-20-010157 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the ftruncate system call.
     - audit_rules_unsuccessful_file_modification_ftruncate
-
-    # UBTU-20-010158 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the creat system call.
     - audit_rules_unsuccessful_file_modification_creat
-
-    # UBTU-20-010159 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the openat system call.
     - audit_rules_unsuccessful_file_modification_openat
-
-    # UBTU-20-010160 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the open_by_handle_at system call.
     - audit_rules_unsuccessful_file_modification_open_by_handle_at
 
     # UBTU-20-010161 The Ubuntu operating system must generate audit records for successful/unsuccessful uses of the sudo command.
@@ -385,7 +355,7 @@ selections:
     # UBTU-20-010244 The Ubuntu operating system must generate audit records for privileged activities, nonlocal maintenance, diagnostic sessions and other system-level access.
     - audit_sudo_log_events
 
-    # UBTU-20-010267 The Ubuntu operating system must generate audit records for any successful/unsuccessful use of unlink system call.
+    # UBTU-20-010267 The Ubuntu operating system must generate audit records for any successful/unsuccessful use of unlink, unlinkat, rename, renameat, and rmdir system calls.
     - audit_rules_file_deletion_events_unlink
     - audit_rules_file_deletion_events_rmdir
     - audit_rules_file_deletion_events_renameat

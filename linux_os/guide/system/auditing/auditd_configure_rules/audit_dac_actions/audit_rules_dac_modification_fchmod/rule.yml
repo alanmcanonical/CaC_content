@@ -58,7 +58,7 @@ references:
     stigid@rhel8: RHEL-08-030540
     stigid@sle12: SLES-12-020470
     stigid@sle15: SLES-15-030300
-    stigid@ubuntu2004: UBTU-20-010153
+    stigid@ubuntu2004: UBTU-20-010152
     vmmsrg: SRG-OS-000458-VMM-001810,SRG-OS-000474-VMM-001940
 
 {{{ complete_ocil_entry_audit_syscall(syscall="fchmod") }}}
