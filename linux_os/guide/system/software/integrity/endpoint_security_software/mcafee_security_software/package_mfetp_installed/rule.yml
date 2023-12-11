@@ -24,12 +24,12 @@ references:
     srg: SRG-OS-000191-GPOS-00080
     stigid@ubuntu2004: UBTU-20-010415
 
-ocil_clause: 'mfetp is not installed'
+ocil_clause: 'mcafeetp is not installed'
 
 ocil: |-
-    ocil_package(package='mfetp')
+    ocil_package(package='mcafeetp')
 
 template:
     name: package_installed
     vars:
-        pkgname: mfetp
+        pkgname: mcafeetp
