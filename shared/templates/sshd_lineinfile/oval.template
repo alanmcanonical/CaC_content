@@ -1,6 +1,6 @@
 {{%- set config_path = "/etc/ssh/sshd_config" %}}
 {{%- set config_dir = "/etc/ssh/sshd_config.d" -%}}
-{{%- set products_with_distributed_configuration = ("rhel9", "fedora") -%}}
+{{%- set products_with_distributed_configuration = ("rhel9", "fedora", "ubuntu2004") -%}}
 {{%- set description = "Ensure '" ~ PARAMETER ~ "' is configured with value '" ~ VALUE ~ "' in " ~ config_path %}}
 {{%- if product in products_with_distributed_configuration %}}
 {{%- set description = description  ~ " and in " ~ config_dir -%}}
