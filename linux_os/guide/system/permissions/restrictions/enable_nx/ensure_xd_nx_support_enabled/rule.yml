@@ -15,9 +15,23 @@ description: |-
     POWER, have included such support since inception and the standard kernel
     for those platforms supports the feature.
 
+    Verify the NX (no-execution) bit flag is set on the system.
+    Check that the no-execution bit flag is set with the following commands:
+    <pre>
+    $ sudo dmesg | grep NX
+    [ 0.000000] NX (Execute Disable) protection: active
+    </pre>
+    If "dmesg" does not show "NX (Execute Disable) protection" active, check the cpuinfo settings with the following command:
+    <pre>
+    $ sudo grep flags /proc/cpuinfo
+    flags : fpu vme de pse tsc ms nx rdtscp lm constant_ts
+    </pre>
+    The output should contain the "nx" flag.
+
     Note: Ensure your system supports the XD or NX bit and has PAE support
     before implementing this recommendation as this may prevent it from
     booting if these are not supported by your hardware.
+
 
 rationale: |-
     Enabling any feature that can protect against buffer overflow attacks
@@ -30,3 +44,4 @@ references:
     disa: CCI-002824
     srg: SRG-OS-000433-GPOS-00192
     stigid@ubuntu2004: UBTU-20-010447
+
