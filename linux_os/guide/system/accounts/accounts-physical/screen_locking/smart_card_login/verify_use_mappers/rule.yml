@@ -11,7 +11,7 @@ description: |-
     Verify that <tt>use_mappers</tt> is set to <tt>pwent</tt> in
     <tt>/etc/pam_pkcs11/pam_pkcs11.conf</tt> file with the following command:
 
-    <pre>$ grep ^use_mappers /etc/pam_pkcs11/pam_pkcs11.conf
+    <pre>$ grep use_mappers /etc/pam_pkcs11/pam_pkcs11.conf
 
     use_mappers = pwent</pre>
 
