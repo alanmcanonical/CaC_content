@@ -4,6 +4,9 @@ prodtype: ubuntu2004
 
 title: 'System Audit Logs Must Be Group Owned By Root'
 
+# This rule is specific to STIG, which has stricted requirements for group ownership
+# For CIS, use rule "file_group_ownership_var_log_audit"
+
 description: |-
     All audit logs must be group owned by root user.
 
