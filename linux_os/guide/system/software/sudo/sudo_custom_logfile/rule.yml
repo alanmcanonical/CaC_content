@@ -72,4 +72,3 @@ template:
         option_regex_suffix: '\s*=\s*("(?:\\"|\\\\|[^"\\\n])*"\B|[^"](?:(?:\\,|\\"|\\ |\\\\|[^", \\\n])*)\b)'
         variable_name: var_sudo_logfile
 
-platform: package[sudo]
