@@ -1,6 +1,12 @@
 #!/bin/bash
 # platforms = multi_platform_ubuntu
+# remediation = none
 
 sed '/AllowUnauthenticated/Id' -i /etc/apt/apt.conf /etc/apt/apt.conf.d/*
 
-echo 'ATP::Get::AllowUnauthenticated "false";' >> /etc/apt/apt.conf
+cat >> /etc/apt/apt.conf <<EOF
+ATP::Get
+{
+  AllowUnauthenticated "true";
+}
+EOF

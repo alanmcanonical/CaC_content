@@ -1,11 +1,7 @@
 #!/bin/bash
+# platforms = multi_platform_ubuntu
+# remediation = none
 
-for file in /etc/apt/apt.conf.d/*; do
-    if [ -e "$file" ]; then
-        if grep -qi "APT::Get::AllowUnauthenticated" $file; then
-            sed -i "s/^.*APT::Get::AllowUnauthenticated.*/APT::Get::AllowUnauthenticated \"true\";/" $file
-        else
-            echo "APT::Get::AllowUnauthenticated \"true\";" >> $file
-        fi
-    fi
-done
+sed '/AllowUnauthenticated/Id' -i /etc/apt/apt.conf /etc/apt/apt.conf.d/*
+
+echo 'ATP::Get::AllowUnauthenticated "true";' >> /etc/apt/apt.conf
