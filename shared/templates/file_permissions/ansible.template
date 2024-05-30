@@ -6,7 +6,16 @@
 
 {{% for path in FILEPATH %}}
 {{% if IS_DIRECTORY %}}
-{{% if FILE_REGEX %}}
+
+{{%- if FILE_REGEX %}}
+{{% set STATE="file" %}}
+{{% set FIND_TYPE="-type f" %}}
+{{% set FIND_FILE_REGEX="-regextype posix-extended -regex \"" ~ FILE_REGEX[loop.index0] ~ "\"" %}}
+{{%- else %}}
+{{% set STATE="directory" %}}
+{{% set FIND_TYPE="-type d" %}}
+{{% set FIND_FILE_REGEX="" %}}
+{{%- endif %}}
 
 {{%- if RECURSIVE %}}
 {{% set FIND_RECURSE_ARGS="" %}}
