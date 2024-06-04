@@ -1,5 +1,5 @@
 #!/bin/bash
-# packages = dconf,gdm
+# packages = gdm3
 
 {{% set dconf_db = "distro.d" %}}
 {{% if product not in ("fedora", "rhel9") %}}

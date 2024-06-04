@@ -1,6 +1,6 @@
 #!/bin/bash
 # platform = multi_platform_ubuntu
-# packages = dconf,gdm
+# packages = gdm3
 # variables = var_screensaver_lock_delay=5
 
 . $SHARED/dconf_test_functions.sh

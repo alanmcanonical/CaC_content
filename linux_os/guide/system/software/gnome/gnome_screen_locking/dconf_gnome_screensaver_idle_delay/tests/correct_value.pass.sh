@@ -1,5 +1,5 @@
 #!/bin/bash
-# packages = dconf,gdm
+# packages = gdm3
 # variables = inactivity_timeout_value=900
 
 . $SHARED/dconf_test_functions.sh

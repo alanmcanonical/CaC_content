@@ -1,6 +1,6 @@
 #!/bin/bash
 # platform = multi_platform_ubuntu
-# packages = dconf,gdm
+# packages = gdm3
 
 source $SHARED/dconf_test_functions.sh
 
