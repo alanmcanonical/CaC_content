@@ -465,13 +465,10 @@ if ! rpm -q --quiet "{{{ package }}}" ; then
     {{{ pkg_manager }}} install -y "{{{ package }}}"
 fi
 {{%- elif pkg_manager == "apt_get" -%}}
-function wait_for_lock {
-    while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
-        sleep 5
-    done
-}
-
-wait_for_lock
+while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+    printf '%s\n' "Waiting for background apt process"
+    sleep 5
+done
 DEBIAN_FRONTEND=noninteractive apt-get install -y "{{{ package }}}"
 {{%- elif pkg_manager == "zypper" -%}}
 zypper install -y "{{{ package }}}"
