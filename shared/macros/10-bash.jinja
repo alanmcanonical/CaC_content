@@ -465,11 +465,20 @@ if ! rpm -q --quiet "{{{ package }}}" ; then
     {{{ pkg_manager }}} install -y "{{{ package }}}"
 fi
 {{%- elif pkg_manager == "apt_get" -%}}
+# Set a timeout of 1 hour (3600 seconds)
+timeout=3600
+start_time=$SECONDS
+
 while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+    current_time=$(($SECONDS - start_time))
+    if [[ $current_time -ge $timeout ]]; then
+        echo "Timeout reached after 1 hour."
+        exit 1
+    fi
     printf '%s\n' "Waiting for background apt process"
     sleep 5
 done
-DEBIAN_FRONTEND=noninteractive apt -o DPkg::Lock::Timeout=60 install -y "{{{ package }}}"
+DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=60 install -y "{{{ package }}}"
 {{%- elif pkg_manager == "zypper" -%}}
 zypper install -y "{{{ package }}}"
 {{%- else -%}}
