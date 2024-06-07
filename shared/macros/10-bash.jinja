@@ -469,7 +469,7 @@ while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
     printf '%s\n' "Waiting for background apt process"
     sleep 5
 done
-DEBIAN_FRONTEND=noninteractive apt-get install -y "{{{ package }}}"
+DEBIAN_FRONTEND=noninteractive apt -o DPkg::Lock::Timeout=60 install -y "{{{ package }}}"
 {{%- elif pkg_manager == "zypper" -%}}
 zypper install -y "{{{ package }}}"
 {{%- else -%}}
