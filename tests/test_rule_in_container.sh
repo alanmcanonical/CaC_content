@@ -259,6 +259,7 @@ command=(python3 "${script_dir}/automatus.py" rule ${ADDITIONAL_TEST_OPTIONS} --
 if test "$_arg_dry_run" = on; then
 	printf '%s\n' "${command[*]}"
 else
+	printf '%s\n' "${command[*]}"
 	"${command[@]}"
 fi
 
