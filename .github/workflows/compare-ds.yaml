@@ -24,7 +24,7 @@ jobs:
       - name: Find forking point
         env:
           BASE_BRANCH: ${{ github.base_ref }}
-        run: echo "FORK_POINT=$(git merge-base origin/$BASE_BRANCH ${{ github.event.pull_request.head.sha }})" >> $GITHUB_OUTPUT
+        run: cd content && echo "FORK_POINT=$(git merge-base origin/$BASE_BRANCH ${{ github.event.pull_request.head.sha }})" >> $GITHUB_OUTPUT
         id: fork_point
       - name: Checkout fork point
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4

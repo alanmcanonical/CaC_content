@@ -31,7 +31,7 @@ jobs:
       - name: Find forking point
         env:
           BASE_BRANCH: ${{ github.base_ref }}
-        run: echo "FORK_POINT=$(git merge-base origin/$BASE_BRANCH ${{ github.event.pull_request.head.sha }})" >> $GITHUB_OUTPUT
+        run: cd content && echo "FORK_POINT=$(git merge-base origin/$BASE_BRANCH ${{ github.event.pull_request.head.sha }})" >> $GITHUB_OUTPUT
         id: fork_point
       - name: Detect content changes in the PR
         run: python3 ./ctf/content_test_filtering.py pr --base ${{ steps.fork_point.outputs.FORK_POINT }} --remote_repo ${{ github.server_url }}/${{ github.repository }}  --verbose --rule --output json ${{ github.event.pull_request.number }} > output.json
@@ -90,7 +90,7 @@ jobs:
         run: ssh-keygen -N '' -t rsa -f ~/.ssh/id_rsa
       - name: Build test suite container
         if: ${{ steps.ctf.outputs.CTF_OUTPUT_SIZE != '0' }}
-        run: podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat ~/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-ubt22
+        run: podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat ~/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-ubuntu2204
         working-directory: ./Dockerfiles
       - name: Get oscap-ssh
         if: ${{ steps.ctf.outputs.CTF_OUTPUT_SIZE != '0' }}
