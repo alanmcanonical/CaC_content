@@ -15,7 +15,6 @@ RUN true \
         && true
 
 RUN true \
-        # && ssh-keygen -A \
         && mkdir -p /root/.ssh \
         && printf "%s\n" "$CLIENT_PUBLIC_KEY" >> "$AUTH_KEYS" \
         && chmod og-rw /root/.ssh "$AUTH_KEYS" \
