@@ -132,9 +132,13 @@ jobs:
         if: ${{ steps.ctf.outputs.CTF_OUTPUT_SIZE != '0' }}
         with:
           name: ${{ env.DATASTREAM }}
+      - name: Get the profile name
+        if: ${{ steps.ctf.outputs.CTF_OUTPUT_SIZE != '0' }}
+        run: echo "PROFILE=$(basename -s .profile $(grep -rlE "\-\s+${{join(fromJSON(steps.rules.outputs.prop))}}$)" products/ubuntu2204/profiles/ | head -n 1) >> $GITHUB_OUTPUT
+        id: profile
       - name: Run tests in a container - Bash
         if: ${{steps.bash.outputs.prop == 'True' && steps.ctf.outputs.CTF_OUTPUT_SIZE != '0' }}
-        run: python3 ./tests/automatus.py rule --profile stig --duplicate-templates --remove-fips-certified --dontclean --container ssg_test_suite --datastream ssg-ubuntu2204-ds.xml --remediate-using bash --logdir logs_bash --remove-ocp4-only ${{join(fromJSON(steps.rules.outputs.prop))}}
+        run: python3 ./tests/automatus.py rule --profile ${{ steps.profile.outputs.PROFILE }} --duplicate-templates --remove-fips-certified --dontclean --container ssg_test_suite --datastream ssg-ubuntu2204-ds.xml --remediate-using bash --logdir logs_bash --remove-ocp4-only ${{join(fromJSON(steps.rules.outputs.prop))}}
       - name: Check for ERROR in logs
         if: ${{steps.bash.outputs.prop == 'True' && steps.ctf.outputs.CTF_OUTPUT_SIZE != '0' }}
         run: grep -q "^ERROR" logs_bash/test_suite.log
@@ -153,7 +157,7 @@ jobs:
           path: logs_bash/
       - name: Run tests in a container - Ansible
         if: ${{ steps.ansible.outputs.prop == 'True' && steps.ctf.outputs.CTF_OUTPUT_SIZE != '0' }}
-        run: python3 ./tests/automatus.py rule --dontclean --logdir logs_ansible --remediate-using ansible --container ssg_test_suite --datastream ssg-ubuntu2204-ds.xml --profile stig ${{join(fromJSON(steps.rules.outputs.prop))}}
+        run: python3 ./tests/automatus.py rule --dontclean --logdir logs_ansible --remediate-using ansible --container ssg_test_suite --datastream ssg-ubuntu2204-ds.xml --profile ${{ steps.profile.outputs.PROFILE }} ${{join(fromJSON(steps.rules.outputs.prop))}}
       - name: Check for ERROR in logs
         if: ${{steps.ansible.outputs.prop == 'True' && steps.ctf.outputs.CTF_OUTPUT_SIZE != '0' }}
         run: grep -q "^ERROR" logs_ansible/test_suite.log
