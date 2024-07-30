@@ -134,7 +134,7 @@ jobs:
           name: ${{ env.DATASTREAM }}
       - name: Get the profile name
         if: ${{ steps.ctf.outputs.CTF_OUTPUT_SIZE != '0' }}
-        run: echo "PROFILE=$(basename -s .profile $(grep -rlE "\-\s+${{join(fromJSON(steps.rules.outputs.prop))}}$)" products/ubuntu2204/profiles/ | head -n 1) >> $GITHUB_OUTPUT
+        run: echo "PROFILE=$(basename -s .profile `grep -rlE "\-\s+${{join(fromJSON(steps.rules.outputs.prop))}}$)` products/ubuntu2204/profiles/ | head -n 1)" >> $GITHUB_OUTPUT
         id: profile
       - name: Run tests in a container - Bash
         if: ${{steps.bash.outputs.prop == 'True' && steps.ctf.outputs.CTF_OUTPUT_SIZE != '0' }}
