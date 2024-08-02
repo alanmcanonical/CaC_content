@@ -2,18 +2,45 @@
 # reboot = true
 # disruption = high
 
-# Include source function library.
-. /usr/share/scap-security-guide/remediation_functions
-
 {{{ bash_instantiate_variables("var_set_apparmor_enforce_mode") }}}
-local lvl1_aa_enforce=${var_set_apparmor_enforce_mode}
 
 # apparmor and apparmor-utils must be installed to be compliant to this rule.
-{{{ bash_package_installed("apparmor") }}} || DEBIAN_FRONTEND=noninteractive apt-get install apparmor -y
-{{{ bash_package_installed("apparmor-utils") }}} || DEBIAN_FRONTEND=noninteractive apt-get install apparmor-utils -y
+{{{ bash_package_install("apparmor") }}}
+{{{ bash_package_install("apparmor-utils") }}}
 
-if [ -z "${lvl1_aa_enforce}" ] || [ "${lvl1_aa_enforce}" != true ]; then
-    aa-complain /etc/apparmor.d/*
-else
-    aa-enforce /etc/apparmor.d/*
+# Reload all AppArmor profiles
+apparmor_parser -q -r /etc/apparmor.d/
+
+# Set the mode
+APPARMOR_MODE="$var_set_apparmor_enforce_mode"
+
+if [ "$APPARMOR_MODE" = "enforce" ]
+then
+  # Set all profiles to enforce mode
+  aa-enforce /etc/apparmor.d/*
+fi
+
+if [ "$APPARMOR_MODE" = "complain" ]
+then
+  # Set all profiles to complain mode
+  aa-complain /etc/apparmor.d/*
+fi
+
+{{% if 'ubuntu' in product %}}
+UNCONFINED=$(aa-status | grep "processes are unconfined" | awk '{print $1;}')
+if [ $UNCONFINED -ne 0 ];
+{{% else %}}
+UNCONFINED=$(aa-unconfined)
+if [ ! -z "$UNCONFINED" ]
+{{% endif %}}
+then
+  echo -e "***WARNING***: There are some unconfined processes:"
+  echo -e "----------------------------"
+  echo "The may need to have a profile created or activated for them and then be restarted."
+  for PROCESS in "${UNCONFINED[@]}"
+  do
+      echo "$PROCESS"
+  done
+  echo -e "----------------------------"
+  echo "The may need to have a profile created or activated for them and then be restarted."
 fi
