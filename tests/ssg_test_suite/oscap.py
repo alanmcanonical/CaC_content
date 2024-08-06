@@ -535,9 +535,6 @@ class RuleRunner(GenericRunner):
         # oscap --progress options outputs rule results to stdout in
         # following format:
         # xccdf_org....rule_accounts_password_minlen_login_defs:pass
-        print(self.rule_id)
-        print("=================")
-        print(self._oscap_output)
         match = re.findall('{0}:(.*)$'.format(self.rule_id),
                            self._oscap_output,
                            re.MULTILINE)
@@ -573,7 +570,6 @@ class RuleRunner(GenericRunner):
                     'Wrong profile selected in test scenario or '
                     'there has been problem starting the evaluation. '
                     'Please inspect the log file {1} for details.'
-                    'Rule_selected vs self_content'
                     .format(self.rule_id, self.verbose_path))
             else:
                 msg = (
