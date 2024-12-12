@@ -16,6 +16,8 @@
         <criterion test_ref="test_accounts_passwords_pam_faillock_{{{ PRM_NAME }}}_common_pam_faillock_account"
 		   comment="pam_faillock.so is properly defined in common-account"/>
       </criteria>
+      
+      {{% if prm_name is defined %}}
 
       <!-- pam_faillock.so parameters should be defined in /etc/security/faillock.conf whenever
            possible. But due to backwards compatibility, they are also allowed in pam files
@@ -37,8 +39,9 @@
 		     comment="Ensure the {{{ PRM_NAME }}} parameter is present in /etc/security/faillock.conf"/>
         </criteria>
       </criteria>
+      {{% endif %}}   
     </criteria>
-    
+
     {{% else %}}
 
     <criteria operator="AND" comment="Check the proper configuration of pam_faillock.so">
@@ -107,7 +110,7 @@
       </criteria>
     </criteria>
 
-    {{% endif %}}    
+    {{% endif %}}
   </definition>
 
   <!-- The following tests demand complex regex which are necessary more than once.
