@@ -38,7 +38,9 @@
     comment="check the configuration of /etc/security/pwquality.conf"
     id="test_password_pam_pwquality_{{{ VARIABLE }}}" version="3">
     <ind:object object_ref="obj_password_pam_pwquality_{{{ VARIABLE }}}" />
+  {{%- if OPERATION is defined %}}
     <ind:state state_ref="state_password_pam_{{{ VARIABLE }}}" />
+  {{%- endif %}}
   {{%- if ZERO_COMPARISON_OPERATION %}}
     <ind:state state_ref="state_password_pam_{{{ VARIABLE }}}_zero_comparison" />
   {{%- endif %}}
@@ -46,13 +48,19 @@
 
   <ind:textfilecontent54_object id="obj_password_pam_pwquality_{{{ VARIABLE }}}" version="3">
     <ind:filepath operation="pattern match">{{{ filepath_regex }}}</ind:filepath>
+  {{%- if OPERATION is defined %}}
     <ind:pattern operation="pattern match">^\s*{{{ VARIABLE }}}[\s]*=[\s]*(-?\d+)(?:[\s]|$)</ind:pattern>
+  {{%- else %}}
+    <ind:pattern operation="pattern match">^\s*{{{ VARIABLE }}}[\s]*$</ind:pattern>
+  {{%- endif %}}
     <ind:instance datatype="int" operation="greater than or equal">1</ind:instance>
   </ind:textfilecontent54_object>
 
+  {{%- if OPERATION is defined %}}
   <ind:textfilecontent54_state id="state_password_pam_{{{ VARIABLE }}}" version="3">
     <ind:subexpression datatype="int" operation="{{{ OPERATION }}}" var_ref="var_password_pam_{{{ VARIABLE }}}" />
   </ind:textfilecontent54_state>
+  {{%- endif %}}
 
   {{%- if ZERO_COMPARISON_OPERATION %}}
   <ind:textfilecontent54_state id="state_password_pam_{{{ VARIABLE }}}_zero_comparison" version="1">
