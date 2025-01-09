@@ -45,7 +45,7 @@
 
   <ind:textfilecontent54_object id="object_accounts_password_pam_pwhistory_use_authtok_parameter" version="1">
     <ind:filepath>{{{ accounts_password_pam_file }}}</ind:filepath>
-    <ind:pattern operation="pattern match">^\s*password\s+(?:(?:sufficient)|(?:required)|(?:requisite)|(?:\[.*\]))\s+pam_pwhistory\.so\s+[^#]*\buse_authtok\b.*$</ind:pattern>
+    <ind:pattern operation="pattern match">^\s*password\s+(?:(?:sufficient)|(?:required)|(?:requisite)|(?:\[.*\]))\s+pam_pwhistory\.so\s+[^#\n\r]*\buse_authtok\b.*$</ind:pattern>
     <ind:instance datatype="int">1</ind:instance>
   </ind:textfilecontent54_object>
 
