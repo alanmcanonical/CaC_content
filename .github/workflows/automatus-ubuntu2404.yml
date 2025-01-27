@@ -13,11 +13,9 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Install build deps
-        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build xsltproc libxml2-utils python3-yaml python3-jinja2 openscap-utils
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build xsltproc libxml2-utils python3-yaml python3-jinja2 openscap-utils xmldiff python3-git
       - name: Install workflow deps
         run: sudo apt install -y git python3-deepdiff python3-requests jq python3-pip
-      - name: Install deps python
-        run: pip3 install gitpython xmldiff
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         with:
