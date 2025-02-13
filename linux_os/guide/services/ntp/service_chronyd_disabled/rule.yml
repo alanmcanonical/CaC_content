@@ -18,7 +18,7 @@ template:
     name: service_disabled_guard_var
     vars:
         packagename: chrony
-        servicename: chrony
+        servicename: chronyd
         variable: var_timesync_service
         value: chronyd
 {{%- else %}}
