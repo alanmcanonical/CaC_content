@@ -14,4 +14,14 @@ if ! grep -Erq "^daemon\.\*" /etc/rsyslog.*; then
     echo "daemon.* /var/log/messages" >> /etc/rsyslog.d/50-default.conf
 fi
 
+# Dummy filelist
+LOG_FILES=("/var/log/secure" "/var/log/message")
+
+for FILE in "${LOG_FILES[@]}"; do
+    if [ ! -e "$FILE" ] && [ ! -L "$FILE" ]; then
+        touch "$FILE"
+        chmod 064 "$FILE"
+    fi
+done
+
 systemctl restart rsyslog.service
