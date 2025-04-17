@@ -421,7 +421,7 @@ controls:
       been made.
     levels:
       - low
-    related_rules:
+    rules:
       - var_accounts_passwords_pam_faillock_deny=3
       - var_accounts_passwords_pam_faillock_fail_interval=900
       - var_accounts_passwords_pam_faillock_unlock_time=never
@@ -430,7 +430,7 @@ controls:
       - accounts_passwords_pam_faillock_interval
       - accounts_passwords_pam_faillock_silent
       - accounts_passwords_pam_faillock_unlock_time
-    status: planned
+    status: automated
 
   - id: UBTU-24-200640
     title: Ubuntu 24.04 LTS must display the Standard Mandatory DOD Notice and Consent
